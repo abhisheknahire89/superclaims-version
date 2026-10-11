@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/aw/schemas/workflow-config.schema.json",
+  "title": "TenantWorkflowConfig",
+  "description": "PROPOSED. Approval, repudiation, query and clock settings per tenant.",
+  "type": "object",
+  "required": [
+    "workflow_config_id",
+    "version",
+    "status",
+    "approval",
+    "repudiation",
+    "queries",
+    "tat"
+  ],
+  "properties": {
+    "workflow_config_id": {
+      "type": "string",
+      "pattern": "^WFCFG-"
+    },
+    "version": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "DRAFT",
+        "IN_REVIEW",
+        "PUBLISHED",
+        "RETIRED",
+        "ILLUSTRATIVE"
+      ]
+    },
+    "approval": {
+      "type": "object",
+      "required": [
+        "second_approval_required_when"
+      ],
+      "properties": {
+        "second_approval_required_when": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "rule"
+            ],
+            "properties": {
+              "rule": {
+                "enum": [
+                  "PAYABLE_ABOVE_APPROVER_LIMIT",
+                  "DEVIATION_FROM_RECOMMENDATION_ABOVE",
+                  "TOTAL_DEDUCTIONS_ABOVE_SHARE_OF_BILLED"
+                ]
+              }
+            }
+          }
+        },
+        "illustrative_limits": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]{2}$"
+          }
+        }
+      }
+    },
+    "repudiation": {
+      "type": "object",
+      "required": [
+        "tenant_kind",
+        "behaviour"
+      ],
+      "properties": {
+        "tenant_kind": {
+          "enum": [
+            "TPA",
+            "INSURER"
+          ]
+        },
+        "behaviour": {
+          "enum": [
+            "RECORD_INSURER_OUTCOME_ONLY",
+            "ISSUE_WITH_CRC_REFERENCE"
+          ]
+        }
+      },
+      "if": {
+        "properties": {
+          "tenant_kind": {
+            "const": "TPA"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "behaviour": {
+            "const": "RECORD_INSURER_OUTCOME_ONLY"
+          }
+        }
+      }
+    },
+    "queries": {
+      "type": "object",
+      "required": [
+        "approval_required",
+        "auto_close"
+      ],
+      "properties": {
+        "auto_close": {
+          "const": false
+        }
+      }
+    },
+    "tat": {
+      "type": "object",
+      "required": [
+        "IPD_REIMBURSEMENT"
+      ]
+    }
+  }
+}

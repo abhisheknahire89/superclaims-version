@@ -1,0 +1,34 @@
+EVIDENCE E001 — superclaims.ai home page: observation notes (internal research record; do not republish)
+Captured: 2026-10-09 ~18:23 IST via the Claude desktop built-in browser (public, logged-out page).
+Server headers at capture: server=AmazonS3, via=CloudFront (POP HYD57-P7), last-modified Mon, 03 Aug 2026 10:29:15 GMT.
+Method note: the full page text was read on screen. This file keeps a structured paraphrase plus short quotations
+(each under 15 words) for the claims the pack cites; it does not reproduce the page. Re-read the live page to verify.
+
+Structure of the page (in order) and what each section says
+1. Banner: the site states Superclaims is now part of ekincare (link to ekincare.com).
+2. Hero: headline about adjudicating health claims "in minutes, not hours"; positions the product as AI that converts
+   unstructured claim documents into consistent, audit-ready decisions for insurers and TPAs, claiming up to 70% lower operating cost.
+3. Product overview: an "AI-powered claim adjudication engine for insurers and TPAs"; states support for "both IPD and OPD claim adjudication".
+   Three capability cards: structuring claim data (field extraction, bill line categorisation); applying review rules
+   (policy, tariff, clinical, expense, fraud checks "against the configured workflow"); preparing the decision
+   (deductions, findings, reasoning "in a traceable package for reviewers").
+4. Operational impact, with the caveat that results vary by claim type, document quality, configuration and review policy:
+   ~10 mins typical processing time (down from 300+ minutes); >97% "decision precision across evaluated claims";
+   ~70% operational cost reduction "in deployed workflows"; 100K+ claims processed monthly "across active deployments".
+5. Four stages handled by "specialized agents": intake and structure; financial checks; clinical and anomaly review;
+   decision and audit trail ("for reviewer validation"); the stage output is labelled "Review-ready decision package".
+   A sub-heading near the top reads "From claim documents to review-ready decisions."
+6. Review criteria: "extracts 100+ structured attributes"; checks listed as hospital tariff validation, Schedule of Charges (SOC)
+   checks, policy benefit plan validation, deduction calculations, detailed medical scrutiny, Non-Medical Expenses (NME)
+   identification, Fraud/Waste/Abuse (FWA) detection, traceable findings and deductions.
+7. Security: ISO/IEC 27001:2022 certified ISMS; scope described as software development and support for end-to-end health claims;
+   certificate 146637/A/0001/UK/En valid through 13 April 2029; issued to Cardit Labs Private Limited, "the legal entity for Superclaims".
+8. Integration routes: API; TMS integration; secure portal (for when direct integration "is not yet practical").
+9. Call to action: 30-minute live demo using "representative claim data", booked via Cal.com.
+10. Footer: © 2025; "An ekincare company"; links to LinkedIn, Security, Privacy, Terms.
+
+Links on page: https://superclaims.ai/#main-content, https://superclaims.ai/, https://cal.com/bhavishramaswamy/30min, https://ekincare.com/,
+https://superclaims.ai/certifications/cardit-labs-iso-27001-2022-certificate.pdf, https://superclaims.ai/security, https://in.linkedin.com/company/superclaim,
+https://superclaims.ai/privacy, https://superclaims.ai/terms
+Meta description (observed): automate adjudication "up to 30x faster" (note: archived versions say "10x Faster").
+Re-checked 2026-10-10 in the built-in browser: meta description and the "review-ready" phrases above confirmed on the live page.

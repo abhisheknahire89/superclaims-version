@@ -1,0 +1,25 @@
+# ADR-12 — Phase 1 build substitutions
+
+Status: **ACCEPTED for the Phase 1 workbench build (10 Oct 2026).** This ADR records the places where the code in `workbench/` departs from ADR-01, ADR-05/06, ADR-09 and ADR-10 in `../04-architecture.md`, and why. None of these changes alters the data model, the API contract or the rule engine's behaviour.
+
+## Context
+
+The Phase 1 build was written in a sandbox with **no access to a package index** (neither PyPI nor npm). It did have Python 3.13 with a fixed set of preinstalled libraries (Starlette, uvicorn, Pydantic, jsonschema, referencing, PyYAML, pdfplumber, pypdfium2, reportlab), PostgreSQL 16 binaries and a headless Chromium. It had no cloud account, no identity provider and no real claim documents.
+
+## Decisions
+
+| # | Pack decision | What the build does | Why | What changes when we move to the pack decision |
+|---|---|---|---|---|
+| 12.1 | ADR-01: FastAPI | **Starlette** routes with a contract layer (`aw/api/contract.py`). The layer loads `api/openapi.yaml`, enforces the required headers it declares (`Idempotency-Key`, `If-Match`) and validates request bodies against the OpenAPI schemas | FastAPI was not installable. FastAPI is a layer on top of Starlette, so the handlers port directly. Validating requests against the pack's own OpenAPI file also keeps the code from drifting from the contract | Wrap the same handler functions in FastAPI routes. The contract validator can stay as a CI test |
+| 12.2 | ADR-02: PostgreSQL through a standard driver | `aw/db/__init__.py` uses **psycopg 3 if it is importable**. Otherwise it uses `aw/db/pgwire.py`, a small stdlib PostgreSQL wire-protocol client (SCRAM-SHA-256, extended query protocol, JSON and numeric types) | psycopg was not installable | Install psycopg (pinned in `pyproject.toml`) and the facade switches over automatically. **The psycopg path has not been executed yet.** Run the full suite with psycopg installed before any shared environment uses it |
+| 12.3 | ADR-05/06: managed OCR plus an LLM through Bedrock | The **heuristic extractor** reads native PDF text layers: label:value patterns, plus bill tables recognised by their header columns. A **fixture provider** returns stored extraction JSON by file hash. A **Bedrock provider** class exists but is a stub and has never been called | No cloud account, and no real documents to measure against. The heuristic extractor is only good enough for the synthetic PDFs this build generates. It is not a candidate for production | BL-07 bake-off, then BL-08/09. Every provider writes the same `extraction-output.schema.json` and goes through the same grounding check, so the rest of the pipeline does not change. Pages with no text layer currently fail with `NO_TEXT_LAYER_OCR_NOT_CONFIGURED` and need manual handling |
+| 12.4 | ADR-09: React + TypeScript SPA with PDF.js | A **vanilla ES-module UI** (`aw/web/`) with no build step and no third-party code. The server renders each page to PNG at ingest (pypdfium2, 110 dpi). The viewer draws the evidence box from pdfplumber coordinates | npm was unavailable. Server-rendered page images also mean the browser never parses an untrusted PDF | Rebuild the screens in React/TypeScript once a front-end engineer joins (BL-16, from week 6). Keep the page-image approach unless PDF.js gives a measurable benefit |
+| 12.5 | ADR-10: customer IdP via OIDC | **Development tokens**: HMAC-signed bearer tokens issued by `/dev/login`, which is only available when `AW_ENV` is `dev` or `test`. Roles and approval limits are always loaded from `role_assignment` on the server, never from the token | There was no IdP to integrate with | Add OIDC token verification in `aw/auth.py`, keyed on `idp_subject`. `settings.load()` already refuses dev tokens when `AW_ENV=prod` |
+| 12.6 | ADR-04/S3 Object Lock | A **local write-once store** (`LocalWormStore`) with the same key layout (`tenant/claim/document/sha256`). It refuses overwrites. An `S3ObjectLockStore` exists but is a stub | No cloud account | Implement and test the S3 adapter against a real Object Lock bucket in the staging account (BL-04) |
+| 12.7 | ADR-01: separate API and worker processes | `python -m aw.server` runs the API and one worker thread in a single process, for development only. The worker uses a separate database role (`aw_worker`) with its own row-level-security policy | One command to try the system | Run `jobs.Worker(...).forever()` as its own process (or several). The code already supports this because the queue uses `SKIP LOCKED` leases |
+
+## Consequences
+
+- The engine, schema, contract and audit chain are the pack's own artefacts, unchanged. `migrations/0001_schema.sql` is byte-identical to `db/schema.sql` (tested). The engine reproduces every pack trace (tested).
+- Four adapters are **written but unexecuted**: psycopg, Bedrock, S3 Object Lock and OIDC. Each needs its own test before use.
+- The heuristic extractor is the weakest part of the build. Results on the synthetic PDFs say nothing about real scanned hospital documents.

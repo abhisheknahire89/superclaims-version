@@ -1,0 +1,41 @@
+{
+  "_format": "product-reverse state.json (rxdaozhang/product-reverse SKILL.md), adapted; screenshots stored under raw/screenshots/",
+  "product_name": "Superclaims",
+  "url": "https://superclaims.ai/",
+  "current_phase": "output",
+  "current_branch": "main",
+  "tab_id": "seed",
+  "focus_areas": ["claims adjudication workflow", "checks and deductions", "integration routes", "security posture", "commercial model"],
+  "tech_stack": {
+    "marketing_site": {"framework": "Next.js App Router (static export, Turbopack chunks)", "hosting": "Amazon S3 + CloudFront (HYD POP)", "analytics": "none observed", "fonts": ["Cooper Light", "DM Sans"]},
+    "product": "NOT OBSERVABLE — no product UI or API is exposed on the marketing domain"
+  },
+  "pages_discovered": [
+    {"path": "/", "title": "Superclaims | AI Adjudication for Health Insurance", "branch": "main", "op_id": "op_001"},
+    {"path": "/security.html", "title": "Security | Superclaims", "branch": "main", "op_id": "op_004"},
+    {"path": "/privacy.html", "title": "Privacy | Superclaims", "branch": "main", "op_id": "op_005"},
+    {"path": "/terms.html", "title": "Terms | Superclaims", "branch": "main", "op_id": "op_006"},
+    {"path": "/certifications/cardit-labs-iso-27001-2022-certificate.pdf", "title": "ISO certificate (image PDF)", "branch": "main", "op_id": "op_007"}
+  ],
+  "api_endpoints": [],
+  "operations": [
+    {"id": "op_001", "branch": "main", "action": "navigate+get_page_text", "target": "https://superclaims.ai/", "timestamp": "2026-10-09T12:52:00Z"},
+    {"id": "op_002", "branch": "main", "action": "tech_detect", "target": "scripts/meta/headers", "timestamp": "2026-10-09T12:52:30Z"},
+    {"id": "op_003", "branch": "main", "action": "probe_static_paths", "target": "/robots.txt /sitemap.xml /security /privacy /terms /api /login /app /docs /llms.txt /.well-known/security.txt", "timestamp": "2026-10-09T12:52:40Z"},
+    {"id": "op_004", "branch": "main", "action": "navigate+get_page_text", "target": "https://superclaims.ai/security.html", "timestamp": "2026-10-09T12:53:10Z"},
+    {"id": "op_005", "branch": "main", "action": "navigate+get_page_text", "target": "https://superclaims.ai/privacy.html", "timestamp": "2026-10-09T12:53:30Z"},
+    {"id": "op_006", "branch": "main", "action": "navigate+get_page_text", "target": "https://superclaims.ai/terms.html", "timestamp": "2026-10-09T12:53:50Z"},
+    {"id": "op_007", "branch": "main", "action": "screenshot", "target": "ISO certificate PDF", "timestamp": "2026-10-09T12:54:20Z", "screenshot_ref": "screenshots/E004-iso-certificate-full.jpg"},
+    {"id": "op_008", "branch": "archive", "action": "navigate+get_page_text", "target": "web.archive.org CDX + snapshots 2026-01-20, 2026-06-16", "timestamp": "2026-10-09T12:58:00Z"},
+    {"id": "op_009", "branch": "linkedin", "action": "navigate+get_page_text", "target": "linkedin.com/company/superclaim (home, about, jobs, posts with 'Load more')", "timestamp": "2026-10-09T13:00:00Z"}
+  ],
+  "screenshots": [
+    {"path": "screenshots/E004-iso-certificate-full.jpg", "description": "Certificate rendered in the browser PDF viewer", "op_id": "op_007"},
+    {"path": "screenshots/E004-iso-certificate-scope-zoom.png", "description": "Zoom on scope and dates", "op_id": "op_007"}
+  ],
+  "notes": [
+    "Product is auth-gated / demo-gated. Per user instruction no demo was booked, no form submitted, no account created.",
+    "Footer links /security /privacy /terms return 404; .html variants work (observed defect on the live site).",
+    "LinkedIn was viewed in a browser profile with an existing session; viewer-specific data was not recorded."
+  ]
+}

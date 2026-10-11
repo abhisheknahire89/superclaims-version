@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/aw/schemas/checklist.schema.json",
+  "title": "DocumentChecklist",
+  "description": "PROPOSED. Required documents per workflow.",
+  "type": "object",
+  "required": [
+    "checklist_id",
+    "checklist_version",
+    "status",
+    "workflow",
+    "items"
+  ],
+  "properties": {
+    "checklist_id": {
+      "type": "string",
+      "pattern": "^CHECKLIST-"
+    },
+    "checklist_version": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "DRAFT",
+        "IN_REVIEW",
+        "PUBLISHED",
+        "RETIRED",
+        "ILLUSTRATIVE"
+      ]
+    },
+    "workflow": {
+      "enum": [
+        "PREAUTH",
+        "ENHANCEMENT",
+        "CASHLESS_DISCHARGE",
+        "IPD_REIMBURSEMENT",
+        "OPD_REIMBURSEMENT",
+        "OPD_CASHLESS"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "type",
+          "label",
+          "default_addressee"
+        ],
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "label": {
+            "type": "string"
+          },
+          "covered_by_gate": {
+            "type": "string",
+            "pattern": "^R-"
+          },
+          "required_if": {
+            "type": "string",
+            "pattern": "^(PHARMACY_INVOICES_BILLED|CATEGORY_BILLED:[A-Z_]+)$"
+          },
+          "default_addressee": {
+            "enum": [
+              "HOSPITAL",
+              "CLAIMANT",
+              "INSURER"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

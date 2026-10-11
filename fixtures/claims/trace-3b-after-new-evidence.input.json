@@ -1,0 +1,404 @@
+{
+  "status": "SYNTHETIC",
+  "notice": "Same claim as trace 3a after the hospital supplied a corrected itemised bill (DOC-0003-FB2) and the admission record (DOC-0003-AR). The previous recommendation EVAL-0003-v1 is marked STALE and superseded by this run. The PED question remains open for the medical officer.",
+  "claim_id": "CLM-DEMO-0003",
+  "evaluation_id": "EVAL-0003-v2",
+  "supersedes_evaluation_id": "EVAL-0003-v1",
+  "workflow": "IPD_REIMBURSEMENT",
+  "member": {
+    "member_id": "MEM-DEMO-3003",
+    "name_normalised": "SUNITA SHARMA",
+    "gender": "F",
+    "dob": "1974-02-11"
+  },
+  "policy": {
+    "policy_no": "ILL-POL-000303",
+    "config_ref": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+    "period_start": "2026-05-15",
+    "period_end": "2027-05-14",
+    "continuous_cover_since": "2024-05-15",
+    "base_sum_insured": "400000.00",
+    "cumulative_bonus": "0.00",
+    "paid_in_current_year": "0.00"
+  },
+  "hospital_id": "HOSP-ILL-NN-12",
+  "hospital_is_network": false,
+  "bill_no": "SH/26/0915",
+  "bill_no_evidence": {
+    "document_id": "DOC-0003-FB2",
+    "page": 1,
+    "bbox": [
+      400,
+      60,
+      540,
+      76
+    ],
+    "quote": "Bill No: SH/26/0915"
+  },
+  "bill_stated_total": "85850.25",
+  "admission_date": "2026-09-02",
+  "discharge_date": "2026-09-07",
+  "procedure_codes": [
+    "DEBRIDEMENT"
+  ],
+  "diagnosis": {
+    "text": "Type 2 diabetes mellitus with diabetic foot ulcer, left; surgical debridement",
+    "icd10": "E11.621",
+    "evidence": {
+      "document_id": "DOC-0003-DS",
+      "page": 1,
+      "bbox": [
+        72,
+        210,
+        470,
+        228
+      ],
+      "quote": "Type 2 diabetes mellitus with diabetic foot ulcer, left; surgical debridement"
+    }
+  },
+  "identity_observations": [
+    {
+      "source": "CLAIM_FORM",
+      "name_normalised": "SUNITA SHARMA",
+      "gender": "F",
+      "evidence": {
+        "document_id": "DOC-0003-CF",
+        "page": 1,
+        "bbox": [
+          96,
+          140,
+          300,
+          156
+        ],
+        "quote": "SUNITA SHARMA"
+      }
+    },
+    {
+      "source": "DISCHARGE_SUMMARY",
+      "name_normalised": "SUNITA SHARMA",
+      "gender": "F",
+      "evidence": {
+        "document_id": "DOC-0003-DS",
+        "page": 1,
+        "bbox": [
+          72,
+          96,
+          280,
+          112
+        ],
+        "quote": "SUNITA SHARMA"
+      }
+    },
+    {
+      "source": "FINAL_BILL",
+      "name_normalised": "SUNITA SHARMA",
+      "gender": "F",
+      "evidence": {
+        "document_id": "DOC-0003-FB2",
+        "page": 1,
+        "bbox": [
+          60,
+          88,
+          260,
+          104
+        ],
+        "quote": "SUNITA SHARMA"
+      }
+    }
+  ],
+  "admission_date_observations": [
+    {
+      "source": "ADMISSION_RECORD",
+      "value": "2026-09-02",
+      "evidence": {
+        "document_id": "DOC-0003-AR",
+        "page": 1,
+        "bbox": [
+          72,
+          110,
+          260,
+          126
+        ],
+        "quote": "Admitted 02/09/2026 23:40 via emergency"
+      }
+    },
+    {
+      "source": "FINAL_BILL",
+      "value": "2026-09-02",
+      "evidence": {
+        "document_id": "DOC-0003-FB2",
+        "page": 1,
+        "bbox": [
+          400,
+          88,
+          540,
+          104
+        ],
+        "quote": "2026-09-02"
+      }
+    }
+  ],
+  "date_resolution_note": "Discharge summary shows DOA 03/09/2026. Reviewer RA-0031 recorded that the admission record shows admission at 23:40 on 02/09 and that the discharge summary used the next calendar day; resolution accepted with evidence DOC-0003-AR.",
+  "itemised_bill_available": true,
+  "bill_lines": [
+    {
+      "line_id": "L01",
+      "description": "Room charges - twin sharing",
+      "category": "ROOM",
+      "room_category": "TWIN_SHARING",
+      "quantity": "5",
+      "unit_rate": "2800.00",
+      "billed": "14000.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0003-FB2",
+          "page": 2,
+          "bbox": [
+            40,
+            120,
+            560,
+            134
+          ],
+          "quote": "Room charges - twin sharing 14,000.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L02",
+      "description": "Nursing charges",
+      "category": "NURSING",
+      "quantity": "5",
+      "unit_rate": "900.00",
+      "billed": "4500.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0003-FB2",
+          "page": 2,
+          "bbox": [
+            40,
+            136,
+            560,
+            150
+          ],
+          "quote": "Nursing charges 4,500.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L03",
+      "description": "Surgeon fee - debridement",
+      "category": "PROFESSIONAL_FEES",
+      "billed": "18000.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0003-FB2",
+          "page": 2,
+          "bbox": [
+            40,
+            152,
+            560,
+            166
+          ],
+          "quote": "Surgeon fee - debridement 18,000.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L04",
+      "description": "Operation theatre charges",
+      "category": "OT_CHARGES",
+      "billed": "9500.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0003-FB2",
+          "page": 2,
+          "bbox": [
+            40,
+            168,
+            560,
+            182
+          ],
+          "quote": "Operation theatre charges 9,500.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L05",
+      "description": "Pharmacy - drugs, insulin, antibiotics",
+      "category": "PHARMACY",
+      "billed": "21340.25",
+      "evidence": [
+        {
+          "document_id": "DOC-0003-FB2",
+          "page": 2,
+          "bbox": [
+            40,
+            184,
+            560,
+            198
+          ],
+          "quote": "Pharmacy - drugs, insulin, antibiotics 21,340.25"
+        }
+      ]
+    },
+    {
+      "line_id": "L06",
+      "description": "Dressing materials",
+      "category": "CONSUMABLES",
+      "billed": "6780.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0003-FB2",
+          "page": 2,
+          "bbox": [
+            40,
+            200,
+            560,
+            214
+          ],
+          "quote": "Dressing materials 6,780.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L07",
+      "description": "Investigations - HbA1c, culture, X-ray foot",
+      "category": "DIAGNOSTICS",
+      "billed": "7950.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0003-FB2",
+          "page": 2,
+          "bbox": [
+            40,
+            216,
+            560,
+            230
+          ],
+          "quote": "Investigations - HbA1c, culture, X-ray foot 7,950.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L08",
+      "description": "Physician visits",
+      "category": "PROFESSIONAL_FEES",
+      "quantity": "5",
+      "unit_rate": "700.00",
+      "billed": "3500.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0003-FB2",
+          "page": 2,
+          "bbox": [
+            40,
+            232,
+            560,
+            246
+          ],
+          "quote": "Physician visits 3,500.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L09",
+      "description": "Urine bag",
+      "category": "OTHER_HOSPITAL_SERVICES",
+      "billed": "120.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0003-FB2",
+          "page": 2,
+          "bbox": [
+            40,
+            248,
+            560,
+            262
+          ],
+          "quote": "Urine bag 120.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L10",
+      "description": "Hand wash",
+      "category": "OTHER_HOSPITAL_SERVICES",
+      "billed": "160.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0003-FB2",
+          "page": 2,
+          "bbox": [
+            40,
+            264,
+            560,
+            278
+          ],
+          "quote": "Hand wash 160.00"
+        }
+      ]
+    }
+  ],
+  "ped_signals": [
+    {
+      "text": "known case of type 2 diabetes mellitus for 6 years, on oral hypoglycaemic agents",
+      "evidence": {
+        "document_id": "DOC-0003-DS",
+        "page": 1,
+        "bbox": [
+          72,
+          250,
+          520,
+          282
+        ],
+        "quote": "known case of type 2 diabetes mellitus for 6 years, on oral hypoglycaemic agents"
+      }
+    }
+  ],
+  "portfolio_bill_number_index": [
+    {
+      "claim_id": "CLM-DEMO-0088",
+      "bill_no": "SH/26/0915",
+      "hospital_id": "HOSP-ILL-NN-12",
+      "member_id": "MEM-DEMO-8808"
+    }
+  ],
+  "documents_present": [
+    {
+      "document_id": "DOC-0003-CF",
+      "type": "CLAIM_FORM"
+    },
+    {
+      "document_id": "DOC-0003-DS",
+      "type": "DISCHARGE_SUMMARY"
+    },
+    {
+      "document_id": "DOC-0003-SB",
+      "type": "FINAL_BILL_SUMMARY"
+    },
+    {
+      "document_id": "DOC-0003-INV",
+      "type": "INVESTIGATION_REPORT"
+    },
+    {
+      "document_id": "DOC-0003-RCPT",
+      "type": "PAYMENT_RECEIPT"
+    },
+    {
+      "document_id": "DOC-0003-ID",
+      "type": "ID_PROOF"
+    },
+    {
+      "document_id": "DOC-0003-BANK",
+      "type": "BANK_DETAILS"
+    },
+    {
+      "document_id": "DOC-0003-FB2",
+      "type": "FINAL_BILL_ITEMISED"
+    },
+    {
+      "document_id": "DOC-0003-AR",
+      "type": "ADMISSION_RECORD"
+    }
+  ]
+}

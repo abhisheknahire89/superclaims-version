@@ -1,0 +1,424 @@
+{
+  "status": "SYNTHETIC",
+  "notice": "Synthetic claim. Names, numbers, hospital and amounts are invented. Represents reviewer-confirmed extracted facts at the moment the rule run starts.",
+  "claim_id": "CLM-DEMO-0001",
+  "evaluation_id": "EVAL-0001-v1",
+  "workflow": "IPD_REIMBURSEMENT",
+  "member": {
+    "member_id": "MEM-DEMO-1001",
+    "name_normalised": "ARJUN MEHTA",
+    "gender": "M",
+    "dob": "1992-01-20"
+  },
+  "policy": {
+    "policy_no": "ILL-POL-000101",
+    "config_ref": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+    "period_start": "2026-06-01",
+    "period_end": "2027-05-31",
+    "continuous_cover_since": "2024-06-01",
+    "base_sum_insured": "500000.00",
+    "cumulative_bonus": "0.00",
+    "paid_in_current_year": "0.00"
+  },
+  "hospital_id": "HOSP-ILL-NN-07",
+  "hospital_is_network": false,
+  "bill_no": "SCH/26/1188",
+  "bill_stated_total": "109360.50",
+  "admission_date": "2026-08-10",
+  "discharge_date": "2026-08-12",
+  "procedure_codes": [
+    "LAP_APPENDICECTOMY"
+  ],
+  "diagnosis": {
+    "text": "Acute appendicitis",
+    "icd10": "K35.8",
+    "evidence": {
+      "document_id": "DOC-0001-DS",
+      "page": 1,
+      "bbox": [
+        72,
+        210,
+        410,
+        228
+      ],
+      "quote": "Acute appendicitis"
+    }
+  },
+  "identity_observations": [
+    {
+      "source": "CLAIM_FORM",
+      "name_normalised": "ARJUN MEHTA",
+      "gender": "M",
+      "evidence": {
+        "document_id": "DOC-0001-CF",
+        "page": 1,
+        "bbox": [
+          96,
+          140,
+          300,
+          156
+        ],
+        "quote": "ARJUN MEHTA"
+      }
+    },
+    {
+      "source": "DISCHARGE_SUMMARY",
+      "name_normalised": "ARJUN MEHTA",
+      "gender": "M",
+      "evidence": {
+        "document_id": "DOC-0001-DS",
+        "page": 1,
+        "bbox": [
+          72,
+          96,
+          280,
+          112
+        ],
+        "quote": "ARJUN MEHTA"
+      }
+    },
+    {
+      "source": "FINAL_BILL",
+      "name_normalised": "ARJUN MEHTA",
+      "gender": "M",
+      "evidence": {
+        "document_id": "DOC-0001-FB",
+        "page": 1,
+        "bbox": [
+          60,
+          88,
+          260,
+          104
+        ],
+        "quote": "ARJUN MEHTA"
+      }
+    }
+  ],
+  "admission_date_observations": [
+    {
+      "source": "DISCHARGE_SUMMARY",
+      "value": "2026-08-10",
+      "evidence": {
+        "document_id": "DOC-0001-DS",
+        "page": 1,
+        "bbox": [
+          72,
+          130,
+          220,
+          146
+        ],
+        "quote": "2026-08-10"
+      }
+    },
+    {
+      "source": "FINAL_BILL",
+      "value": "2026-08-10",
+      "evidence": {
+        "document_id": "DOC-0001-FB",
+        "page": 1,
+        "bbox": [
+          400,
+          88,
+          540,
+          104
+        ],
+        "quote": "2026-08-10"
+      }
+    }
+  ],
+  "itemised_bill_available": true,
+  "bill_lines": [
+    {
+      "line_id": "L01",
+      "description": "Room charges - twin sharing",
+      "category": "ROOM",
+      "room_category": "TWIN_SHARING",
+      "quantity": "2",
+      "unit_rate": "3500.00",
+      "billed": "7000.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0001-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            120,
+            560,
+            134
+          ],
+          "quote": "Room charges - twin sharing 7,000.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L02",
+      "description": "Nursing charges",
+      "category": "NURSING",
+      "quantity": "2",
+      "unit_rate": "1200.00",
+      "billed": "2400.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0001-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            136,
+            560,
+            150
+          ],
+          "quote": "Nursing charges 2,400.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L03",
+      "description": "Surgeon fee - laparoscopic appendicectomy",
+      "category": "PROFESSIONAL_FEES",
+      "billed": "30000.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0001-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            152,
+            560,
+            166
+          ],
+          "quote": "Surgeon fee - laparoscopic appendicectomy 30,000.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L04",
+      "description": "Anaesthetist fee",
+      "category": "PROFESSIONAL_FEES",
+      "billed": "9000.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0001-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            168,
+            560,
+            182
+          ],
+          "quote": "Anaesthetist fee 9,000.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L05",
+      "description": "Operation theatre charges",
+      "category": "OT_CHARGES",
+      "billed": "22000.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0001-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            184,
+            560,
+            198
+          ],
+          "quote": "Operation theatre charges 22,000.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L06",
+      "description": "Pharmacy - drugs and IV fluids",
+      "category": "PHARMACY",
+      "billed": "18640.50",
+      "invoice_no": "PH-7781",
+      "service_date": "2026-08-11",
+      "evidence": [
+        {
+          "document_id": "DOC-0001-PH",
+          "page": 1,
+          "bbox": [
+            40,
+            500,
+            560,
+            514
+          ],
+          "quote": "Pharmacy - drugs and IV fluids 18,640.50"
+        }
+      ]
+    },
+    {
+      "line_id": "L07",
+      "description": "Surgical consumables",
+      "category": "CONSUMABLES",
+      "billed": "9850.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0001-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            200,
+            560,
+            214
+          ],
+          "quote": "Surgical consumables 9,850.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L08",
+      "description": "Investigations - CBC, LFT, USG abdomen",
+      "category": "DIAGNOSTICS",
+      "billed": "6300.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0001-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            216,
+            560,
+            230
+          ],
+          "quote": "Investigations - CBC, LFT, USG abdomen 6,300.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L09",
+      "description": "Consultant visits",
+      "category": "PROFESSIONAL_FEES",
+      "quantity": "3",
+      "unit_rate": "800.00",
+      "billed": "2400.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0001-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            232,
+            560,
+            246
+          ],
+          "quote": "Consultant visits 2,400.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L10",
+      "description": "Admission / registration charges",
+      "category": "OTHER_HOSPITAL_SERVICES",
+      "billed": "1000.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0001-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            248,
+            560,
+            262
+          ],
+          "quote": "Admission / registration charges 1,000.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L11",
+      "description": "Toothpaste and toothbrush",
+      "category": "OTHER_HOSPITAL_SERVICES",
+      "billed": "180.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0001-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            264,
+            560,
+            278
+          ],
+          "quote": "Toothpaste and toothbrush 180.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L12",
+      "description": "Mineral water",
+      "category": "OTHER_HOSPITAL_SERVICES",
+      "billed": "240.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0001-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            280,
+            560,
+            294
+          ],
+          "quote": "Mineral water 240.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L13",
+      "description": "Patient gown",
+      "category": "OTHER_HOSPITAL_SERVICES",
+      "billed": "350.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0001-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            296,
+            560,
+            310
+          ],
+          "quote": "Patient gown 350.00"
+        }
+      ]
+    }
+  ],
+  "ped_signals": [],
+  "portfolio_bill_number_index": [],
+  "documents_present": [
+    {
+      "document_id": "DOC-0001-CF",
+      "type": "CLAIM_FORM"
+    },
+    {
+      "document_id": "DOC-0001-DS",
+      "type": "DISCHARGE_SUMMARY"
+    },
+    {
+      "document_id": "DOC-0001-FB",
+      "type": "FINAL_BILL_ITEMISED"
+    },
+    {
+      "document_id": "DOC-0001-PH",
+      "type": "PHARMACY_BILL"
+    },
+    {
+      "document_id": "DOC-0001-INV",
+      "type": "INVESTIGATION_REPORT"
+    },
+    {
+      "document_id": "DOC-0001-RCPT",
+      "type": "PAYMENT_RECEIPT"
+    },
+    {
+      "document_id": "DOC-0001-ID",
+      "type": "ID_PROOF"
+    },
+    {
+      "document_id": "DOC-0001-BANK",
+      "type": "BANK_DETAILS"
+    }
+  ]
+}

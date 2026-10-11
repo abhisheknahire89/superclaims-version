@@ -1,0 +1,573 @@
+{
+  "status": "SYNTHETIC",
+  "notice": "Synthetic claim. Names, numbers, hospital and amounts are invented. Represents reviewer-confirmed extracted facts at the moment the rule run starts.",
+  "claim_id": "CLM-DEMO-0002",
+  "evaluation_id": "EVAL-0002-v1",
+  "workflow": "IPD_REIMBURSEMENT",
+  "member": {
+    "member_id": "MEM-DEMO-2002",
+    "name_normalised": "LAKSHMI IYER",
+    "gender": "F",
+    "dob": "1963-03-15"
+  },
+  "policy": {
+    "policy_no": "ILL-POL-000202",
+    "config_ref": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+    "period_start": "2026-04-10",
+    "period_end": "2027-04-09",
+    "continuous_cover_since": "2021-04-10",
+    "base_sum_insured": "300000.00",
+    "cumulative_bonus": "30000.00",
+    "paid_in_current_year": "245000.00"
+  },
+  "hospital_id": "HOSP-ILL-NW-01",
+  "hospital_is_network": true,
+  "bill_no": "INH/26/4410",
+  "bill_stated_total": "172455.75",
+  "admission_date": "2026-07-01",
+  "discharge_date": "2026-07-05",
+  "procedure_codes": [
+    "LAP_CHOLECYSTECTOMY"
+  ],
+  "diagnosis": {
+    "text": "Calculous cholecystitis",
+    "icd10": "K80.1",
+    "evidence": {
+      "document_id": "DOC-0002-DS",
+      "page": 1,
+      "bbox": [
+        72,
+        210,
+        410,
+        228
+      ],
+      "quote": "Calculous cholecystitis"
+    }
+  },
+  "identity_observations": [
+    {
+      "source": "CLAIM_FORM",
+      "name_normalised": "LAKSHMI IYER",
+      "gender": "F",
+      "evidence": {
+        "document_id": "DOC-0002-CF",
+        "page": 1,
+        "bbox": [
+          96,
+          140,
+          300,
+          156
+        ],
+        "quote": "LAKSHMI IYER"
+      }
+    },
+    {
+      "source": "DISCHARGE_SUMMARY",
+      "name_normalised": "LAKSHMI IYER",
+      "gender": "F",
+      "evidence": {
+        "document_id": "DOC-0002-DS",
+        "page": 1,
+        "bbox": [
+          72,
+          96,
+          280,
+          112
+        ],
+        "quote": "LAKSHMI IYER"
+      }
+    },
+    {
+      "source": "FINAL_BILL",
+      "name_normalised": "LAKSHMI IYER",
+      "gender": "F",
+      "evidence": {
+        "document_id": "DOC-0002-FB",
+        "page": 1,
+        "bbox": [
+          60,
+          88,
+          260,
+          104
+        ],
+        "quote": "LAKSHMI IYER"
+      }
+    }
+  ],
+  "admission_date_observations": [
+    {
+      "source": "DISCHARGE_SUMMARY",
+      "value": "2026-07-01",
+      "evidence": {
+        "document_id": "DOC-0002-DS",
+        "page": 1,
+        "bbox": [
+          72,
+          130,
+          220,
+          146
+        ],
+        "quote": "2026-07-01"
+      }
+    },
+    {
+      "source": "FINAL_BILL",
+      "value": "2026-07-01",
+      "evidence": {
+        "document_id": "DOC-0002-FB",
+        "page": 1,
+        "bbox": [
+          400,
+          88,
+          540,
+          104
+        ],
+        "quote": "2026-07-01"
+      }
+    }
+  ],
+  "itemised_bill_available": true,
+  "bill_lines": [
+    {
+      "line_id": "L01",
+      "description": "Room charges - single AC",
+      "category": "ROOM",
+      "room_category": "SINGLE_AC",
+      "ward_context": "WARD",
+      "quantity": "3",
+      "unit_rate": "6000.00",
+      "billed": "18000.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            120,
+            560,
+            134
+          ],
+          "quote": "Room charges - single AC 18,000.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L02",
+      "description": "ICU charges",
+      "category": "ICU_ROOM",
+      "room_category": "ICU",
+      "ward_context": "ICU",
+      "quantity": "1",
+      "unit_rate": "9000.00",
+      "billed": "9000.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            136,
+            560,
+            150
+          ],
+          "quote": "ICU charges 9,000.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L03",
+      "description": "Nursing charges - ward",
+      "category": "NURSING",
+      "ward_context": "WARD",
+      "quantity": "3",
+      "unit_rate": "1500.00",
+      "billed": "4500.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            152,
+            560,
+            166
+          ],
+          "quote": "Nursing charges - ward 4,500.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L04",
+      "description": "Nursing charges - ICU",
+      "category": "NURSING",
+      "ward_context": "ICU",
+      "quantity": "1",
+      "unit_rate": "3000.00",
+      "billed": "3000.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            168,
+            560,
+            182
+          ],
+          "quote": "Nursing charges - ICU 3,000.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L05",
+      "description": "Surgeon fee - laparoscopic cholecystectomy",
+      "category": "PROFESSIONAL_FEES",
+      "ward_context": "WARD",
+      "billed": "45000.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            184,
+            560,
+            198
+          ],
+          "quote": "Surgeon fee - laparoscopic cholecystectomy 45,000.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L06",
+      "description": "Anaesthetist fee",
+      "category": "PROFESSIONAL_FEES",
+      "ward_context": "WARD",
+      "billed": "12000.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            200,
+            560,
+            214
+          ],
+          "quote": "Anaesthetist fee 12,000.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L07",
+      "description": "Operation theatre charges",
+      "category": "OT_CHARGES",
+      "ward_context": "WARD",
+      "billed": "28000.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            216,
+            560,
+            230
+          ],
+          "quote": "Operation theatre charges 28,000.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L08",
+      "description": "Consultant visits - ward",
+      "category": "PROFESSIONAL_FEES",
+      "ward_context": "WARD",
+      "quantity": "4",
+      "unit_rate": "1000.00",
+      "billed": "4000.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            232,
+            560,
+            246
+          ],
+          "quote": "Consultant visits - ward 4,000.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L09",
+      "description": "Intensivist visit - ICU",
+      "category": "PROFESSIONAL_FEES",
+      "ward_context": "ICU",
+      "billed": "2500.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            248,
+            560,
+            262
+          ],
+          "quote": "Intensivist visit - ICU 2,500.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L10",
+      "description": "Pharmacy invoice PH-2291",
+      "category": "PHARMACY",
+      "invoice_no": "PH-2291",
+      "service_date": "2026-07-02",
+      "billed": "3420.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-PH1",
+          "page": 1,
+          "bbox": [
+            40,
+            480,
+            560,
+            494
+          ],
+          "quote": "Pharmacy invoice PH-2291 3,420.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L11",
+      "description": "Pharmacy invoice PH-2291",
+      "category": "PHARMACY",
+      "invoice_no": "PH-2291",
+      "service_date": "2026-07-02",
+      "billed": "3420.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-PH1-COPY",
+          "page": 1,
+          "bbox": [
+            40,
+            480,
+            560,
+            494
+          ],
+          "quote": "Pharmacy invoice PH-2291 3,420.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L12",
+      "description": "Pharmacy invoice PH-2307",
+      "category": "PHARMACY",
+      "invoice_no": "PH-2307",
+      "service_date": "2026-07-04",
+      "billed": "11865.75",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-PH2",
+          "page": 1,
+          "bbox": [
+            40,
+            480,
+            560,
+            494
+          ],
+          "quote": "Pharmacy invoice PH-2307 11,865.75"
+        }
+      ]
+    },
+    {
+      "line_id": "L13",
+      "description": "Laparoscopic consumables",
+      "category": "CONSUMABLES",
+      "ward_context": "WARD",
+      "billed": "14500.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-FB",
+          "page": 3,
+          "bbox": [
+            40,
+            120,
+            560,
+            134
+          ],
+          "quote": "Laparoscopic consumables 14,500.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L14",
+      "description": "CT scan abdomen (contrast)",
+      "category": "DIAGNOSTICS",
+      "ward_context": "WARD",
+      "billed": "5500.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-FB",
+          "page": 3,
+          "bbox": [
+            40,
+            136,
+            560,
+            150
+          ],
+          "quote": "CT scan abdomen (contrast) 5,500.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L15",
+      "description": "Laboratory investigations",
+      "category": "DIAGNOSTICS",
+      "ward_context": "WARD",
+      "billed": "4850.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-FB",
+          "page": 3,
+          "bbox": [
+            40,
+            152,
+            560,
+            166
+          ],
+          "quote": "Laboratory investigations 4,850.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L16",
+      "description": "Television charges",
+      "category": "OTHER_HOSPITAL_SERVICES",
+      "ward_context": "WARD",
+      "quantity": "4",
+      "unit_rate": "150.00",
+      "billed": "600.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-FB",
+          "page": 3,
+          "bbox": [
+            40,
+            168,
+            560,
+            182
+          ],
+          "quote": "Television charges 600.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L17",
+      "description": "Telephone charges",
+      "category": "OTHER_HOSPITAL_SERVICES",
+      "ward_context": "WARD",
+      "billed": "350.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-FB",
+          "page": 3,
+          "bbox": [
+            40,
+            184,
+            560,
+            198
+          ],
+          "quote": "Telephone charges 350.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L18",
+      "description": "Infusion pump charges",
+      "category": "OTHER_HOSPITAL_SERVICES",
+      "ward_context": "WARD",
+      "billed": "1800.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-FB",
+          "page": 3,
+          "bbox": [
+            40,
+            200,
+            560,
+            214
+          ],
+          "quote": "Infusion pump charges 1,800.00"
+        }
+      ]
+    },
+    {
+      "line_id": "L19",
+      "description": "Nursing - bed pan",
+      "category": "NURSING",
+      "ward_context": "WARD",
+      "billed": "150.00",
+      "evidence": [
+        {
+          "document_id": "DOC-0002-FB",
+          "page": 3,
+          "bbox": [
+            40,
+            216,
+            560,
+            230
+          ],
+          "quote": "Nursing - bed pan 150.00"
+        }
+      ]
+    }
+  ],
+  "ped_signals": [],
+  "portfolio_bill_number_index": [],
+  "documents_present": [
+    {
+      "document_id": "DOC-0002-CF",
+      "type": "CLAIM_FORM"
+    },
+    {
+      "document_id": "DOC-0002-DS",
+      "type": "DISCHARGE_SUMMARY"
+    },
+    {
+      "document_id": "DOC-0002-FB",
+      "type": "FINAL_BILL_ITEMISED"
+    },
+    {
+      "document_id": "DOC-0002-PH1",
+      "type": "PHARMACY_BILL"
+    },
+    {
+      "document_id": "DOC-0002-PH1-COPY",
+      "type": "PHARMACY_BILL"
+    },
+    {
+      "document_id": "DOC-0002-PH2",
+      "type": "PHARMACY_BILL"
+    },
+    {
+      "document_id": "DOC-0002-INV",
+      "type": "INVESTIGATION_REPORT"
+    },
+    {
+      "document_id": "DOC-0002-RCPT",
+      "type": "PAYMENT_RECEIPT"
+    },
+    {
+      "document_id": "DOC-0002-ID",
+      "type": "ID_PROOF"
+    },
+    {
+      "document_id": "DOC-0002-BANK",
+      "type": "BANK_DETAILS"
+    }
+  ]
+}

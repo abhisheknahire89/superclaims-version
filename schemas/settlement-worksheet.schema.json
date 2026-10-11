@@ -1,0 +1,133 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/aw/schemas/settlement-worksheet.schema.json",
+  "title": "SettlementWorksheet",
+  "description": "PROPOSED. Export produced after a human decision: what was billed, paid and disallowed with reasons and clause references, plus the grievance/ombudsman route the TPA must include when any part is disallowed (E-REG-04). Rendered to PDF for the letter; JSON goes to the TMS.",
+  "type": "object",
+  "required": [
+    "worksheet_id",
+    "claim_id",
+    "decision",
+    "amounts",
+    "disallowances",
+    "line_table",
+    "grievance_route",
+    "provenance"
+  ],
+  "properties": {
+    "worksheet_id": {
+      "type": "string"
+    },
+    "claim_id": {
+      "type": "string"
+    },
+    "decision": {
+      "type": "object",
+      "required": [
+        "decision_id",
+        "disposition",
+        "decided_by",
+        "evaluation_id"
+      ],
+      "properties": {
+        "disposition": {
+          "enum": [
+            "APPROVED_FULL",
+            "APPROVED_PARTIAL",
+            "WITHDRAWN",
+            "CLOSED_DUPLICATE"
+          ]
+        },
+        "second_approver": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "amounts": {
+      "type": "object",
+      "required": [
+        "claimed",
+        "billed",
+        "approved",
+        "disallowed_total"
+      ],
+      "properties": {
+        "claimed": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]{2}$"
+        },
+        "billed": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]{2}$"
+        },
+        "approved": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]{2}$"
+        },
+        "disallowed_total": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]{2}$"
+        }
+      }
+    },
+    "disallowances": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "line_id",
+          "amount",
+          "reason",
+          "clause",
+          "rule_id"
+        ],
+        "properties": {
+          "amount": {
+            "type": "string",
+            "pattern": "^-?[0-9]+\\.[0-9]{2}$"
+          },
+          "reason": {
+            "type": "string",
+            "minLength": 1
+          },
+          "clause": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "line_table": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "line_id",
+          "description",
+          "billed",
+          "payable"
+        ]
+      }
+    },
+    "grievance_route": {
+      "type": "object",
+      "required": [
+        "insurer_grievance_procedure",
+        "grievance_officer_contact",
+        "ombudsman_procedure",
+        "ombudsman_contact"
+      ]
+    },
+    "provenance": {
+      "type": "object",
+      "required": [
+        "engine_version",
+        "config_versions",
+        "output_hash"
+      ]
+    }
+  }
+}

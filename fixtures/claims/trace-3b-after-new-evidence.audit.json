@@ -1,0 +1,409 @@
+[
+  {
+    "seq": 45,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:10:05.000+05:30",
+    "actor": "INTEGRATION:TMS",
+    "event_type": "DOCUMENT_RECEIVED",
+    "payload": {
+      "document_id": "DOC-0003-FB2",
+      "declared_type": "FINAL_BILL_ITEMISED",
+      "sha256": "f77a8bfce2239cd3…(synthetic)"
+    },
+    "prev_hash": "48ee94a85a5dd13bc441301cd891d3f8dfc2f3f544c132f62eed83a212edd739",
+    "event_hash": "a54da191b255c1fe5d4b426d0bb674b853b46b347de52da2f9cd403c2dd1b508"
+  },
+  {
+    "seq": 46,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:10:10.000+05:30",
+    "actor": "INTEGRATION:TMS",
+    "event_type": "DOCUMENT_RECEIVED",
+    "payload": {
+      "document_id": "DOC-0003-AR",
+      "declared_type": "ADMISSION_RECORD",
+      "sha256": "8f7ce1c3b584ff92…(synthetic)"
+    },
+    "prev_hash": "a54da191b255c1fe5d4b426d0bb674b853b46b347de52da2f9cd403c2dd1b508",
+    "event_hash": "5e164c7fe42643f246ec5184b0b9d9d84df82cb4d5352f7eadc6ff1483768078"
+  },
+  {
+    "seq": 47,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:10:55.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RECOMMENDATION_MARKED_STALE",
+    "payload": {
+      "evaluation_id": "EVAL-0003-v1",
+      "reason": "NEW_EVIDENCE"
+    },
+    "prev_hash": "5e164c7fe42643f246ec5184b0b9d9d84df82cb4d5352f7eadc6ff1483768078",
+    "event_hash": "66cdc52527b8f37e21ee9095134f223145025a04f4aff205e135e8ce82a03b6d"
+  },
+  {
+    "seq": 48,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:11:01.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "DOCUMENT_CLASSIFIED",
+    "payload": {
+      "document_id": "DOC-0003-FB2",
+      "type": "FINAL_BILL_ITEMISED",
+      "classifier": "doc-classifier@0.4 (proposed)"
+    },
+    "prev_hash": "66cdc52527b8f37e21ee9095134f223145025a04f4aff205e135e8ce82a03b6d",
+    "event_hash": "70d9fdce6f6801c33162ef64c3ab7b3ab0ead9cbe538a51303d56411f866a208"
+  },
+  {
+    "seq": 49,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:11:26.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "EXTRACTION_COMPLETED",
+    "payload": {
+      "document_id": "DOC-0003-FB2",
+      "extractor": "extract-pipeline@0.7 (proposed)"
+    },
+    "prev_hash": "70d9fdce6f6801c33162ef64c3ab7b3ab0ead9cbe538a51303d56411f866a208",
+    "event_hash": "41e45463b1cd7df14e959f5fdc95839f1ca670f4b595cea018b137aecdf23551"
+  },
+  {
+    "seq": 50,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:11:32.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "DOCUMENT_CLASSIFIED",
+    "payload": {
+      "document_id": "DOC-0003-AR",
+      "type": "ADMISSION_RECORD",
+      "classifier": "doc-classifier@0.4 (proposed)"
+    },
+    "prev_hash": "41e45463b1cd7df14e959f5fdc95839f1ca670f4b595cea018b137aecdf23551",
+    "event_hash": "87a18596d1f1195e3b5fe479336968fae82203c044f424861f6ed03561ea3ed5"
+  },
+  {
+    "seq": 51,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:11:57.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "EXTRACTION_COMPLETED",
+    "payload": {
+      "document_id": "DOC-0003-AR",
+      "extractor": "extract-pipeline@0.7 (proposed)"
+    },
+    "prev_hash": "87a18596d1f1195e3b5fe479336968fae82203c044f424861f6ed03561ea3ed5",
+    "event_hash": "b1b3a45f51c430f55452164545922b48deb5464444872778b5eccddb28a79c65"
+  },
+  {
+    "seq": 52,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:12:42.000+05:30",
+    "actor": "USER:PROC-04",
+    "event_type": "REVIEWER_ACTION_RECORDED",
+    "payload": {
+      "action": "RESOLVE_CONFLICT",
+      "finding_kind": "DATE_CONFLICT",
+      "resolution": "2026-09-02",
+      "evidence": "DOC-0003-AR p1"
+    },
+    "prev_hash": "b1b3a45f51c430f55452164545922b48deb5464444872778b5eccddb28a79c65",
+    "event_hash": "6568228d562840c30ee750977875c5433258f03362721cb208777dca1a034413"
+  },
+  {
+    "seq": 53,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:27.000+05:30",
+    "actor": "USER:PROC-04",
+    "event_type": "REVIEWER_ACTION_RECORDED",
+    "payload": {
+      "action": "RESOLVE_CONFLICT",
+      "finding_kind": "IDENTITY_CONFLICT",
+      "resolution": "Corrected bill DOC-0003-FB2 supersedes DOC-0003-SB"
+    },
+    "prev_hash": "6568228d562840c30ee750977875c5433258f03362721cb208777dca1a034413",
+    "event_hash": "f1eca08dabaf95ac72d89549f82602f062cddf1332f90d1f6f7ef9cbdc1fcaed"
+  },
+  {
+    "seq": 54,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_RUN_STARTED",
+    "payload": {
+      "evaluation_id": "EVAL-0003-v2",
+      "config_versions": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+      "input_hash": "sha256:d7e286f94b052f57e05c20c36f4d08984db1a94e1d90e3b9c2ffeaeb571a3ade"
+    },
+    "prev_hash": "f1eca08dabaf95ac72d89549f82602f062cddf1332f90d1f6f7ef9cbdc1fcaed",
+    "event_hash": "9d11353f63c97ab861d44f90ea2eb7ea3b28ac571853125d3fd50c1e183e4cfd"
+  },
+  {
+    "seq": 55,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.012+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-GATE-IDENTITY",
+      "rule_version": "1.0.0",
+      "status": "PASSED"
+    },
+    "prev_hash": "9d11353f63c97ab861d44f90ea2eb7ea3b28ac571853125d3fd50c1e183e4cfd",
+    "event_hash": "1c182adf9f3361fd64b9c2acee5d8279d74ff6ee04069dff206a576474656937"
+  },
+  {
+    "seq": 56,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.024+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-GATE-DATES",
+      "rule_version": "1.0.0",
+      "status": "PASSED"
+    },
+    "prev_hash": "1c182adf9f3361fd64b9c2acee5d8279d74ff6ee04069dff206a576474656937",
+    "event_hash": "4da28cde9b306c97ebec7369f6eac33ea4ea6aacda3b0672f9a605da891a0690"
+  },
+  {
+    "seq": 57,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.036+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-GATE-ITEMISATION",
+      "rule_version": "1.0.0",
+      "status": "PASSED"
+    },
+    "prev_hash": "4da28cde9b306c97ebec7369f6eac33ea4ea6aacda3b0672f9a605da891a0690",
+    "event_hash": "6fb26985153a244d1d74e9f1ac90f971b84773cb8dfa1441d5436ae0dc1822a4"
+  },
+  {
+    "seq": 58,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.048+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-DOC-COMPLETENESS",
+      "rule_version": "1.0.0",
+      "status": "PASSED"
+    },
+    "prev_hash": "6fb26985153a244d1d74e9f1ac90f971b84773cb8dfa1441d5436ae0dc1822a4",
+    "event_hash": "0692e131308980b5c34b3b88d8669efc34f74cb28c200fed1cd1dfa9e33796ca"
+  },
+  {
+    "seq": 59,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.060+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-ELIG-POLICY-ACTIVE",
+      "rule_version": "1.0.0",
+      "status": "PASSED"
+    },
+    "prev_hash": "0692e131308980b5c34b3b88d8669efc34f74cb28c200fed1cd1dfa9e33796ca",
+    "event_hash": "e5a343d2f01ed7d0704524b3b497ece5aefaa361dbb28d17af1f5e226d2ecd07"
+  },
+  {
+    "seq": 60,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.072+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-ELIG-WAITING",
+      "rule_version": "1.1.0",
+      "status": "REVIEW"
+    },
+    "prev_hash": "e5a343d2f01ed7d0704524b3b497ece5aefaa361dbb28d17af1f5e226d2ecd07",
+    "event_hash": "b701d0e9f7af2273b08006f70f51db1f98d1b3095d7de7032488d5e8803442b6"
+  },
+  {
+    "seq": 61,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.084+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-LINE-DUPLICATE",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE"
+    },
+    "prev_hash": "b701d0e9f7af2273b08006f70f51db1f98d1b3095d7de7032488d5e8803442b6",
+    "event_hash": "db637e3e350fbaf5881caa9e91d9515388cdb4cdf0831560968b9b29b68eabbf"
+  },
+  {
+    "seq": 62,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.096+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-LINE-NONPAYABLE",
+      "rule_version": "1.0.0",
+      "status": "APPLIED"
+    },
+    "prev_hash": "db637e3e350fbaf5881caa9e91d9515388cdb4cdf0831560968b9b29b68eabbf",
+    "event_hash": "023651be59d60616fa380bcf4db2b3ee5181f716618b485825400ba7990f9017"
+  },
+  {
+    "seq": 63,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.108+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-LINE-TARIFF",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE"
+    },
+    "prev_hash": "023651be59d60616fa380bcf4db2b3ee5181f716618b485825400ba7990f9017",
+    "event_hash": "b53d6dab2ab3233ec9c323b7a1059cea6ff6f4694b71fec07710555b99eafc05"
+  },
+  {
+    "seq": 64,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.120+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-LINE-ROOM-CAP",
+      "rule_version": "1.1.0",
+      "status": "NOT_APPLICABLE"
+    },
+    "prev_hash": "b53d6dab2ab3233ec9c323b7a1059cea6ff6f4694b71fec07710555b99eafc05",
+    "event_hash": "7ad2acea9f5eff65c107196712bc1ff34def61b3e21cd76b6380dbf5f86892c4"
+  },
+  {
+    "seq": 65,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.132+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-LINE-PROPORTIONATE",
+      "rule_version": "1.1.0",
+      "status": "NOT_APPLICABLE"
+    },
+    "prev_hash": "7ad2acea9f5eff65c107196712bc1ff34def61b3e21cd76b6380dbf5f86892c4",
+    "event_hash": "9e873a3b64ef2a6798de77c0cd57d765eafda2d769ae762f5ade1e2583d1e558"
+  },
+  {
+    "seq": 66,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.144+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-CLAIM-SUBLIMIT",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE"
+    },
+    "prev_hash": "9e873a3b64ef2a6798de77c0cd57d765eafda2d769ae762f5ade1e2583d1e558",
+    "event_hash": "18db91141c2df545a2f2f8ecb78ab7db6d90eae57a5be44438b8b211de829e2f"
+  },
+  {
+    "seq": 67,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.156+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-CLAIM-DEDUCTIBLE",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE"
+    },
+    "prev_hash": "18db91141c2df545a2f2f8ecb78ab7db6d90eae57a5be44438b8b211de829e2f",
+    "event_hash": "7dce05610b0c581938479785e387c1cba700da216990fe12f46ab6a3387cd170"
+  },
+  {
+    "seq": 68,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.168+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-CLAIM-COPAY",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE"
+    },
+    "prev_hash": "7dce05610b0c581938479785e387c1cba700da216990fe12f46ab6a3387cd170",
+    "event_hash": "5a1d3256fa4397da1f44501b99825118ff18fd02a9acf52c3a15fd45d7fbc239"
+  },
+  {
+    "seq": 69,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.180+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-CLAIM-SI-CAP",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE"
+    },
+    "prev_hash": "5a1d3256fa4397da1f44501b99825118ff18fd02a9acf52c3a15fd45d7fbc239",
+    "event_hash": "0d25ce0aff7799a3151c7a6f1b8b42ac204a9f8668725fd81666e6505fb805a6"
+  },
+  {
+    "seq": 70,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.192+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-CLAIM-ROUNDING",
+      "rule_version": "1.0.0",
+      "status": "APPLIED"
+    },
+    "prev_hash": "0d25ce0aff7799a3151c7a6f1b8b42ac204a9f8668725fd81666e6505fb805a6",
+    "event_hash": "a5574e620bf33e9a93ddecb8d1b505fcf07a3f4442d383661d8622fcaaa82390"
+  },
+  {
+    "seq": 71,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.204+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-ANOM-BILLNO-REUSE",
+      "rule_version": "0.9.0",
+      "status": "FLAGGED"
+    },
+    "prev_hash": "a5574e620bf33e9a93ddecb8d1b505fcf07a3f4442d383661d8622fcaaa82390",
+    "event_hash": "8d9a91ddca0bd36d7bc4c327d37118baba5450317f9a0e7dde14c6c60b9f7309"
+  },
+  {
+    "seq": 72,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:13:29.244+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RECOMMENDATION_CREATED",
+    "payload": {
+      "evaluation_id": "EVAL-0003-v2",
+      "type": "REFER_MEDICAL",
+      "recommended_payable": "85570.00",
+      "output_hash": "sha256:5eeeada55eadb6eb80bacee586493f872e347ac2295a93b7573e9424d6972b00"
+    },
+    "prev_hash": "8d9a91ddca0bd36d7bc4c327d37118baba5450317f9a0e7dde14c6c60b9f7309",
+    "event_hash": "79c117967fe1aa96aa894366623b31d35f2c81a1e44a9b7bd0b7768eb8aa80ca"
+  },
+  {
+    "seq": 73,
+    "claim_id": "CLM-DEMO-0003",
+    "occurred_at": "2026-09-14T15:14:14.244+05:30",
+    "actor": "USER:MO-01",
+    "event_type": "MEDICAL_REVIEW_PENDING",
+    "payload": {
+      "finding_kind": "POSSIBLE_PED_WITHIN_WAITING_PERIOD",
+      "awaiting": [
+        "PAST_TREATMENT_RECORDS",
+        "PROPOSAL_FORM"
+      ]
+    },
+    "prev_hash": "79c117967fe1aa96aa894366623b31d35f2c81a1e44a9b7bd0b7768eb8aa80ca",
+    "event_hash": "9957954a8a6e76ddc046bcae103c8944925a2cb2a71736148ac94871fe644798"
+  }
+]

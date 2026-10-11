@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Adjudication Workbench</title>
+<link rel="stylesheet" href="/static/app.css">
+<script type="module" src="/static/app.js"></script>
+</head>
+<body>
+<a class="skip" href="#app">Skip to content</a>
+<div class="envbar" role="note" id="envbar">Development build · synthetic data only · every decision is made by a person</div>
+<header class="top">
+  <div class="brand"><span class="mark" aria-hidden="true">▤</span> Adjudication Workbench</div>
+  <nav aria-label="Main"><a href="#/queue" id="nav-queue">Work queue</a></nav>
+  <div class="who" id="who"></div>
+</header>
+<div id="live" class="sr" aria-live="polite"></div>
+<main id="app" tabindex="-1"></main>
+<dialog id="help" aria-labelledby="help-title">
+  <h2 id="help-title">Keyboard</h2>
+  <dl class="keys">
+    <dt><kbd>J</kbd> / <kbd>K</kbd></dt><dd>Next / previous bill line or finding</dd>
+    <dt><kbd>E</kbd></dt><dd>Open evidence for the focused row</dd>
+    <dt><kbd>G</kbd> then <kbd>D</kbd></dt><dd>Go to the decision panel</dd>
+    <dt><kbd>N</kbd></dt><dd>Open the next claim in the queue</dd>
+    <dt><kbd>?</kbd></dt><dd>This help</dd>
+  </dl>
+  <form method="dialog"><button class="btn">Close</button></form>
+</dialog>
+</body>
+</html>

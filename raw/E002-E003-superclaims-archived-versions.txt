@@ -1,0 +1,27 @@
+EVIDENCE E002 and E003 — earlier versions of superclaims.ai (Internet Archive): observation notes
+(internal research record; do not republish). Captured 2026-10-09 via the built-in browser (one-time approvals for web.archive.org).
+CDX index (domain match, digest-collapsed): 20251016071558 http→301; 20260120212003 200; 20260616151934 200; static chunks 20260518.
+Method note: pages were read in full; this file keeps a structured paraphrase plus short quotations (each under 15 words).
+
+E002 — snapshot 2026-01-20 (https://web.archive.org/web/20260120212003/https://superclaims.ai/)
+- Headline claimed "10x Faster & 3x Cheaper"; hero metrics: 5 min TAT, 70% cost reduction, 99% accuracy.
+- Framed the product as a "digital adjudication team" of autonomous agents that "reads, reasons, and decides".
+- Four named agents:
+  * Pre-Authorization Agent — interprets pre-auth documents, validates eligibility/coverage, recommends "Approve, Query, or Reject".
+  * Non-Medico Validation Agent — item-level scrutiny for non-payables, tariff mismatches, policy violations.
+  * Medico Review Agent — reads medical narratives and diagnosis codes; checks necessity and admission validity.
+  * Audit & Compliance Agent — validates other agents' outputs, detects anomalies/fraud indicators, builds audit trails.
+- Impact tiles: 70% cost reduction; "90min → 5min TAT"; "99% operational precision"; "100k+ claims/month"; improved loss ratios.
+- Claimed "Proprietary adjudication protocols, curated clinical datasets" as a moat.
+- Three-step flow (Ingest, Reason, Settle) under a heading promising "zero manual steps"; the Settle step said
+  "payment triggers fired automatically".
+- Footer © 2025.
+
+E003 — snapshot 2026-06-16 (https://web.archive.org/web/20260616151934/https://superclaims.ai/)
+- Same "10x Faster & 3x Cheaper" headline; described the platform as automating "the end-to-end claims review process"; states IPD and OPD support.
+- Impact tiles now: ~10 mins (from 300+ minutes); >97% "Decision precision for accurate payouts"; ~70% cost reduction; 100K+ claims monthly.
+- Agents renamed: Non-Medico Agent (administrative evaluation), Medico Agent (clinical review), FWA Agent (anomaly detection),
+  Audit Agent (decision and logging).
+- Seven numbered validations: hospital tariff, SOC, policy benefit plan, NME identification, deduction calculations,
+  detailed medical scrutiny, FWA detection. "100+ structured attributes".
+- Integration via API, TMS integration or secure portal. Footer © 2026.

@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/aw/schemas/tariff.schema.json",
+  "title": "HospitalTariff",
+  "description": "PROPOSED. Versioned hospital tariff (item caps; packages P1).",
+  "type": "object",
+  "required": [
+    "tariff_id",
+    "tariff_version",
+    "status",
+    "hospital_id",
+    "agreement_doc_id",
+    "agreement_clause",
+    "effective_from",
+    "effective_to",
+    "uniform_pricing_across_room_categories",
+    "item_caps",
+    "packages"
+  ],
+  "properties": {
+    "tariff_id": {
+      "type": "string",
+      "pattern": "^TARIFF-"
+    },
+    "tariff_version": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "DRAFT",
+        "IN_REVIEW",
+        "PUBLISHED",
+        "RETIRED",
+        "ILLUSTRATIVE"
+      ]
+    },
+    "hospital_id": {
+      "type": "string"
+    },
+    "agreement_doc_id": {
+      "type": "string"
+    },
+    "agreement_clause": {
+      "type": "string",
+      "minLength": 1
+    },
+    "effective_from": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+    },
+    "effective_to": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "uniform_pricing_across_room_categories": {
+      "type": "boolean"
+    },
+    "room_rates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "room_category",
+          "rate_per_day"
+        ],
+        "properties": {
+          "rate_per_day": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]{2}$"
+          }
+        }
+      }
+    },
+    "item_caps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "tariff_item_code",
+          "category",
+          "max_rate",
+          "unit",
+          "match_keys"
+        ],
+        "properties": {
+          "category": {
+            "enum": [
+              "ROOM",
+              "ICU_ROOM",
+              "NURSING",
+              "PROFESSIONAL_FEES",
+              "OT_CHARGES",
+              "PROCEDURE_CHARGES",
+              "PHARMACY",
+              "CONSUMABLES",
+              "IMPLANTS",
+              "DIAGNOSTICS",
+              "OTHER_HOSPITAL_SERVICES"
+            ]
+          },
+          "max_rate": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]{2}$"
+          },
+          "unit": {
+            "enum": [
+              "PER_STUDY",
+              "PER_PROCEDURE",
+              "PER_DAY",
+              "PER_UNIT"
+            ]
+          },
+          "match_keys": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      }
+    },
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "package_code",
+          "amount",
+          "procedure_codes",
+          "inclusions"
+        ],
+        "properties": {
+          "amount": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]{2}$"
+          }
+        }
+      }
+    }
+  }
+}

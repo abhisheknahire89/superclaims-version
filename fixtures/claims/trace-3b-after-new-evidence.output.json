@@ -1,0 +1,507 @@
+{
+  "engine_version": "ref-harness-0.4.0",
+  "claim_id": "CLM-DEMO-0003",
+  "evaluation_id": "EVAL-0003-v2",
+  "config_versions": {
+    "policy_config": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+    "nme_list": "NMELIST-ILL-A@2026.1.0",
+    "tariff": null,
+    "checklist": "CHECKLIST-IPD-REIMB@2026.1.0",
+    "engine": "ref-harness-0.4.0",
+    "rules": {
+      "R-GATE-IDENTITY": "1.0.0",
+      "R-GATE-DATES": "1.0.0",
+      "R-GATE-ITEMISATION": "1.0.0",
+      "R-DOC-COMPLETENESS": "1.0.0",
+      "R-ELIG-POLICY-ACTIVE": "1.0.0",
+      "R-ELIG-WAITING": "1.1.0",
+      "R-LINE-DUPLICATE": "1.0.0",
+      "R-LINE-NONPAYABLE": "1.0.0",
+      "R-LINE-TARIFF": "1.0.0",
+      "R-LINE-ROOM-CAP": "1.1.0",
+      "R-LINE-PROPORTIONATE": "1.1.0",
+      "R-CLAIM-SUBLIMIT": "1.0.0",
+      "R-CLAIM-DEDUCTIBLE": "1.0.0",
+      "R-CLAIM-COPAY": "1.0.0",
+      "R-CLAIM-SI-CAP": "1.0.0",
+      "R-CLAIM-ROUNDING": "1.0.0",
+      "R-ANOM-BILLNO-REUSE": "0.9.0"
+    }
+  },
+  "input_hash": "sha256:d7e286f94b052f57e05c20c36f4d08984db1a94e1d90e3b9c2ffeaeb571a3ade",
+  "recommendation": {
+    "type": "REFER_MEDICAL",
+    "computed": true,
+    "recommended_payable": "85570.00",
+    "billed_total": "85850.25",
+    "bill_stated_total": "85850.25",
+    "itemised_lines_available": true,
+    "line_level_deductions": "280.00",
+    "claim_level_deductions": "0.25",
+    "admissible_after_line_rules": "85570.25",
+    "blocked_scopes": [],
+    "human_decision_required": true
+  },
+  "lines": [
+    {
+      "line_id": "L01",
+      "description": "Room charges - twin sharing",
+      "category": "ROOM",
+      "ward_context": "WARD",
+      "billed": "14000.00",
+      "payable": "14000.00",
+      "fingerprint": "sha256:69500e0561615e4fda3ca701a7f1805011996f169886998fe3741c285e3b7c27"
+    },
+    {
+      "line_id": "L02",
+      "description": "Nursing charges",
+      "category": "NURSING",
+      "ward_context": "WARD",
+      "billed": "4500.00",
+      "payable": "4500.00",
+      "fingerprint": "sha256:d1ddedffc7518b65bea8d7e1427004342ef12a5af1ea82b93a1041fb0b287a5c"
+    },
+    {
+      "line_id": "L03",
+      "description": "Surgeon fee - debridement",
+      "category": "PROFESSIONAL_FEES",
+      "ward_context": "WARD",
+      "billed": "18000.00",
+      "payable": "18000.00",
+      "fingerprint": "sha256:98a63f8849a905e7eb9c158cf74967cea99f389eea0a5845e5bae699b12f8722"
+    },
+    {
+      "line_id": "L04",
+      "description": "Operation theatre charges",
+      "category": "OT_CHARGES",
+      "ward_context": "WARD",
+      "billed": "9500.00",
+      "payable": "9500.00",
+      "fingerprint": "sha256:a4c42b8c4164877890fd0b9f7624e5b0651c7c48995b6f5954b17cad69fb4fa3"
+    },
+    {
+      "line_id": "L05",
+      "description": "Pharmacy - drugs, insulin, antibiotics",
+      "category": "PHARMACY",
+      "ward_context": "WARD",
+      "billed": "21340.25",
+      "payable": "21340.25",
+      "fingerprint": "sha256:19a358f8c1fe467ba9fa97dde5b7eead508d7d476ff0b6de416b31006bb5e575"
+    },
+    {
+      "line_id": "L06",
+      "description": "Dressing materials",
+      "category": "CONSUMABLES",
+      "ward_context": "WARD",
+      "billed": "6780.00",
+      "payable": "6780.00",
+      "fingerprint": "sha256:b3d5ede6afcb352ae25b056414db8eff912b40426a5ab3182b19e060c2accaf3"
+    },
+    {
+      "line_id": "L07",
+      "description": "Investigations - HbA1c, culture, X-ray foot",
+      "category": "DIAGNOSTICS",
+      "ward_context": "WARD",
+      "billed": "7950.00",
+      "payable": "7950.00",
+      "fingerprint": "sha256:a48d2d10306869178f5840b09e2a3aad24712c23770f83dba6253d06dd839497"
+    },
+    {
+      "line_id": "L08",
+      "description": "Physician visits",
+      "category": "PROFESSIONAL_FEES",
+      "ward_context": "WARD",
+      "billed": "3500.00",
+      "payable": "3500.00",
+      "fingerprint": "sha256:1ef75fc64c21053b33ca6921bba93f55c7266ba02f46809107138821b077e551"
+    },
+    {
+      "line_id": "L09",
+      "description": "Urine bag",
+      "category": "OTHER_HOSPITAL_SERVICES",
+      "ward_context": "WARD",
+      "billed": "120.00",
+      "payable": "0.00",
+      "fingerprint": "sha256:44eeebe024052b386839c5d701bf04dd3432be3614abc02887f603d064172a8d"
+    },
+    {
+      "line_id": "L10",
+      "description": "Hand wash",
+      "category": "OTHER_HOSPITAL_SERVICES",
+      "ward_context": "WARD",
+      "billed": "160.00",
+      "payable": "0.00",
+      "fingerprint": "sha256:e841d0c405266380047733bb4c36268cad31034d90c948ba59dc6c97be70a0bb"
+    }
+  ],
+  "adjustments": [
+    {
+      "adjustment_id": "ADJ-0011",
+      "level": "LINE",
+      "line_id": "L09",
+      "rule_id": "R-LINE-NONPAYABLE",
+      "rule_version": "1.0.0",
+      "reason_code": "NME_SUBSUMED_TREATMENT",
+      "amount": "120.00",
+      "engine_amount": "120.00",
+      "origin": "ENGINE",
+      "override_ref": null,
+      "base_before": "120.00",
+      "remaining_after": "0.00",
+      "formula": "remaining (full)",
+      "explanation": "'Urine bag' matched NME-303 (Urine bag); treatment DISALLOW_FULL_IF_BILLED_SEPARATELY under list NMELIST-ILL-A v2026.1.0.",
+      "authority": {
+        "artifact": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+        "doc_id": "ILL-WORDING-A-2026",
+        "clause": "4.1 Non-payable items"
+      },
+      "evidence_refs": [
+        {
+          "document_id": "DOC-0003-FB2",
+          "page": 2,
+          "bbox": [
+            40,
+            248,
+            560,
+            262
+          ],
+          "quote": "Urine bag 120.00"
+        }
+      ]
+    },
+    {
+      "adjustment_id": "ADJ-0012",
+      "level": "LINE",
+      "line_id": "L10",
+      "rule_id": "R-LINE-NONPAYABLE",
+      "rule_version": "1.0.0",
+      "reason_code": "NME_SUBSUMED_ROOM",
+      "amount": "160.00",
+      "engine_amount": "160.00",
+      "origin": "ENGINE",
+      "override_ref": null,
+      "base_before": "160.00",
+      "remaining_after": "0.00",
+      "formula": "remaining (full)",
+      "explanation": "'Hand wash' matched NME-104 (Hand wash); treatment DISALLOW_FULL_IF_BILLED_SEPARATELY under list NMELIST-ILL-A v2026.1.0.",
+      "authority": {
+        "artifact": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+        "doc_id": "ILL-WORDING-A-2026",
+        "clause": "4.1 Non-payable items"
+      },
+      "evidence_refs": [
+        {
+          "document_id": "DOC-0003-FB2",
+          "page": 2,
+          "bbox": [
+            40,
+            264,
+            560,
+            278
+          ],
+          "quote": "Hand wash 160.00"
+        }
+      ]
+    },
+    {
+      "adjustment_id": "ADJ-0021",
+      "level": "CLAIM",
+      "line_id": null,
+      "rule_id": "R-CLAIM-ROUNDING",
+      "rule_version": "1.0.0",
+      "reason_code": "ROUNDING",
+      "amount": "0.25",
+      "engine_amount": "0.25",
+      "origin": "ENGINE",
+      "override_ref": null,
+      "base_before": "85570.25",
+      "remaining_after": "85570.00",
+      "formula": "85570.25 -> 85570 (RUPEE_HALF_UP)",
+      "explanation": "Final payable rounded per configuration; a negative amount increases the payable.",
+      "authority": {
+        "artifact": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+        "doc_id": "ILL-CLAIMS-MANUAL-A-2026",
+        "clause": "2.4 Rounding of settlement amounts"
+      },
+      "evidence_refs": [
+        {
+          "record_type": "CONFIG",
+          "record_id": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+          "field": "rounding.final_payable"
+        }
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "finding_id": "FND-0006",
+      "rule_id": "R-ELIG-WAITING",
+      "category": "CLINICAL",
+      "kind": "POSSIBLE_PED_WITHIN_WAITING_PERIOD",
+      "severity": "HIGH",
+      "blocking": false,
+      "blocked_scopes": [],
+      "summary": "Clinical history mentions 'known case of type 2 diabetes mellitus for 6 years, on oral hypoglycaemic agents'. Continuous cover is 27 months, below the 36-month PED waiting period. Whether the condition is a PED as defined, and whether it is related to this admission, needs medical-officer review. No deduction or denial is applied by the engine.",
+      "uncertainty_note": "Whether the condition meets the policy's PED definition and relates to this admission requires medical-officer judgement; the engine applies no deduction.",
+      "evidence_refs": [
+        {
+          "document_id": "DOC-0003-DS",
+          "page": 1,
+          "bbox": [
+            72,
+            250,
+            520,
+            282
+          ],
+          "quote": "known case of type 2 diabetes mellitus for 6 years, on oral hypoglycaemic agents"
+        }
+      ],
+      "route_to": "MEDICAL_OFFICER",
+      "status": "OPEN"
+    },
+    {
+      "finding_id": "FND-0023",
+      "rule_id": "R-ANOM-BILLNO-REUSE",
+      "category": "ANOMALY",
+      "kind": "ANOMALY_BILL_NUMBER_REUSE",
+      "severity": "MEDIUM",
+      "blocking": false,
+      "blocked_scopes": [],
+      "summary": "Bill number SH/26/0915 from the same hospital also appears on claim(s) ['CLM-DEMO-0088'] for a different member. This is a pattern for review, not a fraud determination.",
+      "uncertainty_note": "Pattern only; common innocent causes include hospital numbering resets and data-entry errors. Not a fraud determination.",
+      "evidence_refs": [
+        {
+          "document_id": "DOC-0003-FB2",
+          "page": 1,
+          "bbox": [
+            400,
+            60,
+            540,
+            76
+          ],
+          "quote": "Bill No: SH/26/0915"
+        }
+      ],
+      "route_to": "FWA_REVIEW",
+      "status": "OPEN"
+    }
+  ],
+  "query_items": [
+    {
+      "query_item_id": "QRY-0007",
+      "addressed_to": "HOSPITAL",
+      "requested_document_type": "PAST_TREATMENT_RECORDS",
+      "text": "Please provide the first consultation / past treatment records for the condition noted in the history, if available with the hospital.",
+      "linked_findings": [
+        "FND-0006"
+      ]
+    },
+    {
+      "query_item_id": "QRY-0008",
+      "addressed_to": "INSURER",
+      "requested_document_type": "PROPOSAL_FORM",
+      "text": "Please share the proposal form and underwriting disclosures for the policy, for PED assessment.",
+      "linked_findings": [
+        "FND-0006"
+      ]
+    }
+  ],
+  "rule_executions": [
+    {
+      "execution_id": "EXE-0001",
+      "rule_id": "R-GATE-IDENTITY",
+      "rule_version": "1.0.0",
+      "status": "PASSED",
+      "detail": {
+        "sources_checked": 3,
+        "method": "exact normalised match (harness)"
+      }
+    },
+    {
+      "execution_id": "EXE-0002",
+      "rule_id": "R-GATE-DATES",
+      "rule_version": "1.0.0",
+      "status": "PASSED",
+      "detail": {
+        "admission_date": "2026-09-02"
+      }
+    },
+    {
+      "execution_id": "EXE-0003",
+      "rule_id": "R-GATE-ITEMISATION",
+      "rule_version": "1.0.0",
+      "status": "PASSED",
+      "detail": {
+        "stated_total": "85850.25",
+        "sum_of_lines": "85850.25"
+      }
+    },
+    {
+      "execution_id": "EXE-0004",
+      "rule_id": "R-DOC-COMPLETENESS",
+      "rule_version": "1.0.0",
+      "status": "PASSED",
+      "detail": {
+        "required": [
+          "CLAIM_FORM",
+          "DISCHARGE_SUMMARY",
+          "INVESTIGATION_REPORT",
+          "PAYMENT_RECEIPT",
+          "ID_PROOF",
+          "BANK_DETAILS"
+        ],
+        "missing": []
+      }
+    },
+    {
+      "execution_id": "EXE-0005",
+      "rule_id": "R-ELIG-POLICY-ACTIVE",
+      "rule_version": "1.0.0",
+      "status": "PASSED",
+      "detail": {
+        "evaluated_dates": [
+          "2026-09-02"
+        ],
+        "invariant_under_date_conflict": false,
+        "period": [
+          "2026-05-15",
+          "2027-05-14"
+        ]
+      }
+    },
+    {
+      "execution_id": "EXE-0009",
+      "rule_id": "R-ELIG-WAITING",
+      "rule_version": "1.1.0",
+      "status": "REVIEW",
+      "detail": {
+        "continuous_cover_months": 27,
+        "evaluated_dates": [
+          "2026-09-02"
+        ],
+        "invariant_under_date_conflict": false,
+        "ped_signal": "known case of type 2 diabetes mellitus for 6 years, on oral hypoglycaemic agents"
+      }
+    },
+    {
+      "execution_id": "EXE-0010",
+      "rule_id": "R-LINE-DUPLICATE",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE",
+      "detail": {
+        "duplicate_lines": []
+      }
+    },
+    {
+      "execution_id": "EXE-0013",
+      "rule_id": "R-LINE-NONPAYABLE",
+      "rule_version": "1.0.0",
+      "status": "APPLIED",
+      "detail": {
+        "matches": [
+          {
+            "line_id": "L09",
+            "item_code": "NME-303"
+          },
+          {
+            "line_id": "L10",
+            "item_code": "NME-104"
+          }
+        ]
+      }
+    },
+    {
+      "execution_id": "EXE-0014",
+      "rule_id": "R-LINE-TARIFF",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE",
+      "detail": {
+        "reason": "no applicable network tariff"
+      }
+    },
+    {
+      "execution_id": "EXE-0015",
+      "rule_id": "R-LINE-ROOM-CAP",
+      "rule_version": "1.1.0",
+      "status": "NOT_APPLICABLE",
+      "detail": {
+        "eligible_normal_per_day": "4000.00",
+        "eligible_icu_per_day": "8000.00",
+        "actual_normal_per_day": "2800.00",
+        "actual_rate_basis": "DAY_WEIGHTED",
+        "billed_room_days": "5",
+        "allowed_room_days": 5,
+        "lines": []
+      }
+    },
+    {
+      "execution_id": "EXE-0016",
+      "rule_id": "R-LINE-PROPORTIONATE",
+      "rule_version": "1.1.0",
+      "status": "NOT_APPLICABLE",
+      "detail": {
+        "reason": "actual room rate within eligibility",
+        "eligible": "4000.00",
+        "actual": "2800.00"
+      }
+    },
+    {
+      "execution_id": "EXE-0017",
+      "rule_id": "R-CLAIM-SUBLIMIT",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE",
+      "detail": {
+        "sub_limits": []
+      }
+    },
+    {
+      "execution_id": "EXE-0018",
+      "rule_id": "R-CLAIM-DEDUCTIBLE",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE",
+      "detail": {
+        "deductible": "0.00"
+      }
+    },
+    {
+      "execution_id": "EXE-0019",
+      "rule_id": "R-CLAIM-COPAY",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE",
+      "detail": {
+        "age_at_admission": 52
+      }
+    },
+    {
+      "execution_id": "EXE-0020",
+      "rule_id": "R-CLAIM-SI-CAP",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE",
+      "detail": {
+        "available_si": "400000.00"
+      }
+    },
+    {
+      "execution_id": "EXE-0022",
+      "rule_id": "R-CLAIM-ROUNDING",
+      "rule_version": "1.0.0",
+      "status": "APPLIED",
+      "detail": {
+        "before": "85570.25",
+        "after": "85570.00"
+      }
+    },
+    {
+      "execution_id": "EXE-0024",
+      "rule_id": "R-ANOM-BILLNO-REUSE",
+      "rule_version": "0.9.0",
+      "status": "FLAGGED",
+      "detail": {
+        "other_claims": [
+          "CLM-DEMO-0088"
+        ]
+      }
+    }
+  ],
+  "output_hash": "sha256:5eeeada55eadb6eb80bacee586493f872e347ac2295a93b7573e9424d6972b00"
+}

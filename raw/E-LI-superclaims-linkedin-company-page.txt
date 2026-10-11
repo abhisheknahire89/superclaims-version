@@ -1,0 +1,39 @@
+EVIDENCE E-LI-01..E-LI-20 — Superclaims LinkedIn company page: observation log (internal research record; do not republish)
+Source: https://www.linkedin.com/company/superclaim (home, about, jobs, posts). Captured 2026-10-09 ~18:30 IST in the built-in browser,
+which had an existing LinkedIn session belonging to the user. Only company-authored content was recorded. Viewer-specific content
+(connection names, recommendations, ads, the viewer's own name) was not stored. Individual employees named in team posts are omitted;
+founders are named only where press releases also name them. Dates: month/day for current-year posts, year added for older ones;
+"4h" read as 2026-10-09. Reaction counts omitted. Each entry is a paraphrase with at most one short quotation (under 15 words).
+All metric statements are COMPANY-REPORTED marketing statements, not independently verified.
+
+E-LI-01 About/Jobs tabs: tagline describes an AI claims adjudication engine for insurers and TPAs; 11-50 employees; 12 associated members;
+        HQ Hyderabad; founded 2024; privately held; 881 followers. Overview stresses replacing manual reviews and "repetitive non-medical checks".
+        Jobs tab showed no open jobs.
+E-LI-02 2026-10-09: claims that across "1M+ claims processed", missed deductions/non-payables add up to "nearly 10% claims-value impact".
+E-LI-03 2026-10-01: says the same clinical, policy and audit judgment is applied consistently across 1M+ claims.
+E-LI-04 2026-09-23: co-founders' Express Healthcare op-ed summarised as three principles: evidence before scale; "Humans remain accountable";
+        technology that fits the workflow; references SAHI and BODH. (Op-ed itself not located.)
+E-LI-05 2026-09-17: says adjudication moved "from hours to approximately 5 minutes" across 1M+ claims.
+E-LI-06 2026-08-04: "latest advancements" post listing 80%+ reduction in manual operations, under-5-minute adjudication,
+        "99%+ decision accuracy", automated policy/tariff/clinical-guideline validation, and a move toward "autonomous claims adjudication".
+E-LI-07 2025-10-29 (two posts): hiring a "Health Claims Processor" (Hyderabad, on-site, ₹1.8–2.5 LPA) whose role is to
+        "Review and verify AI-processed claims"; asks for 1–3 years in TPA ops/hospital billing and pharma/nursing/life-science degrees.
+        Also a founder's-office intern post. Both describe the company as 70% faster, 99% accurate, 100K+ claims/month.
+E-LI-08 2025-10-29: hiring a backend developer / LLM engineer; stack named as Python, FastAPI, LangChain, LangGraph and GPT-class models;
+        LLM experience with open-source models, Gemini and Claude; "agentic AI workflows". Linked Indeed listing not opened.
+E-LI-09 2025-11-06: introduces four agents — PreAuth, Non-Medico, Medico, Audit — aimed at TPAs.
+E-LI-10 2025-10-11: 400,000-claims milestone (reshared CEO post); 2025-11-18: "automated over 420,000" claims, with revenue-cycle hashtags;
+        2026-01-03: processed 2,026 claims on 1 January.
+E-LI-11 2026-08-05: joined the India Insurtech Association; the association's welcome post mentions claims adjudication, document processing,
+        fraud detection and workflow orchestration for insurers, TPAs, hospitals and employers.
+E-LI-12 2026-06-17: states India has about 3 crore health claims a year, an average of 90 minutes each, and "₹40,000 per claim average".
+E-LI-13 2026-07-07: announces joining ekincare while operating independently; reshared ekincare post frames a 90-minute manual review
+        becoming under 5 minutes AI-assisted; mentions a CNBC-TV18 interview (not located).
+E-LI-14 2026-07-21: shares a Telangana Today feature; says over a lakh claims a month, "turning a 90-minute wait into under 5".
+E-LI-15 2026-09-03: describes one adjudicator handling "50+ files. Every single day." (Implies under ~10 minutes per file in an 8-hour day.)
+E-LI-16 2026-08-13: says the product handles policy, clinical, billing, fraud and audit judgments "automatically, in ~10 minutes".
+E-LI-17 2026-07-15: leakage arithmetic — 1% better leakage control on ₹500 crore of payouts is ₹5 crore; lists duplicates, ineligible items,
+        non-payables, tariff mismatches.
+E-LI-18 2026-06-24: team-recognition post (names omitted) repeating 100K+ claims monthly and 300+ → ~10 minutes.
+E-LI-19 2025-12-30: "Celebrating 1 year of Superclaims" (suggests operations from about December 2024).
+E-LI-20 2026-02-04: hiring an HR executive (role mailbox).

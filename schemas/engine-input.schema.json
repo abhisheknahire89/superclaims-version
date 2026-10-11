@@ -1,0 +1,393 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/aw/schemas/engine-input.schema.json",
+  "title": "EngineInput",
+  "description": "PROPOSED. The rule engine's only input: reviewer-confirmed resolved facts and confirmed bill lines, assembled by the reconcile step from resolved_fact and bill_line rows (mapping in 05 §1.6). The engine never reads raw extraction output.",
+  "type": "object",
+  "$defs": {
+    "docEvidence": {
+      "type": "object",
+      "required": [
+        "document_id",
+        "page",
+        "quote"
+      ],
+      "properties": {
+        "document_id": {
+          "type": "string"
+        },
+        "page": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "bbox": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          },
+          "minItems": 4,
+          "maxItems": 4
+        },
+        "quote": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "observation": {
+      "type": "object",
+      "required": [
+        "source",
+        "evidence"
+      ],
+      "properties": {
+        "source": {
+          "type": "string"
+        },
+        "evidence": {
+          "$ref": "#/$defs/docEvidence"
+        }
+      }
+    }
+  },
+  "required": [
+    "claim_id",
+    "evaluation_id",
+    "workflow",
+    "member",
+    "policy",
+    "hospital_id",
+    "hospital_is_network",
+    "admission_date",
+    "discharge_date",
+    "procedure_codes",
+    "identity_observations",
+    "admission_date_observations",
+    "itemised_bill_available",
+    "bill_lines",
+    "documents_present",
+    "ped_signals",
+    "portfolio_bill_number_index"
+  ],
+  "properties": {
+    "claim_id": {
+      "type": "string"
+    },
+    "evaluation_id": {
+      "type": "string"
+    },
+    "supersedes_evaluation_id": {
+      "type": "string"
+    },
+    "workflow": {
+      "enum": [
+        "PREAUTH",
+        "ENHANCEMENT",
+        "CASHLESS_DISCHARGE",
+        "IPD_REIMBURSEMENT",
+        "OPD_REIMBURSEMENT",
+        "OPD_CASHLESS"
+      ]
+    },
+    "member": {
+      "type": "object",
+      "required": [
+        "member_id",
+        "name_normalised",
+        "gender",
+        "dob"
+      ],
+      "properties": {
+        "gender": {
+          "enum": [
+            "F",
+            "M",
+            "X",
+            "U"
+          ]
+        },
+        "dob": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "required": [
+        "policy_no",
+        "period_start",
+        "period_end",
+        "continuous_cover_since",
+        "base_sum_insured",
+        "cumulative_bonus",
+        "paid_in_current_year"
+      ],
+      "properties": {
+        "period_start": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "period_end": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "continuous_cover_since": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        "base_sum_insured": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]{2}$"
+        },
+        "cumulative_bonus": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]{2}$"
+        },
+        "paid_in_current_year": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]{2}$"
+        }
+      }
+    },
+    "hospital_id": {
+      "type": "string"
+    },
+    "hospital_is_network": {
+      "type": "boolean"
+    },
+    "bill_no": {
+      "type": "string"
+    },
+    "bill_no_evidence": {
+      "$ref": "#/$defs/docEvidence"
+    },
+    "bill_stated_total": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]{2}$"
+    },
+    "admission_date": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "description": "Established value; null while a date conflict is open."
+    },
+    "discharge_date": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "procedure_codes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "diagnosis": {
+      "type": "object",
+      "required": [
+        "text",
+        "evidence"
+      ],
+      "properties": {
+        "evidence": {
+          "$ref": "#/$defs/docEvidence"
+        }
+      }
+    },
+    "identity_observations": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/observation"
+          },
+          {
+            "required": [
+              "name_normalised"
+            ]
+          }
+        ]
+      }
+    },
+    "admission_date_observations": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "$ref": "#/$defs/observation"
+          },
+          {
+            "required": [
+              "value"
+            ],
+            "properties": {
+              "value": {
+                "type": "string",
+                "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "itemised_bill_available": {
+      "type": "boolean"
+    },
+    "summary_bill_evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/docEvidence"
+      }
+    },
+    "bill_lines": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "line_id",
+          "description",
+          "category",
+          "billed",
+          "evidence"
+        ],
+        "properties": {
+          "line_id": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "category": {
+            "enum": [
+              "ROOM",
+              "ICU_ROOM",
+              "NURSING",
+              "PROFESSIONAL_FEES",
+              "OT_CHARGES",
+              "PROCEDURE_CHARGES",
+              "PHARMACY",
+              "CONSUMABLES",
+              "IMPLANTS",
+              "DIAGNOSTICS",
+              "OTHER_HOSPITAL_SERVICES"
+            ]
+          },
+          "ward_context": {
+            "enum": [
+              "WARD",
+              "ICU",
+              "DAYCARE",
+              "OPD",
+              "UNKNOWN"
+            ]
+          },
+          "room_category": {
+            "type": "string"
+          },
+          "quantity": {
+            "type": "string",
+            "pattern": "^[0-9]+(\\.[0-9]+)?$"
+          },
+          "unit_rate": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]{2}$"
+          },
+          "billed": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]{2}$"
+          },
+          "invoice_no": {
+            "type": "string"
+          },
+          "service_date": {
+            "type": "string",
+            "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}$"
+          },
+          "evidence": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/$defs/docEvidence"
+            }
+          }
+        }
+      }
+    },
+    "documents_present": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "document_id",
+          "type"
+        ]
+      }
+    },
+    "ped_signals": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "evidence"
+        ],
+        "properties": {
+          "evidence": {
+            "$ref": "#/$defs/docEvidence"
+          }
+        }
+      }
+    },
+    "portfolio_bill_number_index": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "claim_id",
+          "bill_no",
+          "hospital_id",
+          "member_id"
+        ]
+      }
+    },
+    "reviewer_overrides": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "override_id",
+          "line_id",
+          "rule_id",
+          "amount",
+          "reason_code",
+          "comment",
+          "actor",
+          "line_fingerprint"
+        ],
+        "properties": {
+          "amount": {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]{2}$"
+          },
+          "comment": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  }
+}

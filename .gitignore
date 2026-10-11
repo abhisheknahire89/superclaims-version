@@ -1,0 +1,19 @@
+# local state — never committed
+.env
+*.env.local
+workbench/.env
+workbench/.venv/
+workbench/.devdb/
+workbench/.devdb.env
+workbench/.objects/
+workbench/.backups/
+workbench/ui-shots/
+workbench/e2e-shots/
+workbench/corpus/out/
+workbench/node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+*.egg-info/
+build/
+dist/

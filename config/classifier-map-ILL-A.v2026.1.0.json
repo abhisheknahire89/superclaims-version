@@ -1,0 +1,43 @@
+{
+  "$schema": "../schemas/classifier-map.schema.json",
+  "map_id": "CLASSMAP-ILL-A",
+  "map_version": "2026.1.0",
+  "status": "ILLUSTRATIVE",
+  "illustrative_notice": "Invented dictionaries for the synthetic demo claims. A customer's own document types, bill vocabulary and procedure list replace these.",
+  "document_types": [
+    {"type": "CLAIM_FORM", "keywords_any": ["claim form"], "priority": 10},
+    {"type": "DISCHARGE_SUMMARY", "keywords_any": ["discharge summary"], "priority": 10},
+    {"type": "ADMISSION_RECORD", "keywords_any": ["admission record", "indoor case paper"], "priority": 9},
+    {"type": "FINAL_BILL_SUMMARY", "keywords_any": ["summary bill", "category-wise summary"], "priority": 9},
+    {"type": "FINAL_BILL_ITEMISED", "keywords_any": ["detailed bill", "itemised final bill", "final bill"], "priority": 8},
+    {"type": "PHARMACY_BILL", "keywords_any": ["pharmacy invoice", "pharmacy bill"], "priority": 7},
+    {"type": "INVESTIGATION_REPORT", "keywords_any": ["investigation report", "laboratory report", "radiology report"], "priority": 7},
+    {"type": "PAYMENT_RECEIPT", "keywords_any": ["payment receipt"], "priority": 6},
+    {"type": "ID_PROOF", "keywords_any": ["identity proof"], "priority": 6},
+    {"type": "BANK_DETAILS", "keywords_any": ["bank account details", "cancelled cheque"], "priority": 6}
+  ],
+  "line_categories": [
+    {"category": "ICU_ROOM", "keywords_any": ["icu charges", "icu bed", "iccu charges"]},
+    {"category": "ROOM", "keywords_any": ["room charges", "room rent", "bed charges"]},
+    {"category": "NURSING", "keywords_any": ["nursing"]},
+    {"category": "OT_CHARGES", "keywords_any": ["operation theatre", "ot charges"]},
+    {"category": "PROFESSIONAL_FEES", "keywords_any": ["surgeon fee", "anaesthetist", "consultant visit", "physician visit", "intensivist", "doctor visit"]},
+    {"category": "PHARMACY", "keywords_any": ["pharmacy", "drugs", "medicines"]},
+    {"category": "IMPLANTS", "keywords_any": ["implant", "stent", "mesh"]},
+    {"category": "CONSUMABLES", "keywords_any": ["consumables", "dressing"]},
+    {"category": "DIAGNOSTICS", "keywords_any": ["investigation", "laboratory", "ct scan", "x-ray", "mri", "usg", "ultrasound"]},
+    {"category": "OTHER_HOSPITAL_SERVICES", "keywords_any": ["registration", "toothpaste", "toothbrush", "mineral water", "gown", "television", "telephone", "infusion pump", "urine bag", "hand wash", "attendant", "diet"]}
+  ],
+  "room_categories": [
+    {"room_category": "ICU", "keywords_any": ["icu"]},
+    {"room_category": "SINGLE_AC", "keywords_any": ["single ac", "single room"]},
+    {"room_category": "TWIN_SHARING", "keywords_any": ["twin sharing", "twin"]},
+    {"room_category": "GENERAL_WARD", "keywords_any": ["general ward"]}
+  ],
+  "procedures": [
+    {"code": "LAP_CHOLECYSTECTOMY", "keywords_any": ["laparoscopic cholecystectomy", "lap chole"]},
+    {"code": "LAP_APPENDICECTOMY", "keywords_any": ["laparoscopic appendicectomy", "laparoscopic appendectomy"]},
+    {"code": "DEBRIDEMENT", "keywords_any": ["debridement"]},
+    {"code": "CATARACT", "keywords_any": ["cataract"]}
+  ]
+}

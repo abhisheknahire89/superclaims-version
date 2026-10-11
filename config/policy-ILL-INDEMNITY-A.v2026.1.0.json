@@ -1,0 +1,199 @@
+{
+  "$schema": "../schemas/policy-config.schema.json",
+  "config_id": "POLCFG-ILL-INDEMNITY-A",
+  "config_version": "2026.1.0",
+  "status": "ILLUSTRATIVE",
+  "illustrative_notice": "Invented for engineering tests. Not a real insurance product, not derived from any insurer's filed wording, and not legal or coverage advice.",
+  "product_name": "Illustrative Indemnity Plan A",
+  "product_uin": "ILLUSTRATIVE-NO-UIN",
+  "jurisdiction": "IN",
+  "customer_id": "TENANT-DEMO",
+  "effective_from": "2026-04-01",
+  "effective_to": null,
+  "currency": "INR",
+  "authoritative_documents": [
+    {
+      "doc_id": "ILL-WORDING-A-2026",
+      "title": "Illustrative policy wording A (synthetic)",
+      "clauses_referenced": [
+        "3.1 Room rent",
+        "3.2 Proportionate deduction",
+        "3.3 Sub-limits",
+        "3.4 Co-payment",
+        "3.5 Deductible",
+        "4.1 Non-payable items",
+        "5.2 Waiting periods",
+        "6.1 Sum insured",
+        "7.2 Expenses actually incurred"
+      ]
+    },
+    {
+      "doc_id": "ILL-CLAIMS-MANUAL-A-2026",
+      "title": "Illustrative claims manual A (synthetic)",
+      "clauses_referenced": [
+        "2.4 Rounding of settlement amounts"
+      ]
+    }
+  ],
+  "rounding": {
+    "line_step": "PAISE_HALF_UP",
+    "final_payable": "RUPEE_HALF_UP",
+    "record_rounding_adjustment": true
+  },
+  "sum_insured": {
+    "basis": "INDIVIDUAL_PER_POLICY_YEAR",
+    "cumulative_bonus_counts_toward_available_si": true,
+    "cumulative_bonus_counts_toward_room_rent_base": false
+  },
+  "room_rent": {
+    "normal_room_limit": {
+      "type": "PERCENT_OF_BASE_SI_PER_DAY",
+      "percent": "1.0"
+    },
+    "icu_limit": {
+      "type": "PERCENT_OF_BASE_SI_PER_DAY",
+      "percent": "2.0"
+    },
+    "proportionate_deduction": {
+      "enabled": true,
+      "ratio_basis": "ELIGIBLE_NORMAL_ROOM_RATE / ACTUAL_NORMAL_ROOM_RATE",
+      "applies_to_categories": [
+        "PROFESSIONAL_FEES",
+        "NURSING",
+        "OT_CHARGES",
+        "PROCEDURE_CHARGES",
+        "OTHER_HOSPITAL_SERVICES"
+      ],
+      "exempt_categories": [
+        "PHARMACY",
+        "CONSUMABLES",
+        "IMPLANTS",
+        "DIAGNOSTICS",
+        "ROOM",
+        "ICU_ROOM"
+      ],
+      "exempt_ward_contexts": [
+        "ICU"
+      ],
+      "skip_if_hospital_has_uniform_pricing": true,
+      "interpretation_note": "Which categories are 'associated medical expenses', whether ICU-attributed lines are exempt, and how the 'actual' room rate is taken when the patient changed rooms (DAY_WEIGHTED here) are policy-wording questions. This configuration is one illustrative interpretation and must be replaced by the customer's claims manual.",
+      "actual_rate_basis": "DAY_WEIGHTED"
+    },
+    "room_day_count": "MIDNIGHTS"
+  },
+  "non_payable": {
+    "list_ref": "NMELIST-ILL-A",
+    "list_version": "2026.1.0",
+    "treatment": {
+      "NON_PAYABLE": "DISALLOW_FULL",
+      "SUBSUMED_ROOM": "DISALLOW_FULL_IF_BILLED_SEPARATELY",
+      "SUBSUMED_PROCEDURE": "DISALLOW_FULL_IF_BILLED_SEPARATELY",
+      "SUBSUMED_TREATMENT": "DISALLOW_FULL_IF_BILLED_SEPARATELY"
+    }
+  },
+  "tariff": {
+    "apply_network_tariff_on_reimbursement": true,
+    "on_missing_tariff_item": "NO_ADJUSTMENT_FLAG_FOR_REVIEW"
+  },
+  "sub_limits": [
+    {
+      "code": "SUBLIMIT-CATARACT-PER-EYE",
+      "procedure_codes": [
+        "CATARACT"
+      ],
+      "amount": "40000.00"
+    }
+  ],
+  "deductible": {
+    "amount": "0.00",
+    "applies": "PER_CLAIM"
+  },
+  "co_payment": {
+    "rules": [
+      {
+        "rule_code": "COPAY-AGE-61",
+        "condition": {
+          "age_at_admission_gte": 61
+        },
+        "percent": "10.0"
+      }
+    ],
+    "base": "ADMISSIBLE_AFTER_SUBLIMITS_AND_DEDUCTIBLE"
+  },
+  "waiting_periods": {
+    "initial_days": 30,
+    "initial_waiting_exempt_if_accident": true,
+    "pre_existing_disease_months": 36,
+    "specific_conditions": [
+      {
+        "code": "WP-SPEC-GALLBLADDER",
+        "label": "Cholelithiasis / cholecystectomy (illustrative)",
+        "months": 24,
+        "procedure_codes": [
+          "LAP_CHOLECYSTECTOMY"
+        ]
+      }
+    ],
+    "automation_boundary": "Waiting-period findings are produced as REVIEW findings. The engine never denies a claim on a waiting period; PED determination requires medical-officer review and, for repudiation, the insurer's Claims Review Committee."
+  },
+  "pre_post_hospitalisation": {
+    "pre_days": 30,
+    "post_days": 60
+  },
+  "calculation_order": [
+    "R-GATE-IDENTITY",
+    "R-GATE-DATES",
+    "R-GATE-ITEMISATION",
+    "R-DOC-COMPLETENESS",
+    "R-ELIG-POLICY-ACTIVE",
+    "R-ELIG-WAITING",
+    "R-LINE-DUPLICATE",
+    "R-LINE-NONPAYABLE",
+    "R-LINE-TARIFF",
+    "R-LINE-ROOM-CAP",
+    "R-LINE-PROPORTIONATE",
+    "R-CLAIM-SUBLIMIT",
+    "R-CLAIM-DEDUCTIBLE",
+    "R-CLAIM-COPAY",
+    "R-CLAIM-SI-CAP",
+    "R-CLAIM-ROUNDING"
+  ],
+  "clause_refs": {
+    "R-LINE-DUPLICATE": {
+      "doc_id": "ILL-WORDING-A-2026",
+      "clause": "7.2 Expenses actually incurred"
+    },
+    "R-LINE-NONPAYABLE": {
+      "doc_id": "ILL-WORDING-A-2026",
+      "clause": "4.1 Non-payable items"
+    },
+    "R-LINE-ROOM-CAP": {
+      "doc_id": "ILL-WORDING-A-2026",
+      "clause": "3.1 Room rent"
+    },
+    "R-LINE-PROPORTIONATE": {
+      "doc_id": "ILL-WORDING-A-2026",
+      "clause": "3.2 Proportionate deduction"
+    },
+    "R-CLAIM-SUBLIMIT": {
+      "doc_id": "ILL-WORDING-A-2026",
+      "clause": "3.3 Sub-limits"
+    },
+    "R-CLAIM-DEDUCTIBLE": {
+      "doc_id": "ILL-WORDING-A-2026",
+      "clause": "3.5 Deductible"
+    },
+    "R-CLAIM-COPAY": {
+      "doc_id": "ILL-WORDING-A-2026",
+      "clause": "3.4 Co-payment"
+    },
+    "R-CLAIM-SI-CAP": {
+      "doc_id": "ILL-WORDING-A-2026",
+      "clause": "6.1 Sum insured"
+    },
+    "R-CLAIM-ROUNDING": {
+      "doc_id": "ILL-CLAIMS-MANUAL-A-2026",
+      "clause": "2.4 Rounding of settlement amounts"
+    }
+  }
+}

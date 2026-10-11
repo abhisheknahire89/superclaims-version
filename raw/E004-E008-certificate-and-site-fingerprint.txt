@@ -1,0 +1,20 @@
+EVIDENCE E004 — ISO/IEC 27001:2022 certificate PDF (image-only PDF; read visually)
+URL: https://superclaims.ai/certifications/cardit-labs-iso-27001-2022-certificate.pdf  (PDF title metadata: SKM_C227i26041510130 — a scanner file name)
+Screenshots: raw/screenshots/E004-iso-certificate-full.jpg, raw/screenshots/E004-iso-certificate-scope-zoom.png
+Transcription (from the rendered image; small print may contain transcription errors):
+  Certification body: United Registrar of Systems (URS); marks shown: URS, UKAS Management Systems (number not legible at this resolution), IAF.
+  Awarded to: CARDIT LABS PRIVATE LIMITED, Flat No 301, Srisampadha Arcade-1, Plot No 18-21 Sy No 40, Khajaguda, Behind Union Bank of India, Hyderabad, Telangana, 500104, India
+  Standard: ISO/IEC 27001:2022
+  Scope: "The Information Security Management System Covering Software Development and Support to Processes Health Insurance Claims End-to-End (As per SOA-CLPL/ISMS/SOA-01, Version-01, Dated -10-02-2026)"
+  Certificate number 146637/A/0001/UK/En; date of issue of certification cycle 14 April 2026; issue number 1; certificate expiry 13 April 2029;
+  certification cycle 1; revision 0; original certificate issue date 14 April 2026; signed on behalf of the Schemes Manager.
+Limitations: not verified against the certification body's register (a register lookup requires submitting a search form, which this research did not do).
+What it does not show: product security architecture, hosting region, subprocessors, SOC 2, DPDP compliance, or penetration-test results.
+
+EVIDENCE E008 — marketing-site technical fingerprint (observed 2026-10-09)
+  * Next.js App Router build with Turbopack chunks (/_next/static/chunks/turbopack-*.js; self.__next_f RSC flight data), static export.
+  * Served from Amazon S3 behind Amazon CloudFront (response headers server=AmazonS3, via=…cloudfront.net, x-amz-cf-pop=HYD57-P7, x-amz-server-side-encryption=AES256).
+  * robots.txt allows all; sitemap lists /, /security, /privacy, /terms (lastmod 2026-08-03T10:28:59Z).
+  * No third-party analytics, tag managers, chat widgets or API calls observed on load (only two self-hosted fonts: Cooper Light, DM Sans).
+  * Static probes /api, /login, /app, /docs, /llms.txt, /.well-known/security.txt → 404. No customer-facing product UI is reachable from the marketing domain.
+Interpretation limit: this describes the marketing website only. It is not evidence about the adjudication product's stack or hosting.

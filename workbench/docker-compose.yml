@@ -1,0 +1,32 @@
+# NOT YET RUN: written in a sandbox without Docker (ADR-12). Synthetic data only; passwords are development values.
+# From the research pack root:  docker compose -f workbench/docker-compose.yml up --build
+# Then open http://127.0.0.1:8080/
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_PASSWORD: dev-only-owner-pw
+      POSTGRES_DB: aw
+    volumes:
+      - ./scripts/compose-init-roles.sql:/docker-entrypoint-initdb.d/10-roles.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d aw"]
+      interval: 2s
+      retries: 30
+  app:
+    build:
+      context: ..
+      dockerfile: workbench/Dockerfile
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      AW_ENV: dev
+      AW_OWNER_DSN: postgresql://postgres:dev-only-owner-pw@db:5432/aw?sslmode=disable
+      AW_DATABASE_URL: postgresql://aw_app:dev-only-app-pw@db:5432/aw?sslmode=disable
+      AW_WORKER_DSN: postgresql://aw_worker:dev-only-worker-pw@db:5432/aw?sslmode=disable
+    command: >
+      sh -c "python -m aw.db.migrate \"$$AW_OWNER_DSN\" migrations &&
+             python -m aw.server --host 0.0.0.0 --port 8080 --seed-demo"
+    ports:
+      - "127.0.0.1:8080:8080"

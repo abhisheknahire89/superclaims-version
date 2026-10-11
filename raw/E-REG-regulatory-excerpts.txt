@@ -1,0 +1,70 @@
+REGULATORY EXCERPTS (verbatim passages extracted from official IRDAI PDFs on irdai.gov.in, read 2026-10-09 with pdf.js in the built-in browser)
+These excerpts support specific requirements in the pack. They are not legal advice; interpretations in the pack are marked for qualified review.
+
+E-REG-01  IRDAI Master Circular on Health Insurance Business — Ref IRDAI/HLT/CIR/PRO/84/5/2024, dated 29.05.2024 (Version 1), documentId=4942918
+  Ch.I para 15(b): "Insurer shall decide on the request for cashless authorization immediately but not more than one hour of receipt of request. Necessary systems and procedures shall be put in place by the Insurer immediately and not later than 31st July, 2024."
+  para 16(a): "Insurer shall grant final authorization within three hours of the receipt of discharge authorization request from the hospital. In no case, the policyholder shall be made to wait to be discharged from the Hospital."
+  para 16(b): "If there is any delay beyond three hours, the additional amount if any charged by the hospital shall be borne by the insurer from shareholder's fund."
+  para 17(a): "No claim shall be repudiated without the approval of PMC or a three-member sub-group of PMC called the Claims Review Committee (CRC)."
+  para 17(b): "In case, the claim is repudiated or disallowed partially, details shall be conveyed to the claimant along with full details giving reference to the specific terms and conditions of the policy document."
+  para 17(c): "Pursuant to intimation of the claim, Insurers and Third Party Administrators (TPAs) shall collect the required documents from the Hospitals. Policyholder shall not be required to submit the documents."
+  para 13: no policy/claim contestable on non-disclosure/misrepresentation except established fraud after the Moratorium Period, "i.e. 60 months of continuous coverage".
+  Ch.II A(I)(4)(b): CRC "shall independently take final decision on repudiation of every claim."
+  Ch.II A(IV)(c): insurers and councils "may endeavor to ... Onboard Hospitals and Health Care Providers on National Health Claims Exchange (NHCX)".
+  Ch.II B: Board-approved criteria for monitoring TPA performance, TATs; "In no case, the remuneration of TPAs shall depend upon the Incurred Claim Ratio".
+  Ch.III II(3): "express consent of the policyholder shall be obtained for sharing of medical records and any other related information in every instance."
+  [PARAPHRASE — verbatim not stored; see note at end] para 9: a grace period applies on renewal, and the circular addresses cover during the grace period.
+  [PARAPHRASE — verbatim not stored] para 15(a): insurers to aim for 100% cashless claim settlement, keeping reimbursement claims to a bare minimum.
+  [PARAPHRASE — verbatim not stored] para 16(c): where the patient dies during treatment, the insurer acts on the claim settlement request immediately so the body can be released.
+
+E-REG-02  Annexure to the same Master Circular — Annexure-6 lists superseded circulars, including:
+  (1) IRDAI/HLT/REG/CIR/193/07/2020 dated 22.07.2020 "Master Circular on Standardization of Health Insurance Products";
+  (5) IRDAI/HLT/MISC/CIR/95/04/2020 dated 18.04.2020 "Norms on settlement of health insurance claims";
+  (23) IRDAI/HLT/REG/CIR/011/01/2021 "Cashless Claims in compliance to the provisions of Regulation 31 ...";
+  (52) IRDAI/HLT/MISC/CIR/102/04/2021 "Emphasizing/reiterating existing provisions on Communication on settlement of health insurance claims."
+
+E-REG-03  IRDAI Master Circular on Protection of Policyholders' Interests, 2024 — Ref IRDAI/PP&GR/CIR/MISC/117/9/2024 dated 5 September 2024, documentId=5625747
+  Health section (p.30): "No claim shall be rejected or closed for want of documents or for delayed intimation of claim."
+  (p.30): "In case the claim is not settled within the specified timelines, then the claimant is entitled for interest at bank rate plus 2 percent from the date of receipt of intimation to till the date of payment. Such interest shall be suo-moto paid by the insurers."
+  3(iii)(6) (p.31): "Settlement of claims (other than cashless) shall be settled within fifteen days from submission of claim."
+  3(iii)(5) (p.31): repudiated/rejected/partially disallowed claims to be communicated "with full details giving reference to the specific terms and conditions of the policy document."
+  Schedule D, Customer Information Sheet (fragment transcribed 9 Oct): co-payment is described as a "specified amount/percentage of the admissible claim amount".
+  Schedule C (p.97), matters in health policies: "The sub-limits, Proportionate Deductions and the existence of Package rates if any, with cross reference to the concerned policy section", "Co-pay limits if any", PED waiting period, specific waiting periods, deductibles.
+
+E-REG-04  IRDAI (Third Party Administrators – Health Services) Regulations, 2016, as amended up to 03/12/2019 (consolidated copy), documentId=602997
+  Reg 3(1)(a): TPA services include "servicing of claims ... by way of pre-authorization of cashless treatment or settlement of claims other than cashless claims or both, as per the underlying terms and conditions of the respective policy and within the framework of the guidelines issued by the insurers for settlement of claims."
+  Scrutiny of claims (p.23–24): "TPA may admit claims, authorize cashless facility and recommend to the insurer for the payment of the claim which shall be in line with the detailed claims guidelines issued to TPA by the insurers for the particular product"; settlement communication must state "The granular details of the payments made, amounts disallowed and the reasons there for"; "In case of inadmissibility of the entire claim a) The TPA on its own shall not reject or repudiate the claim; b) The decision and the communication with respect to rejection or repudiation of claim shall be sent only by the concerned insurer".
+  Reg 19(2) (fragment transcribed 9 Oct): "All other records shall be maintained for such period as may be specified by the Authority".
+  Settlement communication (fragment transcribed 9 Oct): details of the grievance procedure, the grievance officer and the ombudsman procedure and contact are to be
+    "mandatorily included ... in every case where the TPA has disallowed any part of the claim". Full paragraph to be re-captured.
+  Reg 19(5): "The TPA and insurer shall establish electronic systems for seamless flow of data for all the claims ..."; 19(6): files/data to be handed to insurers "within 90 days after close of every quarter"; 19(7): "A TPA shall not share the data and personal information received by it for servicing of insurance policies or claims thereon except as provided under Regulation 19 (4)".
+  Code of conduct (p.32) (v): "not to outsource the job of servicing of those insurance policies for which he is appointed as TPA to any other registered entity including TPA or unregistered entity."
+
+E-REG-05  IRDAI Information and Cyber Security Guidelines, 2026 — cover circular Ref IRDAI/GA&HR/CIR/MISC/51/4/2026 dated 06 Apr 2026, documentId=9189223
+  Applies to "All Insurers including FRBs, Insurance Intermediaries covering Brokers, Corporate Agents, Web Aggregators, TPAs, ... and the Insurance Information Bureau of India (IIB)" — "ensure compliance from the current financial year".
+  Annexure A (summary of changes) includes new controls: group companies' infrastructure, networks and databases "logically and/or physically segregated, and where a vendor provides services to group companies, IT personnel with cross-entity access are segregated, wherever possible";
+  "Is the Cloud Service Provider (CSP) MeitY empaneled CSP and holds a valid STQC ... audit status?"; NDA with CSP; CSP to "completely eliminate any trace of data/ information in disks, backups, etc., at the termination of the contract";
+  service providers to obtain "prior written permission before any further outsourcing"; external black-box penetration testing of internet-facing assets "once in a 6 months"; immutable backups;
+  "Regulated Entities must take appropriate technical and organizational measures to comply with the provisions of Digital Personal Data Protection Act (DPDP) and rules made thereunder."
+  [PARAPHRASE — verbatim not stored] Annexure A, row 14: intermediaries submit an annual compliance report (Annexure III format) to the insurers they serve,
+    audited by a CERT-In-empanelled auditor (Annexure IV format). Confirm against the full text before relying on it (OQ-46).
+  Annexure B (the full guidelines, 3.3 MB zip) was NOT reviewed in this pass.
+
+E-REG-06  IRDAI (Insurance Fraud Monitoring Framework) Guidelines, 2025 — Ref IRDAI/IID/GDL/MISC/112/10/2025 dated 09.10.2025, documentId=7948519
+  1.2 "applicable to all insurers and distribution channels unless otherwise specified"; 1.3 in force "from 1st April, 2026".
+  3.2 "Red Flag Indicator or RFI means a possible warning sign, that points to a potential fraud and may require further investigation or analysis".
+  Board-approved anti-fraud policy incl. red flag indicators; participation in IIB's Fraud Monitoring Technology Framework; annual FMR-1 return.
+
+E-REG-07  IRDAI "Modification Guidelines on Standardization in Health Insurance", dated 27 September 2019 (copy hosted by Paramount TPA; the OCR text of the copy is partly garbled)
+  Annexure I re-classifies items into List I (optional items), List II (subsumed into room charges), List III (subsumed into procedure charges), List IV (subsumed into costs of treatment);
+  insurers to ensure hospitals do not bill subsumed items separately; for cashless claims this goes into network SLAs. Status after the 2020 standardisation master circular (itself repealed by E-REG-02) is UNKNOWN.
+
+E-REG-08  IRDAI circular Ref IRDAI/HLT/CIR/MISC/124/06/2023 dated 8 June 2023, "Testing and adoption of Health Claims Exchange (HCX) Specifications and e-claim standards", documentId=3517969
+  Describes the current process as "mostly manual, non-digital"; NHCX as a gateway with validation and routing; insurers/TPAs respond via standard APIs using FHIR.
+
+NOTE ON CAPTURE STATUS (10 Oct 2026)
+- Lines marked [PARAPHRASE — verbatim not stored] were read on 9 Oct, but the verbatim text was not saved.
+- Lines marked "fragment transcribed 9 Oct" hold the exact words noted on 9 Oct, but not the full paragraph.
+- On 10 Oct, irdai.gov.in and policyholder.gov.in both returned HTTP 504 (Azure Front Door origin timeout), so the passages could not be re-captured.
+- The pack labels claims that rest on these lines as UNVERIFIED (verbatim pending). Re-capture them before any customer-facing or legal use.
+

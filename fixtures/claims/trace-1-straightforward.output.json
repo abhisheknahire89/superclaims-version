@@ -1,0 +1,536 @@
+{
+  "engine_version": "ref-harness-0.4.0",
+  "claim_id": "CLM-DEMO-0001",
+  "evaluation_id": "EVAL-0001-v1",
+  "config_versions": {
+    "policy_config": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+    "nme_list": "NMELIST-ILL-A@2026.1.0",
+    "tariff": null,
+    "checklist": "CHECKLIST-IPD-REIMB@2026.1.0",
+    "engine": "ref-harness-0.4.0",
+    "rules": {
+      "R-GATE-IDENTITY": "1.0.0",
+      "R-GATE-DATES": "1.0.0",
+      "R-GATE-ITEMISATION": "1.0.0",
+      "R-DOC-COMPLETENESS": "1.0.0",
+      "R-ELIG-POLICY-ACTIVE": "1.0.0",
+      "R-ELIG-WAITING": "1.1.0",
+      "R-LINE-DUPLICATE": "1.0.0",
+      "R-LINE-NONPAYABLE": "1.0.0",
+      "R-LINE-TARIFF": "1.0.0",
+      "R-LINE-ROOM-CAP": "1.1.0",
+      "R-LINE-PROPORTIONATE": "1.1.0",
+      "R-CLAIM-SUBLIMIT": "1.0.0",
+      "R-CLAIM-DEDUCTIBLE": "1.0.0",
+      "R-CLAIM-COPAY": "1.0.0",
+      "R-CLAIM-SI-CAP": "1.0.0",
+      "R-CLAIM-ROUNDING": "1.0.0",
+      "R-ANOM-BILLNO-REUSE": "0.9.0"
+    }
+  },
+  "input_hash": "sha256:cbc03656130ec01d2d120917deecb3f83dc118343267c26d02ab24c36e49b301",
+  "recommendation": {
+    "type": "PAY_PARTIAL",
+    "computed": true,
+    "recommended_payable": "107591.00",
+    "billed_total": "109360.50",
+    "bill_stated_total": "109360.50",
+    "itemised_lines_available": true,
+    "line_level_deductions": "1770.00",
+    "claim_level_deductions": "-0.50",
+    "admissible_after_line_rules": "107590.50",
+    "blocked_scopes": [],
+    "human_decision_required": true
+  },
+  "lines": [
+    {
+      "line_id": "L01",
+      "description": "Room charges - twin sharing",
+      "category": "ROOM",
+      "ward_context": "WARD",
+      "billed": "7000.00",
+      "payable": "7000.00",
+      "fingerprint": "sha256:9c3788955ab0ec079342a137707f482aa44998e05c288ebf7b60d5aba9a493c2"
+    },
+    {
+      "line_id": "L02",
+      "description": "Nursing charges",
+      "category": "NURSING",
+      "ward_context": "WARD",
+      "billed": "2400.00",
+      "payable": "2400.00",
+      "fingerprint": "sha256:f510d4adbf9166325f1c34e7c4248d3ab91047e6f2fd9014a82cc491a5dc080b"
+    },
+    {
+      "line_id": "L03",
+      "description": "Surgeon fee - laparoscopic appendicectomy",
+      "category": "PROFESSIONAL_FEES",
+      "ward_context": "WARD",
+      "billed": "30000.00",
+      "payable": "30000.00",
+      "fingerprint": "sha256:bc2228cdb011af9c138dd133efec6c3dfc5799a9cf184c3e3ffc94fcd4353a7e"
+    },
+    {
+      "line_id": "L04",
+      "description": "Anaesthetist fee",
+      "category": "PROFESSIONAL_FEES",
+      "ward_context": "WARD",
+      "billed": "9000.00",
+      "payable": "9000.00",
+      "fingerprint": "sha256:120e6f900f4717299d79767c2efecd7bc27e8c2b5ae38c43d9ce8be2927f25a2"
+    },
+    {
+      "line_id": "L05",
+      "description": "Operation theatre charges",
+      "category": "OT_CHARGES",
+      "ward_context": "WARD",
+      "billed": "22000.00",
+      "payable": "22000.00",
+      "fingerprint": "sha256:d4a8baa9e21e2d3058f58822df7596f066c2ab4e035574800547eec44fe39c23"
+    },
+    {
+      "line_id": "L06",
+      "description": "Pharmacy - drugs and IV fluids",
+      "category": "PHARMACY",
+      "ward_context": "WARD",
+      "billed": "18640.50",
+      "payable": "18640.50",
+      "fingerprint": "sha256:7e6c319b1000a73fd32f730cb5b65d421b78d861ea705d4e2ef10a6e758d7489"
+    },
+    {
+      "line_id": "L07",
+      "description": "Surgical consumables",
+      "category": "CONSUMABLES",
+      "ward_context": "WARD",
+      "billed": "9850.00",
+      "payable": "9850.00",
+      "fingerprint": "sha256:7c4dcd109e2fda6f9f0cb78402d1ab5ac54c277da2e996ed328b1cf5266f4e05"
+    },
+    {
+      "line_id": "L08",
+      "description": "Investigations - CBC, LFT, USG abdomen",
+      "category": "DIAGNOSTICS",
+      "ward_context": "WARD",
+      "billed": "6300.00",
+      "payable": "6300.00",
+      "fingerprint": "sha256:4e8e1f984123a8c112eaad83265c5b574545465c6ef9496f2416f0d5330366d4"
+    },
+    {
+      "line_id": "L09",
+      "description": "Consultant visits",
+      "category": "PROFESSIONAL_FEES",
+      "ward_context": "WARD",
+      "billed": "2400.00",
+      "payable": "2400.00",
+      "fingerprint": "sha256:8d21c2c09bb6396f50bfb5daa1fd438e1f45fadccbf4fd864989827a2a2350c2"
+    },
+    {
+      "line_id": "L10",
+      "description": "Admission / registration charges",
+      "category": "OTHER_HOSPITAL_SERVICES",
+      "ward_context": "WARD",
+      "billed": "1000.00",
+      "payable": "0.00",
+      "fingerprint": "sha256:78418a34bc95397cc9df2ad8fcebd62a56a36d6f4bcf3487551434226798b17e"
+    },
+    {
+      "line_id": "L11",
+      "description": "Toothpaste and toothbrush",
+      "category": "OTHER_HOSPITAL_SERVICES",
+      "ward_context": "WARD",
+      "billed": "180.00",
+      "payable": "0.00",
+      "fingerprint": "sha256:b556ab397f6626ff475e055f4ca700c6bf61f7fb8d0d1dbf53bf2a47838c969f"
+    },
+    {
+      "line_id": "L12",
+      "description": "Mineral water",
+      "category": "OTHER_HOSPITAL_SERVICES",
+      "ward_context": "WARD",
+      "billed": "240.00",
+      "payable": "0.00",
+      "fingerprint": "sha256:283309f0f7833dd5d29b9b50d58f138174d37e4036cc9c8adf15a1ea80f430ea"
+    },
+    {
+      "line_id": "L13",
+      "description": "Patient gown",
+      "category": "OTHER_HOSPITAL_SERVICES",
+      "ward_context": "WARD",
+      "billed": "350.00",
+      "payable": "0.00",
+      "fingerprint": "sha256:78d32b4a8eb139279a259a34f9d44706d8235ad9481b2fc67c0b362e04c3506f"
+    }
+  ],
+  "adjustments": [
+    {
+      "adjustment_id": "ADJ-0008",
+      "level": "LINE",
+      "line_id": "L10",
+      "rule_id": "R-LINE-NONPAYABLE",
+      "rule_version": "1.0.0",
+      "reason_code": "NME_SUBSUMED_TREATMENT",
+      "amount": "1000.00",
+      "engine_amount": "1000.00",
+      "origin": "ENGINE",
+      "override_ref": null,
+      "base_before": "1000.00",
+      "remaining_after": "0.00",
+      "formula": "remaining (full)",
+      "explanation": "'Admission / registration charges' matched NME-301 (Admission / registration charges); treatment DISALLOW_FULL_IF_BILLED_SEPARATELY under list NMELIST-ILL-A v2026.1.0.",
+      "authority": {
+        "artifact": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+        "doc_id": "ILL-WORDING-A-2026",
+        "clause": "4.1 Non-payable items"
+      },
+      "evidence_refs": [
+        {
+          "document_id": "DOC-0001-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            248,
+            560,
+            262
+          ],
+          "quote": "Admission / registration charges 1,000.00"
+        }
+      ]
+    },
+    {
+      "adjustment_id": "ADJ-0009",
+      "level": "LINE",
+      "line_id": "L11",
+      "rule_id": "R-LINE-NONPAYABLE",
+      "rule_version": "1.0.0",
+      "reason_code": "NME_SUBSUMED_ROOM",
+      "amount": "180.00",
+      "engine_amount": "180.00",
+      "origin": "ENGINE",
+      "override_ref": null,
+      "base_before": "180.00",
+      "remaining_after": "0.00",
+      "formula": "remaining (full)",
+      "explanation": "'Toothpaste and toothbrush' matched NME-101 (Tooth paste / tooth brush); treatment DISALLOW_FULL_IF_BILLED_SEPARATELY under list NMELIST-ILL-A v2026.1.0.",
+      "authority": {
+        "artifact": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+        "doc_id": "ILL-WORDING-A-2026",
+        "clause": "4.1 Non-payable items"
+      },
+      "evidence_refs": [
+        {
+          "document_id": "DOC-0001-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            264,
+            560,
+            278
+          ],
+          "quote": "Toothpaste and toothbrush 180.00"
+        }
+      ]
+    },
+    {
+      "adjustment_id": "ADJ-0010",
+      "level": "LINE",
+      "line_id": "L12",
+      "rule_id": "R-LINE-NONPAYABLE",
+      "rule_version": "1.0.0",
+      "reason_code": "NME_NON_PAYABLE",
+      "amount": "240.00",
+      "engine_amount": "240.00",
+      "origin": "ENGINE",
+      "override_ref": null,
+      "base_before": "240.00",
+      "remaining_after": "0.00",
+      "formula": "remaining (full)",
+      "explanation": "'Mineral water' matched NME-001 (Mineral water); treatment DISALLOW_FULL under list NMELIST-ILL-A v2026.1.0.",
+      "authority": {
+        "artifact": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+        "doc_id": "ILL-WORDING-A-2026",
+        "clause": "4.1 Non-payable items"
+      },
+      "evidence_refs": [
+        {
+          "document_id": "DOC-0001-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            280,
+            560,
+            294
+          ],
+          "quote": "Mineral water 240.00"
+        }
+      ]
+    },
+    {
+      "adjustment_id": "ADJ-0011",
+      "level": "LINE",
+      "line_id": "L13",
+      "rule_id": "R-LINE-NONPAYABLE",
+      "rule_version": "1.0.0",
+      "reason_code": "NME_SUBSUMED_ROOM",
+      "amount": "350.00",
+      "engine_amount": "350.00",
+      "origin": "ENGINE",
+      "override_ref": null,
+      "base_before": "350.00",
+      "remaining_after": "0.00",
+      "formula": "remaining (full)",
+      "explanation": "'Patient gown' matched NME-102 (Gown); treatment DISALLOW_FULL_IF_BILLED_SEPARATELY under list NMELIST-ILL-A v2026.1.0.",
+      "authority": {
+        "artifact": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+        "doc_id": "ILL-WORDING-A-2026",
+        "clause": "4.1 Non-payable items"
+      },
+      "evidence_refs": [
+        {
+          "document_id": "DOC-0001-FB",
+          "page": 2,
+          "bbox": [
+            40,
+            296,
+            560,
+            310
+          ],
+          "quote": "Patient gown 350.00"
+        }
+      ]
+    },
+    {
+      "adjustment_id": "ADJ-0020",
+      "level": "CLAIM",
+      "line_id": null,
+      "rule_id": "R-CLAIM-ROUNDING",
+      "rule_version": "1.0.0",
+      "reason_code": "ROUNDING",
+      "amount": "-0.50",
+      "engine_amount": "-0.50",
+      "origin": "ENGINE",
+      "override_ref": null,
+      "base_before": "107590.50",
+      "remaining_after": "107591.00",
+      "formula": "107590.50 -> 107591 (RUPEE_HALF_UP)",
+      "explanation": "Final payable rounded per configuration; a negative amount increases the payable.",
+      "authority": {
+        "artifact": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+        "doc_id": "ILL-CLAIMS-MANUAL-A-2026",
+        "clause": "2.4 Rounding of settlement amounts"
+      },
+      "evidence_refs": [
+        {
+          "record_type": "CONFIG",
+          "record_id": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+          "field": "rounding.final_payable"
+        }
+      ]
+    }
+  ],
+  "findings": [],
+  "query_items": [],
+  "rule_executions": [
+    {
+      "execution_id": "EXE-0001",
+      "rule_id": "R-GATE-IDENTITY",
+      "rule_version": "1.0.0",
+      "status": "PASSED",
+      "detail": {
+        "sources_checked": 3,
+        "method": "exact normalised match (harness)"
+      }
+    },
+    {
+      "execution_id": "EXE-0002",
+      "rule_id": "R-GATE-DATES",
+      "rule_version": "1.0.0",
+      "status": "PASSED",
+      "detail": {
+        "admission_date": "2026-08-10"
+      }
+    },
+    {
+      "execution_id": "EXE-0003",
+      "rule_id": "R-GATE-ITEMISATION",
+      "rule_version": "1.0.0",
+      "status": "PASSED",
+      "detail": {
+        "stated_total": "109360.50",
+        "sum_of_lines": "109360.50"
+      }
+    },
+    {
+      "execution_id": "EXE-0004",
+      "rule_id": "R-DOC-COMPLETENESS",
+      "rule_version": "1.0.0",
+      "status": "PASSED",
+      "detail": {
+        "required": [
+          "CLAIM_FORM",
+          "DISCHARGE_SUMMARY",
+          "PHARMACY_BILL",
+          "INVESTIGATION_REPORT",
+          "PAYMENT_RECEIPT",
+          "ID_PROOF",
+          "BANK_DETAILS"
+        ],
+        "missing": []
+      }
+    },
+    {
+      "execution_id": "EXE-0005",
+      "rule_id": "R-ELIG-POLICY-ACTIVE",
+      "rule_version": "1.0.0",
+      "status": "PASSED",
+      "detail": {
+        "evaluated_dates": [
+          "2026-08-10"
+        ],
+        "invariant_under_date_conflict": false,
+        "period": [
+          "2026-06-01",
+          "2027-05-31"
+        ]
+      }
+    },
+    {
+      "execution_id": "EXE-0006",
+      "rule_id": "R-ELIG-WAITING",
+      "rule_version": "1.1.0",
+      "status": "PASSED",
+      "detail": {
+        "continuous_cover_months": 26,
+        "evaluated_dates": [
+          "2026-08-10"
+        ],
+        "invariant_under_date_conflict": false
+      }
+    },
+    {
+      "execution_id": "EXE-0007",
+      "rule_id": "R-LINE-DUPLICATE",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE",
+      "detail": {
+        "duplicate_lines": []
+      }
+    },
+    {
+      "execution_id": "EXE-0012",
+      "rule_id": "R-LINE-NONPAYABLE",
+      "rule_version": "1.0.0",
+      "status": "APPLIED",
+      "detail": {
+        "matches": [
+          {
+            "line_id": "L10",
+            "item_code": "NME-301"
+          },
+          {
+            "line_id": "L11",
+            "item_code": "NME-101"
+          },
+          {
+            "line_id": "L12",
+            "item_code": "NME-001"
+          },
+          {
+            "line_id": "L13",
+            "item_code": "NME-102"
+          }
+        ]
+      }
+    },
+    {
+      "execution_id": "EXE-0013",
+      "rule_id": "R-LINE-TARIFF",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE",
+      "detail": {
+        "reason": "no applicable network tariff"
+      }
+    },
+    {
+      "execution_id": "EXE-0014",
+      "rule_id": "R-LINE-ROOM-CAP",
+      "rule_version": "1.1.0",
+      "status": "NOT_APPLICABLE",
+      "detail": {
+        "eligible_normal_per_day": "5000.00",
+        "eligible_icu_per_day": "10000.00",
+        "actual_normal_per_day": "3500.00",
+        "actual_rate_basis": "DAY_WEIGHTED",
+        "billed_room_days": "2",
+        "allowed_room_days": 2,
+        "lines": []
+      }
+    },
+    {
+      "execution_id": "EXE-0015",
+      "rule_id": "R-LINE-PROPORTIONATE",
+      "rule_version": "1.1.0",
+      "status": "NOT_APPLICABLE",
+      "detail": {
+        "reason": "actual room rate within eligibility",
+        "eligible": "5000.00",
+        "actual": "3500.00"
+      }
+    },
+    {
+      "execution_id": "EXE-0016",
+      "rule_id": "R-CLAIM-SUBLIMIT",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE",
+      "detail": {
+        "sub_limits": []
+      }
+    },
+    {
+      "execution_id": "EXE-0017",
+      "rule_id": "R-CLAIM-DEDUCTIBLE",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE",
+      "detail": {
+        "deductible": "0.00"
+      }
+    },
+    {
+      "execution_id": "EXE-0018",
+      "rule_id": "R-CLAIM-COPAY",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE",
+      "detail": {
+        "age_at_admission": 34
+      }
+    },
+    {
+      "execution_id": "EXE-0019",
+      "rule_id": "R-CLAIM-SI-CAP",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE",
+      "detail": {
+        "available_si": "500000.00"
+      }
+    },
+    {
+      "execution_id": "EXE-0021",
+      "rule_id": "R-CLAIM-ROUNDING",
+      "rule_version": "1.0.0",
+      "status": "APPLIED",
+      "detail": {
+        "before": "107590.50",
+        "after": "107591.00"
+      }
+    },
+    {
+      "execution_id": "EXE-0022",
+      "rule_id": "R-ANOM-BILLNO-REUSE",
+      "rule_version": "0.9.0",
+      "status": "NOT_APPLICABLE",
+      "detail": {
+        "other_claims": []
+      }
+    }
+  ],
+  "output_hash": "sha256:f48a452ce67bca74b571d7d71551bc65d8e020bb483619ecf42e0abe897d0c5e"
+}

@@ -1,0 +1,299 @@
+[
+  {
+    "seq": 50,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:31:45.000+05:30",
+    "actor": "USER:PROC-11",
+    "event_type": "REVIEWER_ACTION_RECORDED",
+    "payload": {
+      "action": "OVERRIDE_ADJUSTMENT",
+      "override_id": "RA-0207",
+      "line_id": "L14",
+      "rule_id": "R-LINE-TARIFF",
+      "after_amount": "0.00",
+      "reason_code": "TARIFF_ITEM_NOT_APPLICABLE"
+    },
+    "prev_hash": "d220b7907eb12d208c5a00f4695db266951a4193af96eef1ecbfb79f14768186",
+    "event_hash": "48ed20f73948fd71e6844d367f52663865dd457e78ff87d652b57749d84bac7f"
+  },
+  {
+    "seq": 51,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:30.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RECOMMENDATION_MARKED_STALE",
+    "payload": {
+      "evaluation_id": "EVAL-0002-v1",
+      "reason": "REVIEWER_CORRECTION"
+    },
+    "prev_hash": "48ed20f73948fd71e6844d367f52663865dd457e78ff87d652b57749d84bac7f",
+    "event_hash": "1e5550e92813548e62a1a4b39123bc431caa3369fbbb02d5da8c86f77736b088"
+  },
+  {
+    "seq": 52,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_RUN_STARTED",
+    "payload": {
+      "evaluation_id": "EVAL-0002-v2",
+      "config_versions": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+      "input_hash": "sha256:d0154619da8c83584b8bcb0d3a3482f6e88b23029c8e2c323bda748fc9b0901a"
+    },
+    "prev_hash": "1e5550e92813548e62a1a4b39123bc431caa3369fbbb02d5da8c86f77736b088",
+    "event_hash": "f49b98cfbaba51389b0dbc6463563762c333f944d4915c85332ea405f7bd233d"
+  },
+  {
+    "seq": 53,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.012+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-GATE-IDENTITY",
+      "rule_version": "1.0.0",
+      "status": "PASSED"
+    },
+    "prev_hash": "f49b98cfbaba51389b0dbc6463563762c333f944d4915c85332ea405f7bd233d",
+    "event_hash": "e31c9bdc6b6d927a661154246c0df3218b268b1482b9da1a5258c2db538cbf0a"
+  },
+  {
+    "seq": 54,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.024+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-GATE-DATES",
+      "rule_version": "1.0.0",
+      "status": "PASSED"
+    },
+    "prev_hash": "e31c9bdc6b6d927a661154246c0df3218b268b1482b9da1a5258c2db538cbf0a",
+    "event_hash": "3a6c40db678f0814166fc9040c3ee54b129e5d97b7088e48f9310b66ef23d4d4"
+  },
+  {
+    "seq": 55,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.036+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-GATE-ITEMISATION",
+      "rule_version": "1.0.0",
+      "status": "PASSED"
+    },
+    "prev_hash": "3a6c40db678f0814166fc9040c3ee54b129e5d97b7088e48f9310b66ef23d4d4",
+    "event_hash": "c7f495182d09d2cf3d3e192e248a180da579c17199acf84b2f0aefd84f45b5bb"
+  },
+  {
+    "seq": 56,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.048+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-DOC-COMPLETENESS",
+      "rule_version": "1.0.0",
+      "status": "PASSED"
+    },
+    "prev_hash": "c7f495182d09d2cf3d3e192e248a180da579c17199acf84b2f0aefd84f45b5bb",
+    "event_hash": "05de258736161ce4d33b3d96e6df99a8451ae896ff49a373b5f6bd002f8c1100"
+  },
+  {
+    "seq": 57,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.060+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-ELIG-POLICY-ACTIVE",
+      "rule_version": "1.0.0",
+      "status": "PASSED"
+    },
+    "prev_hash": "05de258736161ce4d33b3d96e6df99a8451ae896ff49a373b5f6bd002f8c1100",
+    "event_hash": "4e3c7ab042e890cd3555926c72894bd7ab2b0d4df8de08ffc9ddc0fd29cce648"
+  },
+  {
+    "seq": 58,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.072+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-ELIG-WAITING",
+      "rule_version": "1.1.0",
+      "status": "PASSED"
+    },
+    "prev_hash": "4e3c7ab042e890cd3555926c72894bd7ab2b0d4df8de08ffc9ddc0fd29cce648",
+    "event_hash": "9a91680db9f7809ec030808b24063851d7610484128c596c985075534ab831f8"
+  },
+  {
+    "seq": 59,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.084+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-LINE-DUPLICATE",
+      "rule_version": "1.0.0",
+      "status": "APPLIED"
+    },
+    "prev_hash": "9a91680db9f7809ec030808b24063851d7610484128c596c985075534ab831f8",
+    "event_hash": "811619f1a46379432074a198a4540c51afa996ce1215bb50bba69dadb72e83be"
+  },
+  {
+    "seq": 60,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.096+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-LINE-NONPAYABLE",
+      "rule_version": "1.0.0",
+      "status": "APPLIED"
+    },
+    "prev_hash": "811619f1a46379432074a198a4540c51afa996ce1215bb50bba69dadb72e83be",
+    "event_hash": "8a783e9de2680ad9d7b6e13cd15772b1d0ae83100b983e12f99e73a36980e4fd"
+  },
+  {
+    "seq": 61,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.108+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-LINE-TARIFF",
+      "rule_version": "1.0.0",
+      "status": "APPLIED"
+    },
+    "prev_hash": "8a783e9de2680ad9d7b6e13cd15772b1d0ae83100b983e12f99e73a36980e4fd",
+    "event_hash": "049664b2dd18c4b481b81fc27d72e682ee8074a363ba89a6906afe1a9198eed7"
+  },
+  {
+    "seq": 62,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.120+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-LINE-ROOM-CAP",
+      "rule_version": "1.1.0",
+      "status": "APPLIED"
+    },
+    "prev_hash": "049664b2dd18c4b481b81fc27d72e682ee8074a363ba89a6906afe1a9198eed7",
+    "event_hash": "2c62aa4df4ae00913927fe5110122249c0022bfdd1be26c0923ba48899980de2"
+  },
+  {
+    "seq": 63,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.132+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-LINE-PROPORTIONATE",
+      "rule_version": "1.1.0",
+      "status": "APPLIED"
+    },
+    "prev_hash": "2c62aa4df4ae00913927fe5110122249c0022bfdd1be26c0923ba48899980de2",
+    "event_hash": "66826366d74b7910aece182a87abab43cc5be3b1357d94d516d39588b6e26a71"
+  },
+  {
+    "seq": 64,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.144+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-CLAIM-SUBLIMIT",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE"
+    },
+    "prev_hash": "66826366d74b7910aece182a87abab43cc5be3b1357d94d516d39588b6e26a71",
+    "event_hash": "f6a939b4b1d5506cb30a217237ed15bfbe6c0da908be49bc25d693b751f913d7"
+  },
+  {
+    "seq": 65,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.156+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-CLAIM-DEDUCTIBLE",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE"
+    },
+    "prev_hash": "f6a939b4b1d5506cb30a217237ed15bfbe6c0da908be49bc25d693b751f913d7",
+    "event_hash": "c5bb06f994b1f0e49a06ecf3b9959ec9a281fcf0bfae692f671dcaa8f420553f"
+  },
+  {
+    "seq": 66,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.168+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-CLAIM-COPAY",
+      "rule_version": "1.0.0",
+      "status": "APPLIED"
+    },
+    "prev_hash": "c5bb06f994b1f0e49a06ecf3b9959ec9a281fcf0bfae692f671dcaa8f420553f",
+    "event_hash": "ea5a38c38bbc4c4c2eb7b9e4d424351597ef0913caaddab4bf2d015c9dfa1b3e"
+  },
+  {
+    "seq": 67,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.180+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-CLAIM-SI-CAP",
+      "rule_version": "1.0.0",
+      "status": "APPLIED"
+    },
+    "prev_hash": "ea5a38c38bbc4c4c2eb7b9e4d424351597ef0913caaddab4bf2d015c9dfa1b3e",
+    "event_hash": "08041e19352d9b25ff231dbb1830122492db20273effeda515353ee0099ec30e"
+  },
+  {
+    "seq": 68,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.192+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-CLAIM-ROUNDING",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE"
+    },
+    "prev_hash": "08041e19352d9b25ff231dbb1830122492db20273effeda515353ee0099ec30e",
+    "event_hash": "bd04f2566cc9f870074e1eac8db5a0c38aa2edc3ba8e63f1e39491456176d22f"
+  },
+  {
+    "seq": 69,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.204+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-ANOM-BILLNO-REUSE",
+      "rule_version": "0.9.0",
+      "status": "NOT_APPLICABLE"
+    },
+    "prev_hash": "bd04f2566cc9f870074e1eac8db5a0c38aa2edc3ba8e63f1e39491456176d22f",
+    "event_hash": "9e56018fb8ecafe32b5624adf5752ad6fe08a5097c9e10c398af4f76b4723dc2"
+  },
+  {
+    "seq": 70,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:32:32.244+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RECOMMENDATION_CREATED",
+    "payload": {
+      "evaluation_id": "EVAL-0002-v2",
+      "type": "PAY_PARTIAL",
+      "recommended_payable": "85000.00",
+      "output_hash": "sha256:5e1792ffbc32016a07cc79dee07bbb6c2c589dd73c503db15e1e0d3778ca4110"
+    },
+    "prev_hash": "9e56018fb8ecafe32b5624adf5752ad6fe08a5097c9e10c398af4f76b4723dc2",
+    "event_hash": "e907724e6e8110b387fce3f5c00b47e79b141baa3995cd00116aa5104c5a3021"
+  }
+]

@@ -1,0 +1,58 @@
+{
+  "checklist_id": "CHECKLIST-IPD-REIMB",
+  "checklist_version": "2026.1.0",
+  "status": "ILLUSTRATIVE",
+  "workflow": "IPD_REIMBURSEMENT",
+  "illustrative_notice": "Illustrative document checklist for IPD reimbursement. The customer's claims manual defines the real list.",
+  "items": [
+    {
+      "type": "CLAIM_FORM",
+      "label": "Claim form (both parts)",
+      "default_addressee": "CLAIMANT"
+    },
+    {
+      "type": "DISCHARGE_SUMMARY",
+      "label": "Discharge summary",
+      "default_addressee": "HOSPITAL"
+    },
+    {
+      "type": "FINAL_BILL_ITEMISED",
+      "label": "Itemised final bill",
+      "covered_by_gate": "R-GATE-ITEMISATION",
+      "default_addressee": "HOSPITAL"
+    },
+    {
+      "type": "PHARMACY_BILL",
+      "label": "Pharmacy invoices",
+      "required_if": "PHARMACY_INVOICES_BILLED",
+      "default_addressee": "HOSPITAL"
+    },
+    {
+      "type": "INVESTIGATION_REPORT",
+      "label": "Investigation reports",
+      "required_if": "CATEGORY_BILLED:DIAGNOSTICS",
+      "default_addressee": "HOSPITAL"
+    },
+    {
+      "type": "PAYMENT_RECEIPT",
+      "label": "Payment receipt(s)",
+      "default_addressee": "HOSPITAL"
+    },
+    {
+      "type": "ID_PROOF",
+      "label": "Identity proof of the patient",
+      "default_addressee": "CLAIMANT"
+    },
+    {
+      "type": "BANK_DETAILS",
+      "label": "Bank account details for payment",
+      "default_addressee": "CLAIMANT"
+    },
+    {
+      "type": "IMPLANT_INVOICE",
+      "label": "Implant invoice / sticker",
+      "required_if": "CATEGORY_BILLED:IMPLANTS",
+      "default_addressee": "HOSPITAL"
+    }
+  ]
+}

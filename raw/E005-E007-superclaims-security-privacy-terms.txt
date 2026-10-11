@@ -1,0 +1,26 @@
+EVIDENCE E005–E007 — Superclaims security, privacy and terms pages: observation notes (internal research record; do not republish)
+Captured 2026-10-09 via the built-in browser. Each page states "Last updated: August 3, 2026".
+Observed defect: footer links /security, /privacy, /terms return HTTP 404 from CloudFront; the pages are served at /security.html,
+/privacy.html, /terms.html (status 200). Method note: pages read in full; paraphrase plus short quotations (each under 15 words).
+
+E005 https://superclaims.ai/security.html
+- Certification: Cardit Labs is ISO/IEC 27001:2022 certified for ISMS covering software development and support for health claims;
+  issuer United Registrar of Systems; valid 14 April 2026 to 13 April 2029; certificate 146637/A/0001/UK/En.
+- Customer security reviews: "Security specifics vary by deployment"; architecture, hosting, access, retention and subprocessor
+  information is provided on request; binding commitments are those in the customer agreement.
+- Vulnerability reports go to the support mailbox; reporters asked not to include patient information or claim documents.
+- Responsible-testing rules: no access to others' data, no disruption, no social engineering, no testing customer environments without written authorisation.
+
+E006 https://superclaims.ai/privacy.html
+- Scope limited to the marketing website; "Product and customer claim data" are governed by customer agreements and data-processing terms.
+- Collects details volunteered for demos/contact; hosting and security providers may process technical logs.
+- May share limited information with ekincare for group operations; states customer claim data is not shared merely because of the acquisition.
+- Demo bookings handled by Cal.com. Data-subject requests via the support mailbox.
+
+E007 https://superclaims.ai/terms.html
+- Website terms only; product use, SLAs, data processing and support are under a separate customer agreement.
+- States product results and benchmarks vary by claim type, document quality, configuration, workflow and implementation;
+  nothing on the site is medical, coverage, legal or financial advice.
+- Prohibits disruptive scraping and unauthorised access; reserves rights in content and grants no licence to copy or reuse it.
+
+Research conduct: a handful of public pages were read at human pace; no scraping, no form submission, no demo booking, no testing.

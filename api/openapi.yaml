@@ -1,0 +1,769 @@
+openapi: 3.1.0
+info:
+  title: Adjudication Workbench API (PROPOSED)
+  version: 0.3.0
+  summary: Proposed integration contract for an insurer/TPA claims review assistant.
+  description: |
+    STATUS: PROPOSED. Nothing here was observed from Superclaims or any other vendor; Superclaims publishes no API documentation.
+    Design rules:
+      * Money is a decimal string in rupees with two decimals (e.g. "85000.00"); never a float.
+      * Dates are ISO-8601 calendar dates (YYYY-MM-DD) with no time zone; timestamps are RFC 3339 with offset.
+      * Every POST that creates or changes state requires an `Idempotency-Key` header (UUID). Replays with the same key and
+        body return the original response; a different body with the same key returns 409.
+      * State-changing calls on a claim require `If-Match` with the claim's ETag (optimistic concurrency).
+      * Errors use RFC 9457 problem details (`application/problem+json`).
+      * List endpoints use opaque cursor pagination (`cursor`, `limit` ≤ 200) and return `next_cursor`.
+      * Versioning: the major version is in the path. Additive changes (new optional fields, new enum values) can ship
+        without a version bump; clients must ignore unknown fields and treat unknown enum values as "OTHER".
+        Removals are announced with `Deprecation` and `Sunset` headers at least 180 days ahead (proposed policy).
+      * The API never returns a final rejection produced by software. Repudiation is recorded only as a human decision
+        carrying the insurer's Claims Review Committee reference.
+servers:
+  - url: https://api.example.invalid/v1
+    description: Placeholder host (no deployment exists)
+security:
+  - oauth2ClientCredentials: [claims.read, claims.write]
+  - userBearer: []
+tags:
+  - name: Claims
+  - name: Documents
+  - name: Evaluations
+  - name: Review
+  - name: Queries
+  - name: Decisions
+  - name: Audit
+  - name: Configuration
+paths:
+  /me:
+    get:
+      tags: [Session]
+      operationId: getMe
+      summary: The signed-in user, tenant, roles and approval limit (roles come from the database, not the token)
+      responses:
+        '200':
+          description: Current principal
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [user_id, tenant_id, roles]
+                properties:
+                  user_id: {type: string}
+                  tenant_id: {type: string}
+                  display_name: {type: string}
+                  roles: {type: array, items: {type: string}}
+                  approval_limit: {oneOf: [{$ref: '#/components/schemas/Money'}, {type: 'null'}]}
+  /claims:
+    post:
+      tags: [Claims]
+      operationId: createClaim
+      summary: Register a claim (from TMS, portal, or NHCX adapter)
+      parameters:
+        - $ref: '#/components/parameters/IdempotencyKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ClaimCreate'}
+            examples:
+              reimbursement:
+                value:
+                  external_ref: TMS-2026-0002
+                  workflow: IPD_REIMBURSEMENT
+                  policy_no: ILL-POL-000202
+                  member_id: MEM-DEMO-2002
+                  hospital_id: HOSP-ILL-NW-01
+                  admission_date: '2026-07-01'
+                  discharge_date: '2026-07-05'
+                  claimed_amount: '172455.75'
+      responses:
+        '201':
+          description: Created
+          headers:
+            ETag: {$ref: '#/components/headers/ETag'}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Claim'}
+        '409': {$ref: '#/components/responses/Conflict'}
+        '422': {$ref: '#/components/responses/Unprocessable'}
+    get:
+      tags: [Claims]
+      operationId: listClaims
+      summary: Work queue (filtered, cursor-paginated)
+      parameters:
+        - {name: status, in: query, schema: {$ref: '#/components/schemas/ClaimStatus'}}
+        - {name: workflow, in: query, schema: {$ref: '#/components/schemas/Workflow'}}
+        - {name: assigned_to, in: query, schema: {type: string}}
+        - {name: sla_breach_within_minutes, in: query, schema: {type: integer, minimum: 0}}
+        - $ref: '#/components/parameters/Cursor'
+        - $ref: '#/components/parameters/Limit'
+      responses:
+        '200':
+          description: Page of claims
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items, next_cursor]
+                properties:
+                  items: {type: array, items: {$ref: '#/components/schemas/ClaimSummary'}}
+                  next_cursor: {type: [string, 'null']}
+  /claims/{claim_id}:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}]
+    get:
+      tags: [Claims]
+      operationId: getClaim
+      responses:
+        '200':
+          description: Claim
+          headers:
+            ETag: {$ref: '#/components/headers/ETag'}
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Claim'}
+        '404': {$ref: '#/components/responses/NotFound'}
+  /claims/{claim_id}/documents:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}]
+    post:
+      tags: [Documents]
+      operationId: createDocumentUpload
+      summary: Step 1 of upload — register a document and receive a pre-signed upload URL
+      description: |
+        The client uploads the bytes to `upload_url` (PUT, ≤ 50 MB, PDF/JPEG/PNG/TIFF), then calls `:complete`.
+        A document whose SHA-256 matches an existing document on the same claim is returned as-is (200) instead of 201.
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [declared_type, sha256, mime_type, size_bytes]
+              properties:
+                declared_type: {$ref: '#/components/schemas/DocumentType'}
+                sha256: {type: string, pattern: '^[0-9a-f]{64}$'}
+                mime_type: {enum: [application/pdf, image/jpeg, image/png, image/tiff]}
+                size_bytes: {type: integer, minimum: 1, maximum: 52428800}
+                supersedes_document_id: {type: [string, 'null']}
+      responses:
+        '201':
+          description: Upload slot created
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [document_id, upload_url, expires_at]
+                properties:
+                  document_id: {type: string}
+                  upload_url: {type: string, format: uri}
+                  expires_at: {type: string, format: date-time}
+        '200': {description: Duplicate of an existing document; existing record returned}
+    get:
+      tags: [Documents]
+      operationId: listDocuments
+      parameters: [{$ref: '#/components/parameters/Cursor'}, {$ref: '#/components/parameters/Limit'}]
+      responses:
+        '200':
+          description: Documents with processing state
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items: {type: array, items: {$ref: '#/components/schemas/Document'}}
+                  next_cursor: {type: [string, 'null']}
+  /claims/{claim_id}/documents/{document_id}:complete:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}, {name: document_id, in: path, required: true, schema: {type: string}}]
+    post:
+      tags: [Documents]
+      operationId: completeDocumentUpload
+      summary: Step 2 of upload — verify hash, store immutably, enqueue classification/OCR/extraction
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      responses:
+        '202':
+          description: Accepted for processing
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Document'}
+        '422': {$ref: '#/components/responses/Unprocessable'}
+  /claims/{claim_id}/evaluations:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}]
+    post:
+      tags: [Evaluations]
+      operationId: requestEvaluation
+      summary: Re-run rules on the current resolved facts (e.g. after a correction)
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/IfMatch'}]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                trigger: {enum: [REVIEWER_CORRECTION, MANUAL_RERUN, CONFIG_CHANGE]}
+                reason: {type: string, maxLength: 500}
+      responses:
+        '202': {description: Evaluation queued; completion is signalled by webhook `claim.evaluation.completed`}
+        '409': {$ref: '#/components/responses/Conflict'}
+        '412': {$ref: '#/components/responses/PreconditionFailed'}
+  /claims/{claim_id}/evaluations/current:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}]
+    get:
+      tags: [Evaluations]
+      operationId: getCurrentEvaluation
+      summary: Latest non-stale evaluation (recommendation, adjustments, findings, rule trace)
+      responses:
+        '200':
+          description: Evaluation result
+          content:
+            application/json:
+              schema: {$ref: '../schemas/evaluation-result.schema.json'}
+        '404': {$ref: '#/components/responses/NotFound'}
+  /claims/{claim_id}/reviewer-actions:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}]
+    post:
+      tags: [Review]
+      operationId: recordReviewerAction
+      summary: Correct a fact, resolve a conflict, reclassify a line, override/add/remove an adjustment, or resolve a finding
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/IfMatch'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/ReviewerActionCreate'}
+            examples:
+              overrideAdjustment:
+                value:
+                  action: OVERRIDE_ADJUSTMENT
+                  evaluation_id: EVAL-0002-v1
+                  target: {type: adjustment, id: ADJ-0015}
+                  after_value: {amount: '0.00'}
+                  reason_code: TARIFF_ITEM_NOT_APPLICABLE
+                  comment: CT was done as an emergency at an outside centre; tariff item does not apply.
+      responses:
+        '201':
+          description: Recorded; a new evaluation is queued when the action changes rule inputs
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [reviewer_action_id, reevaluation_queued]
+                properties:
+                  reviewer_action_id: {type: string}
+                  reevaluation_queued: {type: boolean}
+        '403': {$ref: '#/components/responses/Forbidden'}
+        '412': {$ref: '#/components/responses/PreconditionFailed'}
+  /claims/{claim_id}/queries:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}]
+    post:
+      tags: [Queries]
+      operationId: draftQuery
+      summary: Create a query letter draft from selected query items
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [addressed_to, items]
+              properties:
+                addressed_to: {enum: [HOSPITAL, CLAIMANT, INSURER, TPA, INVESTIGATOR]}
+                items:
+                  type: array
+                  minItems: 1
+                  items:
+                    type: object
+                    required: [text]
+                    properties:
+                      text: {type: string, maxLength: 1000}
+                      requested_document_type: {$ref: '#/components/schemas/DocumentType'}
+                      linked_finding_ids: {type: array, items: {type: string}}
+      responses:
+        '201': {description: Draft created}
+  /queries/{query_id}:approve:
+    parameters: [{name: query_id, in: path, required: true, schema: {type: string}}]
+    post:
+      tags: [Queries]
+      operationId: approveQuery
+      summary: Human approval; only approved queries are released to the TMS / addressee
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      responses:
+        '200': {description: Approved and released}
+        '403': {$ref: '#/components/responses/Forbidden'}
+  /claims/{claim_id}/decisions:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}]
+    post:
+      tags: [Decisions]
+      operationId: recordDecision
+      summary: Record the human disposition against a specific evaluation
+      description: |
+        Allowed only when no second approval is required by the tenant workflow configuration (payable above the user's limit,
+        deviation from recommendation above threshold, or total deductions above a share of billed). Otherwise returns 409
+        `approval-required`; use `POST /claims/{claim_id}/approval-requests`. Queries are not dispositions; use `/queries`.
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/IfMatch'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/DecisionCreate'}
+            examples:
+              approvePartial:
+                value:
+                  evaluation_id: EVAL-0001-v1
+                  disposition: APPROVED_PARTIAL
+                  approved_payable: '107591.00'
+      responses:
+        '201':
+          description: Decision recorded; export to TMS is queued
+          content:
+            application/json:
+              schema: {$ref: '#/components/schemas/Decision'}
+        '409':
+          description: Evaluation is STALE or SUPERSEDED, or second approval is required (problem type `approval-required`)
+          content:
+            application/problem+json:
+              schema: {$ref: '#/components/schemas/Problem'}
+        '422': {$ref: '#/components/responses/Unprocessable'}
+  /claims/{claim_id}/audit-events:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}]
+    get:
+      tags: [Audit]
+      operationId: listAuditEvents
+      parameters: [{$ref: '#/components/parameters/Cursor'}, {$ref: '#/components/parameters/Limit'}]
+      responses:
+        '200':
+          description: Hash-chained audit events in sequence order
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items: {type: array, items: {$ref: '#/components/schemas/AuditEvent'}}
+                  next_cursor: {type: [string, 'null']}
+  /claims/{claim_id}:assign:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}]
+    post:
+      tags: [Claims]
+      operationId: assignClaim
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/IfMatch'}]
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [assignee_user_id], properties: {assignee_user_id: {type: string}}}}}}
+      responses: {'200': {description: Assigned}, '403': {$ref: '#/components/responses/Forbidden'}, '412': {$ref: '#/components/responses/PreconditionFailed'}}
+  /claims/{claim_id}:withdraw:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}]
+    post:
+      tags: [Claims]
+      operationId: withdrawClaim
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/IfMatch'}]
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [reason], properties: {reason: {type: string, maxLength: 500}}}}}}
+      responses: {'200': {description: Withdrawn (records disposition WITHDRAWN)}, '409': {$ref: '#/components/responses/Conflict'}}
+  /claims/{claim_id}:reopen:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}]
+    post:
+      tags: [Claims]
+      operationId: reopenClaim
+      summary: Supervisor reopens a FINALISED/EXPORTED claim (late evidence, grievance)
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/IfMatch'}]
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [reason], properties: {reason: {type: string, maxLength: 500}}}}}}
+      responses: {'200': {description: Reopened; new evaluation queued}, '403': {$ref: '#/components/responses/Forbidden'}}
+  /claims/{claim_id}/facts:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}]
+    get:
+      tags: [Evaluations]
+      operationId: listFacts
+      summary: Resolved facts with their candidate observations, confidence, grounding status and evidence (document, page, bbox, quote)
+      responses:
+        '200':
+          description: Facts
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      required: [field_path, value, basis, candidates]
+                      properties:
+                        field_path: {type: string}
+                        value: {}
+                        basis: {enum: [AUTO_AGREEMENT, AUTO_SINGLE_SOURCE, REVIEWER_SELECTED, REVIEWER_ENTERED, UNRESOLVED]}
+                        candidates: {type: array, items: {type: object, properties: {value: {}, confidence: {type: number}, grounding_check: {enum: [VERIFIED, NOT_FOUND, NOT_APPLICABLE]}, evidence: {type: object}}}}
+  /claims/{claim_id}/bill-lines:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}]
+    get:
+      tags: [Evaluations]
+      operationId: listBillLines
+      parameters: [{name: bill_version, in: query, schema: {type: integer}}]
+      responses:
+        '200':
+          description: Bill lines (current bill version by default) with category source, ward context, fingerprint and evidence
+          content: {application/json: {schema: {type: object, properties: {items: {type: array, items: {type: object}}}}}}
+  /claims/{claim_id}/documents/{document_id}/pages/{page_no}:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}, {name: document_id, in: path, required: true, schema: {type: string}}, {name: page_no, in: path, required: true, schema: {type: integer, minimum: 1}}]
+    get:
+      tags: [Documents]
+      operationId: getPage
+      summary: Page image (short-lived pre-signed URL), text layer and word boxes for the evidence viewer
+      responses:
+        '200':
+          description: Page
+          content: {application/json: {schema: {type: object, required: [image_url, text_layer], properties: {image_url: {type: string, format: uri}, text_layer: {enum: [NATIVE, OCR, NONE]}, words_url: {type: string, format: uri}, quality_score: {type: number}}}}}
+  /claims/{claim_id}/findings:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}]
+    get:
+      tags: [Review]
+      operationId: listFindings
+      summary: Findings across evaluations with lifecycle status (resolve or dismiss via reviewer-actions)
+      parameters: [{name: status, in: query, schema: {enum: [OPEN, ACKNOWLEDGED, RESOLVED, DISMISSED, SUPERSEDED]}}, {name: category, in: query, schema: {enum: [DOCUMENT, IDENTITY, ELIGIBILITY, FINANCIAL, CLINICAL, ANOMALY]}}]
+      responses: {'200': {description: Findings, content: {application/json: {schema: {type: object, properties: {items: {type: array, items: {type: object}}}}}}}}
+  /claims/{claim_id}/evaluations/{evaluation_id}:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}, {name: evaluation_id, in: path, required: true, schema: {type: string}}]
+    get:
+      tags: [Evaluations]
+      operationId: getEvaluation
+      summary: Any evaluation, including STALE and SUPERSEDED ones (history)
+      responses:
+        '200': {description: Evaluation, content: {application/json: {schema: {$ref: '../schemas/evaluation-result.schema.json'}}}}
+  /claims/{claim_id}/evaluations/{evaluation_id}/diff:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}, {name: evaluation_id, in: path, required: true, schema: {type: string}}, {name: against, in: query, required: true, schema: {type: string}}]
+    get:
+      tags: [Evaluations]
+      operationId: diffEvaluations
+      summary: '"What changed": facts, adjustments (by line and rule), findings and payable between two evaluations'
+      responses: {'200': {description: Diff, content: {application/json: {schema: {type: object, properties: {facts: {type: array}, adjustments: {type: array}, findings: {type: array}, payable_before: {type: [string, 'null']}, payable_after: {type: [string, 'null']}}}}}}}
+  /claims/{claim_id}/approval-requests:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}]
+    post:
+      tags: [Decisions]
+      operationId: requestApproval
+      summary: Submit a proposed decision for second approval (claim → PENDING_APPROVAL)
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}, {$ref: '#/components/parameters/IfMatch'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [evaluation_id, proposed_disposition, approver_user_id]
+              properties:
+                evaluation_id: {type: string}
+                proposed_disposition: {enum: [APPROVED_FULL, APPROVED_PARTIAL]}
+                proposed_payable: {$ref: '#/components/schemas/Money'}
+                approver_user_id: {type: string}
+            examples:
+              trace2:
+                value: {evaluation_id: EVAL-0002-v1, proposed_disposition: APPROVED_PARTIAL, proposed_payable: '85000.00', approver_user_id: SUP-02}
+      responses: {'201': {description: Approval request created}, '422': {$ref: '#/components/responses/Unprocessable'}}
+  /approval-requests/{approval_request_id}:approve:
+    parameters: [{name: approval_request_id, in: path, required: true, schema: {type: string}}]
+    post:
+      tags: [Decisions]
+      operationId: approveRequest
+      summary: Second approver signs; the decision row is written and export queued
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      responses: {'200': {description: Approved, content: {application/json: {schema: {$ref: '#/components/schemas/Decision'}}}}, '403': {$ref: '#/components/responses/Forbidden'}}
+  /approval-requests/{approval_request_id}:return:
+    parameters: [{name: approval_request_id, in: path, required: true, schema: {type: string}}]
+    post:
+      tags: [Decisions]
+      operationId: returnRequest
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [comment], properties: {comment: {type: string, maxLength: 2000}}}}}}
+      responses: {'200': {description: Returned for rework (claim → IN_REVIEW)}}
+  /claims/{claim_id}/decisions/{decision_id}/worksheet:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}, {name: decision_id, in: path, required: true, schema: {type: string}}]
+    get:
+      tags: [Decisions]
+      operationId: getWorksheet
+      responses:
+        '200':
+          description: Settlement worksheet
+          content:
+            application/json: {schema: {$ref: '../schemas/settlement-worksheet.schema.json'}}
+            application/pdf: {schema: {type: string, format: binary}}
+  /claims/{claim_id}/exports:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}]
+    get:
+      tags: [Decisions]
+      operationId: listExports
+      responses: {'200': {description: Export records with target acknowledgement state}}
+  /config-artifacts:
+    get:
+      tags: [Configuration]
+      operationId: listConfigArtifacts
+      parameters: [{name: kind, in: query, schema: {$ref: '#/components/schemas/ArtifactKind'}}, {$ref: '#/components/parameters/Cursor'}, {$ref: '#/components/parameters/Limit'}]
+      responses: {'200': {description: Artifacts and versions}}
+    post:
+      tags: [Configuration]
+      operationId: createConfigDraft
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [artifact_id, version, kind, effective_from, body, source_documents]
+              properties:
+                artifact_id: {type: string}
+                version: {type: string}
+                kind: {$ref: '#/components/schemas/ArtifactKind'}
+                effective_from: {type: string, format: date}
+                effective_to: {type: [string, 'null'], format: date}
+                body: {type: object, description: 'Validated against the schema for its kind (policy-config, tariff, nme-list, checklist, workflow-config)'}
+                source_documents: {type: array, items: {type: object}}
+      responses: {'201': {description: Draft created}, '422': {$ref: '#/components/responses/Unprocessable'}}
+  /config-artifacts/{artifact_id}/versions/{version}:validate:
+    parameters: [{name: artifact_id, in: path, required: true, schema: {type: string}}, {name: version, in: path, required: true, schema: {type: string}}]
+    post:
+      tags: [Configuration]
+      operationId: validateConfig
+      responses: {'200': {description: Schema validation and effective-date overlap check result}}
+  /config-artifacts/{artifact_id}/versions/{version}:replay:
+    parameters: [{name: artifact_id, in: path, required: true, schema: {type: string}}, {name: version, in: path, required: true, schema: {type: string}}]
+    post:
+      tags: [Configuration]
+      operationId: replayConfig
+      summary: Re-evaluate the product's golden claims under the draft; returns per-claim payable deltas
+      responses: {'202': {description: Replay queued; result via GET on the same path with suffix /replay-result}}
+  /config-artifacts/{artifact_id}/versions/{version}:publish:
+    parameters: [{name: artifact_id, in: path, required: true, schema: {type: string}}, {name: version, in: path, required: true, schema: {type: string}}]
+    post:
+      tags: [Configuration]
+      operationId: publishConfig
+      summary: Publish (approver must differ from author; step-up authentication)
+      requestBody: {content: {application/json: {schema: {type: object, properties: {retroactive_to_open_claims: {type: boolean, default: false}}}}}}
+      responses: {'200': {description: Published}, '403': {$ref: '#/components/responses/Forbidden'}}
+  /imports/policies:
+    post:
+      tags: [Configuration]
+      operationId: importPolicies
+      summary: Bulk upsert of policies, members (with continuous-cover dates, base SI, cumulative bonus) from the TMS or policy system
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [records], properties: {records: {type: array, maxItems: 5000, items: {type: object}}}}}}}
+      responses: {'202': {description: Import job queued; per-record errors reported}}
+  /imports/si-ledger:
+    post:
+      tags: [Configuration]
+      operationId: importSiLedger
+      summary: Opening sum-insured utilisation per member and policy year (OPENING_PAID_EXTERNAL entries)
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody: {required: true, content: {application/json: {schema: {type: object, required: [entries], properties: {entries: {type: array, items: {type: object, required: [policy_no, member_id, policy_year_start, amount], properties: {amount: {$ref: '#/components/schemas/Money'}}}}}}}}}
+      responses: {'202': {description: Queued}}
+  /integrations/tms/events:
+    post:
+      tags: [Claims]
+      operationId: receiveTmsEvent
+      summary: Inbound TMS events (document added, claim withdrawn, payment confirmed); de-duplicated on sender event_id
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {type: object, required: [event_id, event_type, external_ref], properties: {event_id: {type: string}, event_type: {enum: [DOCUMENT_ADDED, CLAIM_WITHDRAWN, PAYMENT_CONFIRMED, CLAIM_UPDATED]}, external_ref: {type: string}, data: {type: object}}}
+      responses: {'202': {description: Accepted (or replayed response for a duplicate event_id)}}
+webhooks:
+  claim.evaluation.completed:
+    post:
+      summary: Sent when an evaluation reaches COMPUTED or BLOCKED
+      requestBody:
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/WebhookEvent'}
+            examples:
+              computed:
+                value:
+                  event_id: 01J9Z3K7D2V0XQ3W5M8N4T6R2A
+                  event_type: claim.evaluation.completed
+                  occurred_at: '2026-07-09T11:31:47+05:30'
+                  tenant_id: TENANT-DEMO
+                  claim_id: CLM-DEMO-0002
+                  data: {evaluation_id: EVAL-0002-v1, recommendation: PAY_PARTIAL, recommended_payable: '85000.00'}
+      responses:
+        '2XX': {description: Receiver accepted. Non-2XX or timeout (10 s) triggers retry with exponential backoff for 24 h, then dead-letter.}
+  claim.decision.recorded:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/WebhookEvent'}
+      responses:
+        '2XX': {description: Accepted}
+  claim.query.approved:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema: {$ref: '#/components/schemas/WebhookEvent'}
+      responses:
+        '2XX': {description: Accepted}
+components:
+  securitySchemes:
+    oauth2ClientCredentials:
+      type: oauth2
+      description: System-to-system (TMS adapter). Tokens are tenant-scoped; mTLS recommended for production.
+      flows:
+        clientCredentials:
+          tokenUrl: https://auth.example.invalid/oauth2/token
+          scopes:
+            claims.read: Read claims, evaluations and audit
+            claims.write: Create claims, upload documents, record decisions
+    userBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OIDC access token for reviewer UI sessions; roles come from the customer's IdP group mapping.
+  headers:
+    ETag:
+      schema: {type: string}
+      description: Opaque version of the claim; send back in If-Match.
+  parameters:
+    ClaimId: {name: claim_id, in: path, required: true, schema: {type: string}}
+    IdempotencyKey: {name: Idempotency-Key, in: header, required: true, schema: {type: string, format: uuid}}
+    IfMatch: {name: If-Match, in: header, required: true, schema: {type: string}}
+    Cursor: {name: cursor, in: query, schema: {type: string}}
+    Limit: {name: limit, in: query, schema: {type: integer, minimum: 1, maximum: 200, default: 50}}
+  responses:
+    NotFound: {description: Not found, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}}
+    Conflict: {description: Conflict (idempotency key reuse with different body, or state conflict), content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}}
+    Unprocessable: {description: Validation failed, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}}
+    PreconditionFailed: {description: ETag mismatch — the claim changed; re-read and retry, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}}
+    Forbidden: {description: Role or approval limit does not permit this action, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}}
+  schemas:
+    Money: {type: string, pattern: '^[0-9]+\.[0-9]{2}$'}
+    ArtifactKind: {enum: [POLICY_CONFIG, NME_LIST, TARIFF, CHECKLIST, WORKFLOW_CONFIG, RULE_PACK, CLASSIFIER_MAP]}
+    Workflow: {enum: [PREAUTH, ENHANCEMENT, CASHLESS_DISCHARGE, IPD_REIMBURSEMENT, OPD_REIMBURSEMENT, OPD_CASHLESS]}
+    ClaimStatus: {enum: [INTAKE, DOCS_INCOMPLETE, PROCESSING, READY_FOR_REVIEW, IN_REVIEW, MEDICAL_REVIEW, QUERY_RAISED, AWAITING_RESPONSE, PENDING_APPROVAL, ESCALATED_CRC, FINALISED, EXPORTED, REOPENED, WITHDRAWN]}
+    DocumentType: {enum: [CLAIM_FORM, DISCHARGE_SUMMARY, FINAL_BILL_ITEMISED, FINAL_BILL_SUMMARY, PHARMACY_BILL, INVESTIGATION_REPORT, ADMISSION_RECORD, PRESCRIPTION, PAYMENT_RECEIPT, ID_PROOF, BANK_DETAILS, PREAUTH_REQUEST, IMPLANT_INVOICE, PAST_TREATMENT_RECORDS, PROPOSAL_FORM, OTHER]}
+    ClaimCreate:
+      type: object
+      required: [external_ref, workflow, policy_no, member_id]
+      additionalProperties: false
+      properties:
+        external_ref: {type: string, maxLength: 64}
+        workflow: {$ref: '#/components/schemas/Workflow'}
+        policy_no: {type: string}
+        member_id: {type: string}
+        hospital_id: {type: [string, 'null']}
+        admission_date: {type: [string, 'null'], format: date}
+        discharge_date: {type: [string, 'null'], format: date}
+        claimed_amount: {$ref: '#/components/schemas/Money'}
+    ClaimSummary:
+      type: object
+      required: [claim_id, external_ref, workflow, status]
+      properties:
+        claim_id: {type: string}
+        external_ref: {type: string}
+        workflow: {$ref: '#/components/schemas/Workflow'}
+        status: {$ref: '#/components/schemas/ClaimStatus'}
+        recommendation: {type: [string, 'null']}
+        recommended_payable: {type: [string, 'null']}
+        open_blocking_findings: {type: integer, minimum: 0}
+        sla_due_at: {type: [string, 'null'], format: date-time}
+        assigned_to: {type: [string, 'null']}
+    Claim:
+      allOf:
+        - $ref: '#/components/schemas/ClaimSummary'
+        - type: object
+          properties:
+            policy_no: {type: string}
+            member_id: {type: string}
+            hospital_id: {type: [string, 'null']}
+            admission_date: {type: [string, 'null'], format: date}
+            discharge_date: {type: [string, 'null'], format: date}
+            current_evaluation_id: {type: [string, 'null']}
+    Document:
+      type: object
+      required: [document_id, status]
+      properties:
+        document_id: {type: string}
+        declared_type: {$ref: '#/components/schemas/DocumentType'}
+        classified_type: {type: [string, 'null']}
+        status: {enum: [RECEIVED, STORED, CLASSIFYING, CLASSIFIED, EXTRACTING, EXTRACTED, NEEDS_REVIEW, FAILED_UNREADABLE, FAILED_TECHNICAL, QUARANTINED, SUPERSEDED]}
+        page_count: {type: [integer, 'null']}
+        sha256: {type: string}
+        supersedes_document_id: {type: [string, 'null']}
+    ReviewerActionCreate:
+      type: object
+      required: [action, target, reason_code]
+      properties:
+        action: {enum: [CORRECT_FACT, RESOLVE_CONFLICT, RECLASSIFY_LINE, RECLASSIFY_DOCUMENT, MARK_PAGE_UNREADABLE, OVERRIDE_ADJUSTMENT, ADD_ADJUSTMENT, REMOVE_ADJUSTMENT, ACKNOWLEDGE_FINDING, RESOLVE_FINDING, DISMISS_FINDING, RETURN_FOR_REWORK, ESCALATE_MEDICAL, ESCALATE_CRC, ESCALATE_FWA, PLACE_INVESTIGATION_HOLD, RELEASE_INVESTIGATION_HOLD, RECORD_CRC_DECLINED]}
+        evaluation_id: {type: string}
+        target:
+          type: object
+          required: [type, id]
+          properties:
+            type: {enum: [fact, conflict, bill_line, adjustment, finding, document, page, claim]}
+            id: {type: string}
+        after_value: {type: object}
+        reason_code: {type: string}
+        comment: {type: string, maxLength: 2000}
+      allOf:
+        - if: {properties: {action: {enum: [OVERRIDE_ADJUSTMENT, ADD_ADJUSTMENT, REMOVE_ADJUSTMENT, DISMISS_FINDING]}}}
+          then: {required: [comment]}
+    DecisionCreate:
+      type: object
+      required: [evaluation_id, disposition]
+      properties:
+        evaluation_id: {type: string}
+        disposition: {enum: [APPROVED_FULL, APPROVED_PARTIAL, REPUDIATED_WITH_CRC_APPROVAL, WITHDRAWN, CLOSED_DUPLICATE]}
+        approved_payable: {$ref: '#/components/schemas/Money'}
+        crc_reference: {type: [string, 'null']}
+        communicated_by: {enum: [INSURER, TPA], default: TPA, description: Repudiation is recorded as the insurer's outcome and communicated only by the insurer (E-REG-04)}
+        duplicate_of_claim_id: {type: [string, 'null']}
+        deviation_reason: {type: [string, 'null']}
+      allOf:
+        - if: {properties: {disposition: {const: REPUDIATED_WITH_CRC_APPROVAL}}}
+          then: {required: [crc_reference, communicated_by], properties: {communicated_by: {const: INSURER}}}
+        - if: {properties: {disposition: {const: CLOSED_DUPLICATE}}}
+          then: {required: [duplicate_of_claim_id]}
+        - if: {properties: {disposition: {enum: [APPROVED_FULL, APPROVED_PARTIAL]}}}
+          then: {required: [approved_payable]}
+    Decision:
+      allOf:
+        - $ref: '#/components/schemas/DecisionCreate'
+        - type: object
+          required: [decision_id, decided_by, decided_at]
+          properties:
+            decision_id: {type: string}
+            decided_by: {type: string}
+            decided_at: {type: string, format: date-time}
+    AuditEvent:
+      type: object
+      required: [seq, occurred_at, actor, event_type, payload, prev_hash, event_hash]
+      properties:
+        seq: {type: integer}
+        claim_id: {type: string}
+        occurred_at: {type: string, format: date-time}
+        actor: {type: string}
+        event_type: {type: string}
+        payload: {type: object}
+        prev_hash: {type: string}
+        event_hash: {type: string}
+    WebhookEvent:
+      type: object
+      required: [event_id, event_type, occurred_at, tenant_id, data]
+      properties:
+        event_id: {type: string, description: Unique; receivers must de-duplicate on it (delivery is at-least-once)}
+        event_type: {type: string}
+        occurred_at: {type: string, format: date-time}
+        tenant_id: {type: string}
+        claim_id: {type: string}
+        data: {type: object}
+    Problem:
+      type: object
+      required: [type, title, status]
+      properties:
+        type: {type: string, format: uri}
+        title: {type: string}
+        status: {type: integer}
+        detail: {type: string}
+        instance: {type: string}
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              pointer: {type: string}
+              message: {type: string}

@@ -1,0 +1,171 @@
+{
+  "worksheet_id": "WS-DEC-0001",
+  "claim_id": "CLM-DEMO-0001",
+  "status": "SYNTHETIC",
+  "decision": {
+    "decision_id": "DEC-0001",
+    "disposition": "APPROVED_PARTIAL",
+    "decided_by": "PROC-07",
+    "second_approver": null,
+    "evaluation_id": "EVAL-0001-v1"
+  },
+  "amounts": {
+    "claimed": "109360.50",
+    "billed": "109360.50",
+    "approved": "107591.00",
+    "disallowed_total": "1769.50"
+  },
+  "disallowances": [
+    {
+      "line_id": "L10",
+      "amount": "1000.00",
+      "reason": "'Admission / registration charges' matched NME-301 (Admission / registration charges); treatment DISALLOW_FULL_IF_BILLED_SEPARATELY under list NMELIST-ILL-A v2026.1.0.",
+      "clause": "ILL-WORDING-A-2026 4.1 Non-payable items",
+      "rule_id": "R-LINE-NONPAYABLE"
+    },
+    {
+      "line_id": "L11",
+      "amount": "180.00",
+      "reason": "'Toothpaste and toothbrush' matched NME-101 (Tooth paste / tooth brush); treatment DISALLOW_FULL_IF_BILLED_SEPARATELY under list NMELIST-ILL-A v2026.1.0.",
+      "clause": "ILL-WORDING-A-2026 4.1 Non-payable items",
+      "rule_id": "R-LINE-NONPAYABLE"
+    },
+    {
+      "line_id": "L12",
+      "amount": "240.00",
+      "reason": "'Mineral water' matched NME-001 (Mineral water); treatment DISALLOW_FULL under list NMELIST-ILL-A v2026.1.0.",
+      "clause": "ILL-WORDING-A-2026 4.1 Non-payable items",
+      "rule_id": "R-LINE-NONPAYABLE"
+    },
+    {
+      "line_id": "L13",
+      "amount": "350.00",
+      "reason": "'Patient gown' matched NME-102 (Gown); treatment DISALLOW_FULL_IF_BILLED_SEPARATELY under list NMELIST-ILL-A v2026.1.0.",
+      "clause": "ILL-WORDING-A-2026 4.1 Non-payable items",
+      "rule_id": "R-LINE-NONPAYABLE"
+    },
+    {
+      "line_id": "CLAIM",
+      "amount": "-0.50",
+      "reason": "Final payable rounded per configuration; a negative amount increases the payable.",
+      "clause": "ILL-CLAIMS-MANUAL-A-2026 2.4 Rounding of settlement amounts",
+      "rule_id": "R-CLAIM-ROUNDING"
+    }
+  ],
+  "line_table": [
+    {
+      "line_id": "L01",
+      "description": "Room charges - twin sharing",
+      "billed": "7000.00",
+      "payable": "7000.00"
+    },
+    {
+      "line_id": "L02",
+      "description": "Nursing charges",
+      "billed": "2400.00",
+      "payable": "2400.00"
+    },
+    {
+      "line_id": "L03",
+      "description": "Surgeon fee - laparoscopic appendicectomy",
+      "billed": "30000.00",
+      "payable": "30000.00"
+    },
+    {
+      "line_id": "L04",
+      "description": "Anaesthetist fee",
+      "billed": "9000.00",
+      "payable": "9000.00"
+    },
+    {
+      "line_id": "L05",
+      "description": "Operation theatre charges",
+      "billed": "22000.00",
+      "payable": "22000.00"
+    },
+    {
+      "line_id": "L06",
+      "description": "Pharmacy - drugs and IV fluids",
+      "billed": "18640.50",
+      "payable": "18640.50"
+    },
+    {
+      "line_id": "L07",
+      "description": "Surgical consumables",
+      "billed": "9850.00",
+      "payable": "9850.00"
+    },
+    {
+      "line_id": "L08",
+      "description": "Investigations - CBC, LFT, USG abdomen",
+      "billed": "6300.00",
+      "payable": "6300.00"
+    },
+    {
+      "line_id": "L09",
+      "description": "Consultant visits",
+      "billed": "2400.00",
+      "payable": "2400.00"
+    },
+    {
+      "line_id": "L10",
+      "description": "Admission / registration charges",
+      "billed": "1000.00",
+      "payable": "0.00"
+    },
+    {
+      "line_id": "L11",
+      "description": "Toothpaste and toothbrush",
+      "billed": "180.00",
+      "payable": "0.00"
+    },
+    {
+      "line_id": "L12",
+      "description": "Mineral water",
+      "billed": "240.00",
+      "payable": "0.00"
+    },
+    {
+      "line_id": "L13",
+      "description": "Patient gown",
+      "billed": "350.00",
+      "payable": "0.00"
+    }
+  ],
+  "grievance_route": {
+    "insurer_grievance_procedure": "<customer-supplied: insurer's grievance redressal procedure; complaints may also be registered on IRDAI's Bima Bharosa portal (E-REG-03)>",
+    "grievance_officer_contact": "<customer-supplied: grievance redressal office and officer contact>",
+    "ombudsman_procedure": "<customer-supplied: procedure to approach the Insurance Ombudsman if not satisfied>",
+    "ombudsman_contact": "<customer-supplied: office of the Insurance Ombudsman for the policyholder's jurisdiction>"
+  },
+  "provenance": {
+    "engine_version": "ref-harness-0.4.0",
+    "config_versions": {
+      "policy_config": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+      "nme_list": "NMELIST-ILL-A@2026.1.0",
+      "tariff": null,
+      "checklist": "CHECKLIST-IPD-REIMB@2026.1.0",
+      "engine": "ref-harness-0.4.0",
+      "rules": {
+        "R-GATE-IDENTITY": "1.0.0",
+        "R-GATE-DATES": "1.0.0",
+        "R-GATE-ITEMISATION": "1.0.0",
+        "R-DOC-COMPLETENESS": "1.0.0",
+        "R-ELIG-POLICY-ACTIVE": "1.0.0",
+        "R-ELIG-WAITING": "1.1.0",
+        "R-LINE-DUPLICATE": "1.0.0",
+        "R-LINE-NONPAYABLE": "1.0.0",
+        "R-LINE-TARIFF": "1.0.0",
+        "R-LINE-ROOM-CAP": "1.1.0",
+        "R-LINE-PROPORTIONATE": "1.1.0",
+        "R-CLAIM-SUBLIMIT": "1.0.0",
+        "R-CLAIM-DEDUCTIBLE": "1.0.0",
+        "R-CLAIM-COPAY": "1.0.0",
+        "R-CLAIM-SI-CAP": "1.0.0",
+        "R-CLAIM-ROUNDING": "1.0.0",
+        "R-ANOM-BILLNO-REUSE": "0.9.0"
+      }
+    },
+    "output_hash": "sha256:f48a452ce67bca74b571d7d71551bc65d8e020bb483619ecf42e0abe897d0c5e"
+  }
+}

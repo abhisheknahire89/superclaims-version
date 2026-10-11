@@ -1,0 +1,755 @@
+[
+  {
+    "seq": 1,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:20:05.000+05:30",
+    "actor": "INTEGRATION:TMS",
+    "event_type": "DOCUMENT_RECEIVED",
+    "payload": {
+      "document_id": "DOC-0002-CF",
+      "declared_type": "CLAIM_FORM",
+      "sha256": "d2ff94f07105217b…(synthetic)"
+    },
+    "prev_hash": "GENESIS",
+    "event_hash": "e5ad0a93bd242cce7974f13fffacc76b4608389c3118b5b6cbed2e0756acc04e"
+  },
+  {
+    "seq": 2,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:20:10.000+05:30",
+    "actor": "INTEGRATION:TMS",
+    "event_type": "DOCUMENT_RECEIVED",
+    "payload": {
+      "document_id": "DOC-0002-DS",
+      "declared_type": "DISCHARGE_SUMMARY",
+      "sha256": "08b0d698c2284de4…(synthetic)"
+    },
+    "prev_hash": "e5ad0a93bd242cce7974f13fffacc76b4608389c3118b5b6cbed2e0756acc04e",
+    "event_hash": "86892b7f5cb32b2b20ade101eabd9647c3b3a7cdb988f7cfc2feb91401709c94"
+  },
+  {
+    "seq": 3,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:20:15.000+05:30",
+    "actor": "INTEGRATION:TMS",
+    "event_type": "DOCUMENT_RECEIVED",
+    "payload": {
+      "document_id": "DOC-0002-FB",
+      "declared_type": "FINAL_BILL_ITEMISED",
+      "sha256": "e0426d823e5dd908…(synthetic)"
+    },
+    "prev_hash": "86892b7f5cb32b2b20ade101eabd9647c3b3a7cdb988f7cfc2feb91401709c94",
+    "event_hash": "fc4d0e5517f296452c5c16460bed1b0d20570698fc0979d9f58049396fd36067"
+  },
+  {
+    "seq": 4,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:20:20.000+05:30",
+    "actor": "INTEGRATION:TMS",
+    "event_type": "DOCUMENT_RECEIVED",
+    "payload": {
+      "document_id": "DOC-0002-PH1",
+      "declared_type": "PHARMACY_BILL",
+      "sha256": "be21c566bacf93b1…(synthetic)"
+    },
+    "prev_hash": "fc4d0e5517f296452c5c16460bed1b0d20570698fc0979d9f58049396fd36067",
+    "event_hash": "445c09d646df3397dcb23a3b328b935614e5fade0f6ac1c54ad58006b7275542"
+  },
+  {
+    "seq": 5,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:20:25.000+05:30",
+    "actor": "INTEGRATION:TMS",
+    "event_type": "DOCUMENT_RECEIVED",
+    "payload": {
+      "document_id": "DOC-0002-PH1-COPY",
+      "declared_type": "PHARMACY_BILL",
+      "sha256": "2e9e0aa821c9f656…(synthetic)"
+    },
+    "prev_hash": "445c09d646df3397dcb23a3b328b935614e5fade0f6ac1c54ad58006b7275542",
+    "event_hash": "0269643340e81f7160fc8eac0a6b6b90b159ee83158559400145c610f09cbbb3"
+  },
+  {
+    "seq": 6,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:20:30.000+05:30",
+    "actor": "INTEGRATION:TMS",
+    "event_type": "DOCUMENT_RECEIVED",
+    "payload": {
+      "document_id": "DOC-0002-PH2",
+      "declared_type": "PHARMACY_BILL",
+      "sha256": "5b0cd70feb964fc7…(synthetic)"
+    },
+    "prev_hash": "0269643340e81f7160fc8eac0a6b6b90b159ee83158559400145c610f09cbbb3",
+    "event_hash": "6b553ab731185e1ebda61cabbbdb0dbbb284a59bb0098cc4117d1fd4fa7880b7"
+  },
+  {
+    "seq": 7,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:20:35.000+05:30",
+    "actor": "INTEGRATION:TMS",
+    "event_type": "DOCUMENT_RECEIVED",
+    "payload": {
+      "document_id": "DOC-0002-INV",
+      "declared_type": "INVESTIGATION_REPORT",
+      "sha256": "1b9c9afd7bdf3704…(synthetic)"
+    },
+    "prev_hash": "6b553ab731185e1ebda61cabbbdb0dbbb284a59bb0098cc4117d1fd4fa7880b7",
+    "event_hash": "82f8ebfedec5bab4a35825c622037fee6a76a6a08025ba0394bcb5f8709e1d8d"
+  },
+  {
+    "seq": 8,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:20:40.000+05:30",
+    "actor": "INTEGRATION:TMS",
+    "event_type": "DOCUMENT_RECEIVED",
+    "payload": {
+      "document_id": "DOC-0002-RCPT",
+      "declared_type": "PAYMENT_RECEIPT",
+      "sha256": "ced9e1486b0823c4…(synthetic)"
+    },
+    "prev_hash": "82f8ebfedec5bab4a35825c622037fee6a76a6a08025ba0394bcb5f8709e1d8d",
+    "event_hash": "c5221986a6c5c6ab8d78895a3b49d39c0f15c7c045da865b857b9e479df9771c"
+  },
+  {
+    "seq": 9,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:20:45.000+05:30",
+    "actor": "INTEGRATION:TMS",
+    "event_type": "DOCUMENT_RECEIVED",
+    "payload": {
+      "document_id": "DOC-0002-ID",
+      "declared_type": "ID_PROOF",
+      "sha256": "14d49f9966953c57…(synthetic)"
+    },
+    "prev_hash": "c5221986a6c5c6ab8d78895a3b49d39c0f15c7c045da865b857b9e479df9771c",
+    "event_hash": "775143e1a2d79b64dbe5e698fc2d4add50704b8761b885adf7883fe7ce7f3d1c"
+  },
+  {
+    "seq": 10,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:20:50.000+05:30",
+    "actor": "INTEGRATION:TMS",
+    "event_type": "DOCUMENT_RECEIVED",
+    "payload": {
+      "document_id": "DOC-0002-BANK",
+      "declared_type": "BANK_DETAILS",
+      "sha256": "0e52ba453939d6a3…(synthetic)"
+    },
+    "prev_hash": "775143e1a2d79b64dbe5e698fc2d4add50704b8761b885adf7883fe7ce7f3d1c",
+    "event_hash": "14829ac0359352c2da0595a155be77337e9b1a7b0e1bac141f3f7977dc2f1c55"
+  },
+  {
+    "seq": 11,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:20:56.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "DOCUMENT_CLASSIFIED",
+    "payload": {
+      "document_id": "DOC-0002-CF",
+      "type": "CLAIM_FORM",
+      "classifier": "doc-classifier@0.4 (proposed)"
+    },
+    "prev_hash": "14829ac0359352c2da0595a155be77337e9b1a7b0e1bac141f3f7977dc2f1c55",
+    "event_hash": "4af8b35cecbea267c765938e4dd0ae52bf9f5f50be67e8d777862d384ad7e3f5"
+  },
+  {
+    "seq": 12,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:21:21.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "EXTRACTION_COMPLETED",
+    "payload": {
+      "document_id": "DOC-0002-CF",
+      "extractor": "extract-pipeline@0.7 (proposed)"
+    },
+    "prev_hash": "4af8b35cecbea267c765938e4dd0ae52bf9f5f50be67e8d777862d384ad7e3f5",
+    "event_hash": "fff79b342e07f6dc78c22af92c65f7cf7044f7647df177b09075042d297dbd98"
+  },
+  {
+    "seq": 13,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:21:27.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "DOCUMENT_CLASSIFIED",
+    "payload": {
+      "document_id": "DOC-0002-DS",
+      "type": "DISCHARGE_SUMMARY",
+      "classifier": "doc-classifier@0.4 (proposed)"
+    },
+    "prev_hash": "fff79b342e07f6dc78c22af92c65f7cf7044f7647df177b09075042d297dbd98",
+    "event_hash": "cdcf4fb30bfa6e7ece52dc6880e258ef358769b58dd8fb75166b4261dd8934a8"
+  },
+  {
+    "seq": 14,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:21:52.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "EXTRACTION_COMPLETED",
+    "payload": {
+      "document_id": "DOC-0002-DS",
+      "extractor": "extract-pipeline@0.7 (proposed)"
+    },
+    "prev_hash": "cdcf4fb30bfa6e7ece52dc6880e258ef358769b58dd8fb75166b4261dd8934a8",
+    "event_hash": "ce1010623809e8d2408443a9618b1959c072e80110df481b062bd0416e8435dc"
+  },
+  {
+    "seq": 15,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:21:58.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "DOCUMENT_CLASSIFIED",
+    "payload": {
+      "document_id": "DOC-0002-FB",
+      "type": "FINAL_BILL_ITEMISED",
+      "classifier": "doc-classifier@0.4 (proposed)"
+    },
+    "prev_hash": "ce1010623809e8d2408443a9618b1959c072e80110df481b062bd0416e8435dc",
+    "event_hash": "beb3f5ba5a6d34616267c97d30f244b5c073038cf732e0692679fb747d90f2f5"
+  },
+  {
+    "seq": 16,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:22:23.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "EXTRACTION_COMPLETED",
+    "payload": {
+      "document_id": "DOC-0002-FB",
+      "extractor": "extract-pipeline@0.7 (proposed)"
+    },
+    "prev_hash": "beb3f5ba5a6d34616267c97d30f244b5c073038cf732e0692679fb747d90f2f5",
+    "event_hash": "8c105b6cf4d4a83d85b545b6c2c29a325f89449d4e9beae3255c3569628dfa6b"
+  },
+  {
+    "seq": 17,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:22:29.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "DOCUMENT_CLASSIFIED",
+    "payload": {
+      "document_id": "DOC-0002-PH1",
+      "type": "PHARMACY_BILL",
+      "classifier": "doc-classifier@0.4 (proposed)"
+    },
+    "prev_hash": "8c105b6cf4d4a83d85b545b6c2c29a325f89449d4e9beae3255c3569628dfa6b",
+    "event_hash": "fd80e2860d35c265a548a3ec56bf8d1362418cfba6bb8d4b9b3d423ceaea75c3"
+  },
+  {
+    "seq": 18,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:22:54.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "EXTRACTION_COMPLETED",
+    "payload": {
+      "document_id": "DOC-0002-PH1",
+      "extractor": "extract-pipeline@0.7 (proposed)"
+    },
+    "prev_hash": "fd80e2860d35c265a548a3ec56bf8d1362418cfba6bb8d4b9b3d423ceaea75c3",
+    "event_hash": "bc735f89227b4a43abf8be9c605630c608e294c0ccc92eb36402e33b9a5059fd"
+  },
+  {
+    "seq": 19,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:23:00.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "DOCUMENT_CLASSIFIED",
+    "payload": {
+      "document_id": "DOC-0002-PH1-COPY",
+      "type": "PHARMACY_BILL",
+      "classifier": "doc-classifier@0.4 (proposed)"
+    },
+    "prev_hash": "bc735f89227b4a43abf8be9c605630c608e294c0ccc92eb36402e33b9a5059fd",
+    "event_hash": "897a577b9e5f90b64647c9f89fd4046aeb2051a0fb6fa5bdb380de636a95d9cf"
+  },
+  {
+    "seq": 20,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:23:25.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "EXTRACTION_COMPLETED",
+    "payload": {
+      "document_id": "DOC-0002-PH1-COPY",
+      "extractor": "extract-pipeline@0.7 (proposed)"
+    },
+    "prev_hash": "897a577b9e5f90b64647c9f89fd4046aeb2051a0fb6fa5bdb380de636a95d9cf",
+    "event_hash": "b478e5bfe5d75aa965942561515dd74c57f239bdb0ecfac4d1c9083e67cdc7d5"
+  },
+  {
+    "seq": 21,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:23:31.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "DOCUMENT_CLASSIFIED",
+    "payload": {
+      "document_id": "DOC-0002-PH2",
+      "type": "PHARMACY_BILL",
+      "classifier": "doc-classifier@0.4 (proposed)"
+    },
+    "prev_hash": "b478e5bfe5d75aa965942561515dd74c57f239bdb0ecfac4d1c9083e67cdc7d5",
+    "event_hash": "7f9990625759bf436c286546ec674ea02fc969e267cc30c6556799474ffe70c4"
+  },
+  {
+    "seq": 22,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:23:56.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "EXTRACTION_COMPLETED",
+    "payload": {
+      "document_id": "DOC-0002-PH2",
+      "extractor": "extract-pipeline@0.7 (proposed)"
+    },
+    "prev_hash": "7f9990625759bf436c286546ec674ea02fc969e267cc30c6556799474ffe70c4",
+    "event_hash": "95890880615b0350a76c8e689803f662d33a7eb538bbd1dabdd7082fdbedc2f4"
+  },
+  {
+    "seq": 23,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:24:02.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "DOCUMENT_CLASSIFIED",
+    "payload": {
+      "document_id": "DOC-0002-INV",
+      "type": "INVESTIGATION_REPORT",
+      "classifier": "doc-classifier@0.4 (proposed)"
+    },
+    "prev_hash": "95890880615b0350a76c8e689803f662d33a7eb538bbd1dabdd7082fdbedc2f4",
+    "event_hash": "84ca75c99b5c48517222d97c4f8bd03c7ce690d0075170212412b65b72ce4e70"
+  },
+  {
+    "seq": 24,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:24:27.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "EXTRACTION_COMPLETED",
+    "payload": {
+      "document_id": "DOC-0002-INV",
+      "extractor": "extract-pipeline@0.7 (proposed)"
+    },
+    "prev_hash": "84ca75c99b5c48517222d97c4f8bd03c7ce690d0075170212412b65b72ce4e70",
+    "event_hash": "9739f2706f7ec5fbc666dab277a2a1974ade4b9a315d4ced085fadfafcc03d7e"
+  },
+  {
+    "seq": 25,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:24:33.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "DOCUMENT_CLASSIFIED",
+    "payload": {
+      "document_id": "DOC-0002-RCPT",
+      "type": "PAYMENT_RECEIPT",
+      "classifier": "doc-classifier@0.4 (proposed)"
+    },
+    "prev_hash": "9739f2706f7ec5fbc666dab277a2a1974ade4b9a315d4ced085fadfafcc03d7e",
+    "event_hash": "f211eb9a17a3f317bfbd5c7f9d174cc5c523070a8bb2dfbeee737de9cd81b217"
+  },
+  {
+    "seq": 26,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:24:58.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "EXTRACTION_COMPLETED",
+    "payload": {
+      "document_id": "DOC-0002-RCPT",
+      "extractor": "extract-pipeline@0.7 (proposed)"
+    },
+    "prev_hash": "f211eb9a17a3f317bfbd5c7f9d174cc5c523070a8bb2dfbeee737de9cd81b217",
+    "event_hash": "3de0b8fc347a64b0a90ff93209e3a0cff40512e64c751b810f13331b7822f2df"
+  },
+  {
+    "seq": 27,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:25:04.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "DOCUMENT_CLASSIFIED",
+    "payload": {
+      "document_id": "DOC-0002-ID",
+      "type": "ID_PROOF",
+      "classifier": "doc-classifier@0.4 (proposed)"
+    },
+    "prev_hash": "3de0b8fc347a64b0a90ff93209e3a0cff40512e64c751b810f13331b7822f2df",
+    "event_hash": "7e923f84fb4c2f3a4fd0bf7844f17284fba4d72338bc4776c33162bc13d023a8"
+  },
+  {
+    "seq": 28,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:25:29.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "EXTRACTION_COMPLETED",
+    "payload": {
+      "document_id": "DOC-0002-ID",
+      "extractor": "extract-pipeline@0.7 (proposed)"
+    },
+    "prev_hash": "7e923f84fb4c2f3a4fd0bf7844f17284fba4d72338bc4776c33162bc13d023a8",
+    "event_hash": "8e561b6fbc65b940aab1fd895d6e85e831c28a1faae53c972376c46f578cd2ed"
+  },
+  {
+    "seq": 29,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:25:35.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "DOCUMENT_CLASSIFIED",
+    "payload": {
+      "document_id": "DOC-0002-BANK",
+      "type": "BANK_DETAILS",
+      "classifier": "doc-classifier@0.4 (proposed)"
+    },
+    "prev_hash": "8e561b6fbc65b940aab1fd895d6e85e831c28a1faae53c972376c46f578cd2ed",
+    "event_hash": "a61d1afe47e1778a89636d73f9111d94c6fa298d89fbd30d275f6dd86dc40fc3"
+  },
+  {
+    "seq": 30,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:00.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "EXTRACTION_COMPLETED",
+    "payload": {
+      "document_id": "DOC-0002-BANK",
+      "extractor": "extract-pipeline@0.7 (proposed)"
+    },
+    "prev_hash": "a61d1afe47e1778a89636d73f9111d94c6fa298d89fbd30d275f6dd86dc40fc3",
+    "event_hash": "0926eea87f4db6fcb297658470033926ceeffb65b933ed369f2dc115ceb3f86b"
+  },
+  {
+    "seq": 31,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.000+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_RUN_STARTED",
+    "payload": {
+      "evaluation_id": "EVAL-0002-v1",
+      "config_versions": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+      "input_hash": "sha256:f651c90c71a148e91b1237ed72f6b6f53df610ace71279c53d426fd44054fb97"
+    },
+    "prev_hash": "0926eea87f4db6fcb297658470033926ceeffb65b933ed369f2dc115ceb3f86b",
+    "event_hash": "2daca8975188855a58cbcd5c5c16210bc9ddea8617945f097ca6715704e23d6c"
+  },
+  {
+    "seq": 32,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.012+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-GATE-IDENTITY",
+      "rule_version": "1.0.0",
+      "status": "PASSED"
+    },
+    "prev_hash": "2daca8975188855a58cbcd5c5c16210bc9ddea8617945f097ca6715704e23d6c",
+    "event_hash": "609e8cf7219731a734eda7419763012d474bb171020309f35ebbab4936d9449b"
+  },
+  {
+    "seq": 33,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.024+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-GATE-DATES",
+      "rule_version": "1.0.0",
+      "status": "PASSED"
+    },
+    "prev_hash": "609e8cf7219731a734eda7419763012d474bb171020309f35ebbab4936d9449b",
+    "event_hash": "c3ead72d7fcdcf53318870e2eaac4c0fef3d280447f139a3d72ab0fbd76e8b64"
+  },
+  {
+    "seq": 34,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.036+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-GATE-ITEMISATION",
+      "rule_version": "1.0.0",
+      "status": "PASSED"
+    },
+    "prev_hash": "c3ead72d7fcdcf53318870e2eaac4c0fef3d280447f139a3d72ab0fbd76e8b64",
+    "event_hash": "bf65b1710a60a15b72b907517257dc829074e383d36bac0bdbb6d6e700c35470"
+  },
+  {
+    "seq": 35,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.048+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-DOC-COMPLETENESS",
+      "rule_version": "1.0.0",
+      "status": "PASSED"
+    },
+    "prev_hash": "bf65b1710a60a15b72b907517257dc829074e383d36bac0bdbb6d6e700c35470",
+    "event_hash": "11f1cfa830a71ed4fe0d879e5d19a85c26d792e5372e0a8fd83a1c380d10e298"
+  },
+  {
+    "seq": 36,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.060+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-ELIG-POLICY-ACTIVE",
+      "rule_version": "1.0.0",
+      "status": "PASSED"
+    },
+    "prev_hash": "11f1cfa830a71ed4fe0d879e5d19a85c26d792e5372e0a8fd83a1c380d10e298",
+    "event_hash": "9e25f9e5ed046b91f4b06b83e1d81e584af2a904cd1d460fd80e58e6dcb381f0"
+  },
+  {
+    "seq": 37,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.072+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-ELIG-WAITING",
+      "rule_version": "1.1.0",
+      "status": "PASSED"
+    },
+    "prev_hash": "9e25f9e5ed046b91f4b06b83e1d81e584af2a904cd1d460fd80e58e6dcb381f0",
+    "event_hash": "f86ae58ef53c1e5000689019145756d1d41cf0a8669feb0d2d300ce5fd4d9732"
+  },
+  {
+    "seq": 38,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.084+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-LINE-DUPLICATE",
+      "rule_version": "1.0.0",
+      "status": "APPLIED"
+    },
+    "prev_hash": "f86ae58ef53c1e5000689019145756d1d41cf0a8669feb0d2d300ce5fd4d9732",
+    "event_hash": "bb9f8ce440b026354ffcdc9f4ae24ab0f9773e99969285b18444aba5e384a079"
+  },
+  {
+    "seq": 39,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.096+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-LINE-NONPAYABLE",
+      "rule_version": "1.0.0",
+      "status": "APPLIED"
+    },
+    "prev_hash": "bb9f8ce440b026354ffcdc9f4ae24ab0f9773e99969285b18444aba5e384a079",
+    "event_hash": "64e48060f4c79bf7373257b00a64f7ac5d5c53e0783a12b4126fdc5c89c6f96f"
+  },
+  {
+    "seq": 40,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.108+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-LINE-TARIFF",
+      "rule_version": "1.0.0",
+      "status": "APPLIED"
+    },
+    "prev_hash": "64e48060f4c79bf7373257b00a64f7ac5d5c53e0783a12b4126fdc5c89c6f96f",
+    "event_hash": "cf5c9f465a46802e38470b600b94b398ee52fd0004cf852f1b00ca78a6fbcd9c"
+  },
+  {
+    "seq": 41,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.120+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-LINE-ROOM-CAP",
+      "rule_version": "1.1.0",
+      "status": "APPLIED"
+    },
+    "prev_hash": "cf5c9f465a46802e38470b600b94b398ee52fd0004cf852f1b00ca78a6fbcd9c",
+    "event_hash": "2e9250ad90b5e8164ff575b94d939d4a4f5bfcfed46f19fe5a17e273813cf0b4"
+  },
+  {
+    "seq": 42,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.132+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-LINE-PROPORTIONATE",
+      "rule_version": "1.1.0",
+      "status": "APPLIED"
+    },
+    "prev_hash": "2e9250ad90b5e8164ff575b94d939d4a4f5bfcfed46f19fe5a17e273813cf0b4",
+    "event_hash": "68000e8d6ccde655835b8e0fd314f1e66b8b71aae1c02abbe7c19e04ab5c2471"
+  },
+  {
+    "seq": 43,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.144+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-CLAIM-SUBLIMIT",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE"
+    },
+    "prev_hash": "68000e8d6ccde655835b8e0fd314f1e66b8b71aae1c02abbe7c19e04ab5c2471",
+    "event_hash": "7b39d00d003b19ec1b0ec168f7ea10b59b1e3b93bc669ae170a6471c3a078a39"
+  },
+  {
+    "seq": 44,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.156+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-CLAIM-DEDUCTIBLE",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE"
+    },
+    "prev_hash": "7b39d00d003b19ec1b0ec168f7ea10b59b1e3b93bc669ae170a6471c3a078a39",
+    "event_hash": "34bd90547db54252dc4a523f55221d55ff324dd79fe2eb4a72d28d06d456d5df"
+  },
+  {
+    "seq": 45,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.168+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-CLAIM-COPAY",
+      "rule_version": "1.0.0",
+      "status": "APPLIED"
+    },
+    "prev_hash": "34bd90547db54252dc4a523f55221d55ff324dd79fe2eb4a72d28d06d456d5df",
+    "event_hash": "13f2a9c5733a30452c80e27094b08f08e76a719673037651e47f4e42b677d763"
+  },
+  {
+    "seq": 46,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.180+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-CLAIM-SI-CAP",
+      "rule_version": "1.0.0",
+      "status": "APPLIED"
+    },
+    "prev_hash": "13f2a9c5733a30452c80e27094b08f08e76a719673037651e47f4e42b677d763",
+    "event_hash": "2569cb622a3d3b76d11ec86ee567c4a97af3fa072cb741ccbe9c692e32cfce97"
+  },
+  {
+    "seq": 47,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.192+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-CLAIM-ROUNDING",
+      "rule_version": "1.0.0",
+      "status": "NOT_APPLICABLE"
+    },
+    "prev_hash": "2569cb622a3d3b76d11ec86ee567c4a97af3fa072cb741ccbe9c692e32cfce97",
+    "event_hash": "a0a69cd220e459e3d36c626e9c59d67d09cc1055109006914aa5f859a56319fb"
+  },
+  {
+    "seq": 48,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.204+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RULE_EXECUTED",
+    "payload": {
+      "rule_id": "R-ANOM-BILLNO-REUSE",
+      "rule_version": "0.9.0",
+      "status": "NOT_APPLICABLE"
+    },
+    "prev_hash": "a0a69cd220e459e3d36c626e9c59d67d09cc1055109006914aa5f859a56319fb",
+    "event_hash": "22e20f58e9e128f23632c495c2794d6077480e87b603fdcd499a253080a61a63"
+  },
+  {
+    "seq": 49,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:02.244+05:30",
+    "actor": "SYSTEM",
+    "event_type": "RECOMMENDATION_CREATED",
+    "payload": {
+      "evaluation_id": "EVAL-0002-v1",
+      "type": "PAY_PARTIAL",
+      "recommended_payable": "85000.00",
+      "output_hash": "sha256:400a2e2ea5adc2614eda881241293d096fc42da4ccba3da5f2afd11becabc9ad"
+    },
+    "prev_hash": "22e20f58e9e128f23632c495c2794d6077480e87b603fdcd499a253080a61a63",
+    "event_hash": "d220b7907eb12d208c5a00f4695db266951a4193af96eef1ecbfb79f14768186"
+  },
+  {
+    "seq": 50,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:26:47.244+05:30",
+    "actor": "USER:PROC-11",
+    "event_type": "REVIEWER_VIEWED_RECOMMENDATION",
+    "payload": {},
+    "prev_hash": "d220b7907eb12d208c5a00f4695db266951a4193af96eef1ecbfb79f14768186",
+    "event_hash": "1f8c9ab0b864efbeacda97f7e06804842b8a1541405d31cf998c1337bb0530bf"
+  },
+  {
+    "seq": 51,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:27:32.244+05:30",
+    "actor": "USER:PROC-11",
+    "event_type": "REVIEWER_CONFIRMED_FINDING",
+    "payload": {
+      "adjustment_rule": "R-LINE-DUPLICATE",
+      "line_id": "L11",
+      "comment": "DOC-0002-PH1-COPY is a photocopy of PH-2291."
+    },
+    "prev_hash": "1f8c9ab0b864efbeacda97f7e06804842b8a1541405d31cf998c1337bb0530bf",
+    "event_hash": "d1058c06c961edf9c6f69cf732be9bb8724aacb2c701c9f3f0929f9928a4de2d"
+  },
+  {
+    "seq": 52,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:28:17.244+05:30",
+    "actor": "USER:PROC-11",
+    "event_type": "APPROVAL_REQUESTED",
+    "payload": {
+      "proposed_disposition": "APPROVED_PARTIAL",
+      "approved_payable": "85000.00",
+      "reason": "Second approval required by WFCFG-TENANT-DEMO: total deductions 50.7% of billed > 30%."
+    },
+    "prev_hash": "d1058c06c961edf9c6f69cf732be9bb8724aacb2c701c9f3f0929f9928a4de2d",
+    "event_hash": "78113e3d2b7075cef9a003a3abb59d3c7ea9eb81952171206f63375b78f48abf"
+  },
+  {
+    "seq": 53,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:29:02.244+05:30",
+    "actor": "USER:SUP-02",
+    "event_type": "APPROVAL_GRANTED",
+    "payload": {},
+    "prev_hash": "78113e3d2b7075cef9a003a3abb59d3c7ea9eb81952171206f63375b78f48abf",
+    "event_hash": "983269668237214173842e9e9eb23a5103cf8ed511b84bcebb7b77638027c3db"
+  },
+  {
+    "seq": 54,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:29:47.244+05:30",
+    "actor": "SYSTEM",
+    "event_type": "DECISION_RECORDED",
+    "payload": {
+      "decision": "APPROVED_PARTIAL",
+      "approved_payable": "85000.00",
+      "decided_by": "PROC-11",
+      "second_approver": "SUP-02"
+    },
+    "prev_hash": "983269668237214173842e9e9eb23a5103cf8ed511b84bcebb7b77638027c3db",
+    "event_hash": "ee04d4a981b54f1f0b8f6a9f83e508350f058abdc8970405616bcb1a189fd2ab"
+  },
+  {
+    "seq": 55,
+    "claim_id": "CLM-DEMO-0002",
+    "occurred_at": "2026-07-09T11:30:32.244+05:30",
+    "actor": "SYSTEM",
+    "event_type": "SETTLEMENT_WORKSHEET_EXPORTED",
+    "payload": {
+      "format": "JSON+PDF",
+      "target": "TMS_STUB"
+    },
+    "prev_hash": "ee04d4a981b54f1f0b8f6a9f83e508350f058abdc8970405616bcb1a189fd2ab",
+    "event_hash": "638837f83e16334d917d28fb2a73666a0426e7e4fa2b0c3cfa46377bac3dab86"
+  }
+]

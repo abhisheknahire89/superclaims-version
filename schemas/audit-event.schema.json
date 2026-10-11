@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/aw/schemas/audit-event.schema.json",
+  "title": "AuditEvent",
+  "description": "PROPOSED. Hash-chained audit event. Payloads carry identifiers and hashes, not document content.",
+  "type": "object",
+  "required": [
+    "seq",
+    "claim_id",
+    "occurred_at",
+    "actor",
+    "event_type",
+    "payload",
+    "prev_hash",
+    "event_hash"
+  ],
+  "properties": {
+    "seq": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "claim_id": {
+      "type": "string"
+    },
+    "occurred_at": {
+      "type": "string"
+    },
+    "actor": {
+      "type": "string",
+      "pattern": "^(SYSTEM|USER:[A-Z0-9-]+|INTEGRATION:[A-Z0-9_-]+)$"
+    },
+    "event_type": {
+      "enum": [
+        "CLAIM_CREATED",
+        "CLAIM_ASSIGNED",
+        "CLAIM_WITHDRAWN",
+        "CLAIM_REOPENED",
+        "DOCUMENT_RECEIVED",
+        "DOCUMENT_QUARANTINED",
+        "DOCUMENT_CLASSIFIED",
+        "DOCUMENT_SUPERSEDED",
+        "EXTRACTION_COMPLETED",
+        "EXTRACTION_FAILED",
+        "RULE_RUN_STARTED",
+        "RULE_EXECUTED",
+        "RECOMMENDATION_CREATED",
+        "RECOMMENDATION_MARKED_STALE",
+        "EVALUATION_FAILED",
+        "REVIEWER_VIEWED_RECOMMENDATION",
+        "REVIEWER_ACTION_RECORDED",
+        "REVIEWER_CONFIRMED_FINDING",
+        "MEDICAL_REVIEW_OPENED",
+        "MEDICAL_REVIEW_PENDING",
+        "MEDICAL_REVIEW_COMPLETED",
+        "ANOMALY_TRIAGED",
+        "INVESTIGATION_HOLD_PLACED",
+        "INVESTIGATION_HOLD_RELEASED",
+        "QUERY_DRAFTED",
+        "QUERY_APPROVED",
+        "QUERY_SENT",
+        "QUERY_ANSWERED",
+        "APPROVAL_REQUESTED",
+        "APPROVAL_GRANTED",
+        "APPROVAL_RETURNED",
+        "DECISION_RECORDED",
+        "CRC_OUTCOME_RECORDED",
+        "SETTLEMENT_WORKSHEET_EXPORTED",
+        "EXPORT_ACKNOWLEDGED",
+        "EXPORT_FAILED",
+        "CONFIG_PUBLISHED",
+        "BREAK_GLASS_ACCESS"
+      ]
+    },
+    "payload": {
+      "type": "object"
+    },
+    "prev_hash": {
+      "type": "string",
+      "pattern": "^(GENESIS|[0-9a-f]{64})$"
+    },
+    "event_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

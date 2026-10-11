@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/aw/schemas/nme-list.schema.json",
+  "title": "NonMedicalExpenseList",
+  "description": "PROPOSED. Customer non-payable list per wording.",
+  "type": "object",
+  "required": [
+    "list_id",
+    "list_version",
+    "status",
+    "categories",
+    "items"
+  ],
+  "properties": {
+    "list_id": {
+      "type": "string",
+      "pattern": "^NMELIST-"
+    },
+    "list_version": {
+      "type": "string"
+    },
+    "status": {
+      "enum": [
+        "DRAFT",
+        "IN_REVIEW",
+        "PUBLISHED",
+        "RETIRED",
+        "ILLUSTRATIVE"
+      ]
+    },
+    "categories": {
+      "type": "object",
+      "required": [
+        "NON_PAYABLE",
+        "SUBSUMED_ROOM",
+        "SUBSUMED_PROCEDURE",
+        "SUBSUMED_TREATMENT"
+      ]
+    },
+    "items": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "item_code",
+          "canonical",
+          "category",
+          "synonyms"
+        ],
+        "properties": {
+          "category": {
+            "enum": [
+              "NON_PAYABLE",
+              "SUBSUMED_ROOM",
+              "SUBSUMED_PROCEDURE",
+              "SUBSUMED_TREATMENT"
+            ]
+          },
+          "synonyms": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "pattern": "^[a-z0-9 /&()-]+$"
+            }
+          }
+        }
+      }
+    }
+  }
+}

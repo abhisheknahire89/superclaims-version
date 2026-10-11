@@ -1,0 +1,209 @@
+{
+  "status": "SYNTHETIC",
+  "notice": "Synthetic claim. Names, numbers, hospital and amounts are invented. State at first rule run, before the hospital responds to queries.",
+  "claim_id": "CLM-DEMO-0003",
+  "evaluation_id": "EVAL-0003-v1",
+  "workflow": "IPD_REIMBURSEMENT",
+  "member": {
+    "member_id": "MEM-DEMO-3003",
+    "name_normalised": "SUNITA SHARMA",
+    "gender": "F",
+    "dob": "1974-02-11"
+  },
+  "policy": {
+    "policy_no": "ILL-POL-000303",
+    "config_ref": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+    "period_start": "2026-05-15",
+    "period_end": "2027-05-14",
+    "continuous_cover_since": "2024-05-15",
+    "base_sum_insured": "400000.00",
+    "cumulative_bonus": "0.00",
+    "paid_in_current_year": "0.00"
+  },
+  "hospital_id": "HOSP-ILL-NN-12",
+  "hospital_is_network": false,
+  "bill_no": "SH/26/0915",
+  "bill_no_evidence": {
+    "document_id": "DOC-0003-SB",
+    "page": 1,
+    "bbox": [
+      400,
+      60,
+      540,
+      76
+    ],
+    "quote": "Bill No: SH/26/0915"
+  },
+  "bill_stated_total": "85850.25",
+  "admission_date": null,
+  "discharge_date": "2026-09-07",
+  "procedure_codes": [
+    "DEBRIDEMENT"
+  ],
+  "diagnosis": {
+    "text": "Type 2 diabetes mellitus with diabetic foot ulcer, left; surgical debridement",
+    "icd10": "E11.621",
+    "evidence": {
+      "document_id": "DOC-0003-DS",
+      "page": 1,
+      "bbox": [
+        72,
+        210,
+        470,
+        228
+      ],
+      "quote": "Type 2 diabetes mellitus with diabetic foot ulcer, left; surgical debridement"
+    }
+  },
+  "identity_observations": [
+    {
+      "source": "CLAIM_FORM",
+      "name_normalised": "SUNITA SHARMA",
+      "gender": "F",
+      "evidence": {
+        "document_id": "DOC-0003-CF",
+        "page": 1,
+        "bbox": [
+          96,
+          140,
+          300,
+          156
+        ],
+        "quote": "SUNITA SHARMA"
+      }
+    },
+    {
+      "source": "DISCHARGE_SUMMARY",
+      "name_normalised": "SUNITA SHARMA",
+      "gender": "F",
+      "evidence": {
+        "document_id": "DOC-0003-DS",
+        "page": 1,
+        "bbox": [
+          72,
+          96,
+          280,
+          112
+        ],
+        "quote": "SUNITA SHARMA"
+      }
+    },
+    {
+      "source": "SUMMARY_BILL",
+      "name_normalised": "SUNIL SHARMA",
+      "gender": "M",
+      "evidence": {
+        "document_id": "DOC-0003-SB",
+        "page": 1,
+        "bbox": [
+          60,
+          88,
+          260,
+          104
+        ],
+        "quote": "Patient: Mr. Sunil Sharma"
+      }
+    }
+  ],
+  "admission_date_observations": [
+    {
+      "source": "DISCHARGE_SUMMARY",
+      "value": "2026-09-03",
+      "evidence": {
+        "document_id": "DOC-0003-DS",
+        "page": 1,
+        "bbox": [
+          72,
+          130,
+          220,
+          146
+        ],
+        "quote": "DOA: 03/09/2026"
+      }
+    },
+    {
+      "source": "SUMMARY_BILL",
+      "value": "2026-09-02",
+      "evidence": {
+        "document_id": "DOC-0003-SB",
+        "page": 1,
+        "bbox": [
+          400,
+          88,
+          540,
+          104
+        ],
+        "quote": "Admission: 02-09-2026"
+      }
+    }
+  ],
+  "itemised_bill_available": false,
+  "summary_bill_evidence": [
+    {
+      "document_id": "DOC-0003-SB",
+      "page": 1,
+      "bbox": [
+        40,
+        120,
+        560,
+        420
+      ],
+      "quote": "Category-wise summary only; no item break-up"
+    }
+  ],
+  "bill_lines": [],
+  "ped_signals": [
+    {
+      "text": "known case of type 2 diabetes mellitus for 6 years, on oral hypoglycaemic agents",
+      "evidence": {
+        "document_id": "DOC-0003-DS",
+        "page": 1,
+        "bbox": [
+          72,
+          250,
+          520,
+          282
+        ],
+        "quote": "known case of type 2 diabetes mellitus for 6 years, on oral hypoglycaemic agents"
+      }
+    }
+  ],
+  "portfolio_bill_number_index": [
+    {
+      "claim_id": "CLM-DEMO-0088",
+      "bill_no": "SH/26/0915",
+      "hospital_id": "HOSP-ILL-NN-12",
+      "member_id": "MEM-DEMO-8808"
+    }
+  ],
+  "documents_present": [
+    {
+      "document_id": "DOC-0003-CF",
+      "type": "CLAIM_FORM"
+    },
+    {
+      "document_id": "DOC-0003-DS",
+      "type": "DISCHARGE_SUMMARY"
+    },
+    {
+      "document_id": "DOC-0003-SB",
+      "type": "FINAL_BILL_SUMMARY"
+    },
+    {
+      "document_id": "DOC-0003-INV",
+      "type": "INVESTIGATION_REPORT"
+    },
+    {
+      "document_id": "DOC-0003-RCPT",
+      "type": "PAYMENT_RECEIPT"
+    },
+    {
+      "document_id": "DOC-0003-ID",
+      "type": "ID_PROOF"
+    },
+    {
+      "document_id": "DOC-0003-BANK",
+      "type": "BANK_DETAILS"
+    }
+  ]
+}

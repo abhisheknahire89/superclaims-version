@@ -1,0 +1,284 @@
+{
+  "worksheet_id": "WS-DEC-0002",
+  "claim_id": "CLM-DEMO-0002",
+  "status": "SYNTHETIC",
+  "decision": {
+    "decision_id": "DEC-0002",
+    "disposition": "APPROVED_PARTIAL",
+    "decided_by": "PROC-11",
+    "second_approver": "SUP-02",
+    "evaluation_id": "EVAL-0002-v1"
+  },
+  "amounts": {
+    "claimed": "172455.75",
+    "billed": "172455.75",
+    "approved": "85000.00",
+    "disallowed_total": "87455.75"
+  },
+  "disallowances": [
+    {
+      "line_id": "L11",
+      "amount": "3420.00",
+      "reason": "Same invoice PH-2291, date and amount already billed on L10.",
+      "clause": "ILL-WORDING-A-2026 7.2 Expenses actually incurred",
+      "rule_id": "R-LINE-DUPLICATE"
+    },
+    {
+      "line_id": "L16",
+      "amount": "600.00",
+      "reason": "'Television charges' matched NME-002 (Television charges); treatment DISALLOW_FULL under list NMELIST-ILL-A v2026.1.0.",
+      "clause": "ILL-WORDING-A-2026 4.1 Non-payable items",
+      "rule_id": "R-LINE-NONPAYABLE"
+    },
+    {
+      "line_id": "L17",
+      "amount": "350.00",
+      "reason": "'Telephone charges' matched NME-003 (Telephone charges); treatment DISALLOW_FULL under list NMELIST-ILL-A v2026.1.0.",
+      "clause": "ILL-WORDING-A-2026 4.1 Non-payable items",
+      "rule_id": "R-LINE-NONPAYABLE"
+    },
+    {
+      "line_id": "L18",
+      "amount": "1800.00",
+      "reason": "'Infusion pump charges' matched NME-302 (Infusion pump cost); treatment DISALLOW_FULL_IF_BILLED_SEPARATELY under list NMELIST-ILL-A v2026.1.0.",
+      "clause": "ILL-WORDING-A-2026 4.1 Non-payable items",
+      "rule_id": "R-LINE-NONPAYABLE"
+    },
+    {
+      "line_id": "L19",
+      "amount": "150.00",
+      "reason": "'Nursing - bed pan' matched NME-103 (Bed pan); treatment DISALLOW_FULL_IF_BILLED_SEPARATELY under list NMELIST-ILL-A v2026.1.0.",
+      "clause": "ILL-WORDING-A-2026 4.1 Non-payable items",
+      "rule_id": "R-LINE-NONPAYABLE"
+    },
+    {
+      "line_id": "L05",
+      "amount": "10000.00",
+      "reason": "Billed above agreed tariff item TI-SURG-LAPCHOLE (TARIFF-ILL-HOSP-NW-01 v2026.07).",
+      "clause": "ILL-AGREEMENT-NW-01-2026 Schedule 2 Item rates",
+      "rule_id": "R-LINE-TARIFF"
+    },
+    {
+      "line_id": "L14",
+      "amount": "1500.00",
+      "reason": "Billed above agreed tariff item TI-CT-ABD (TARIFF-ILL-HOSP-NW-01 v2026.07).",
+      "clause": "ILL-AGREEMENT-NW-01-2026 Schedule 2 Item rates",
+      "rule_id": "R-LINE-TARIFF"
+    },
+    {
+      "line_id": "L01",
+      "amount": "9000.00",
+      "reason": "Eligible room rent is 3000.00/day.",
+      "clause": "ILL-WORDING-A-2026 3.1 Room rent",
+      "rule_id": "R-LINE-ROOM-CAP"
+    },
+    {
+      "line_id": "L02",
+      "amount": "3000.00",
+      "reason": "Eligible ICU rent is 6000.00/day.",
+      "clause": "ILL-WORDING-A-2026 3.1 Room rent",
+      "rule_id": "R-LINE-ROOM-CAP"
+    },
+    {
+      "line_id": "L03",
+      "amount": "2250.00",
+      "reason": "Room occupied at 6000.00/day (day-weighted) vs eligible 3000.00/day; associated charges paid in proportion.",
+      "clause": "ILL-WORDING-A-2026 3.2 Proportionate deduction",
+      "rule_id": "R-LINE-PROPORTIONATE"
+    },
+    {
+      "line_id": "L05",
+      "amount": "17500.00",
+      "reason": "Room occupied at 6000.00/day (day-weighted) vs eligible 3000.00/day; associated charges paid in proportion.",
+      "clause": "ILL-WORDING-A-2026 3.2 Proportionate deduction",
+      "rule_id": "R-LINE-PROPORTIONATE"
+    },
+    {
+      "line_id": "L06",
+      "amount": "6000.00",
+      "reason": "Room occupied at 6000.00/day (day-weighted) vs eligible 3000.00/day; associated charges paid in proportion.",
+      "clause": "ILL-WORDING-A-2026 3.2 Proportionate deduction",
+      "rule_id": "R-LINE-PROPORTIONATE"
+    },
+    {
+      "line_id": "L07",
+      "amount": "14000.00",
+      "reason": "Room occupied at 6000.00/day (day-weighted) vs eligible 3000.00/day; associated charges paid in proportion.",
+      "clause": "ILL-WORDING-A-2026 3.2 Proportionate deduction",
+      "rule_id": "R-LINE-PROPORTIONATE"
+    },
+    {
+      "line_id": "L08",
+      "amount": "2000.00",
+      "reason": "Room occupied at 6000.00/day (day-weighted) vs eligible 3000.00/day; associated charges paid in proportion.",
+      "clause": "ILL-WORDING-A-2026 3.2 Proportionate deduction",
+      "rule_id": "R-LINE-PROPORTIONATE"
+    },
+    {
+      "line_id": "CLAIM",
+      "amount": "10088.58",
+      "reason": "COPAY-AGE-61: age 63 at admission.",
+      "clause": "ILL-WORDING-A-2026 3.4 Co-payment",
+      "rule_id": "R-CLAIM-COPAY"
+    },
+    {
+      "line_id": "CLAIM",
+      "amount": "5797.17",
+      "reason": "Amount exceeds available sum insured for the policy year.",
+      "clause": "ILL-WORDING-A-2026 6.1 Sum insured",
+      "rule_id": "R-CLAIM-SI-CAP"
+    }
+  ],
+  "line_table": [
+    {
+      "line_id": "L01",
+      "description": "Room charges - single AC",
+      "billed": "18000.00",
+      "payable": "9000.00"
+    },
+    {
+      "line_id": "L02",
+      "description": "ICU charges",
+      "billed": "9000.00",
+      "payable": "6000.00"
+    },
+    {
+      "line_id": "L03",
+      "description": "Nursing charges - ward",
+      "billed": "4500.00",
+      "payable": "2250.00"
+    },
+    {
+      "line_id": "L04",
+      "description": "Nursing charges - ICU",
+      "billed": "3000.00",
+      "payable": "3000.00"
+    },
+    {
+      "line_id": "L05",
+      "description": "Surgeon fee - laparoscopic cholecystectomy",
+      "billed": "45000.00",
+      "payable": "17500.00"
+    },
+    {
+      "line_id": "L06",
+      "description": "Anaesthetist fee",
+      "billed": "12000.00",
+      "payable": "6000.00"
+    },
+    {
+      "line_id": "L07",
+      "description": "Operation theatre charges",
+      "billed": "28000.00",
+      "payable": "14000.00"
+    },
+    {
+      "line_id": "L08",
+      "description": "Consultant visits - ward",
+      "billed": "4000.00",
+      "payable": "2000.00"
+    },
+    {
+      "line_id": "L09",
+      "description": "Intensivist visit - ICU",
+      "billed": "2500.00",
+      "payable": "2500.00"
+    },
+    {
+      "line_id": "L10",
+      "description": "Pharmacy invoice PH-2291",
+      "billed": "3420.00",
+      "payable": "3420.00"
+    },
+    {
+      "line_id": "L11",
+      "description": "Pharmacy invoice PH-2291",
+      "billed": "3420.00",
+      "payable": "0.00"
+    },
+    {
+      "line_id": "L12",
+      "description": "Pharmacy invoice PH-2307",
+      "billed": "11865.75",
+      "payable": "11865.75"
+    },
+    {
+      "line_id": "L13",
+      "description": "Laparoscopic consumables",
+      "billed": "14500.00",
+      "payable": "14500.00"
+    },
+    {
+      "line_id": "L14",
+      "description": "CT scan abdomen (contrast)",
+      "billed": "5500.00",
+      "payable": "4000.00"
+    },
+    {
+      "line_id": "L15",
+      "description": "Laboratory investigations",
+      "billed": "4850.00",
+      "payable": "4850.00"
+    },
+    {
+      "line_id": "L16",
+      "description": "Television charges",
+      "billed": "600.00",
+      "payable": "0.00"
+    },
+    {
+      "line_id": "L17",
+      "description": "Telephone charges",
+      "billed": "350.00",
+      "payable": "0.00"
+    },
+    {
+      "line_id": "L18",
+      "description": "Infusion pump charges",
+      "billed": "1800.00",
+      "payable": "0.00"
+    },
+    {
+      "line_id": "L19",
+      "description": "Nursing - bed pan",
+      "billed": "150.00",
+      "payable": "0.00"
+    }
+  ],
+  "grievance_route": {
+    "insurer_grievance_procedure": "<customer-supplied: insurer's grievance redressal procedure; complaints may also be registered on IRDAI's Bima Bharosa portal (E-REG-03)>",
+    "grievance_officer_contact": "<customer-supplied: grievance redressal office and officer contact>",
+    "ombudsman_procedure": "<customer-supplied: procedure to approach the Insurance Ombudsman if not satisfied>",
+    "ombudsman_contact": "<customer-supplied: office of the Insurance Ombudsman for the policyholder's jurisdiction>"
+  },
+  "provenance": {
+    "engine_version": "ref-harness-0.4.0",
+    "config_versions": {
+      "policy_config": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+      "nme_list": "NMELIST-ILL-A@2026.1.0",
+      "tariff": "TARIFF-ILL-HOSP-NW-01@2026.07",
+      "checklist": "CHECKLIST-IPD-REIMB@2026.1.0",
+      "engine": "ref-harness-0.4.0",
+      "rules": {
+        "R-GATE-IDENTITY": "1.0.0",
+        "R-GATE-DATES": "1.0.0",
+        "R-GATE-ITEMISATION": "1.0.0",
+        "R-DOC-COMPLETENESS": "1.0.0",
+        "R-ELIG-POLICY-ACTIVE": "1.0.0",
+        "R-ELIG-WAITING": "1.1.0",
+        "R-LINE-DUPLICATE": "1.0.0",
+        "R-LINE-NONPAYABLE": "1.0.0",
+        "R-LINE-TARIFF": "1.0.0",
+        "R-LINE-ROOM-CAP": "1.1.0",
+        "R-LINE-PROPORTIONATE": "1.1.0",
+        "R-CLAIM-SUBLIMIT": "1.0.0",
+        "R-CLAIM-DEDUCTIBLE": "1.0.0",
+        "R-CLAIM-COPAY": "1.0.0",
+        "R-CLAIM-SI-CAP": "1.0.0",
+        "R-CLAIM-ROUNDING": "1.0.0",
+        "R-ANOM-BILLNO-REUSE": "0.9.0"
+      }
+    },
+    "output_hash": "sha256:400a2e2ea5adc2614eda881241293d096fc42da4ccba3da5f2afd11becabc9ad"
+  }
+}

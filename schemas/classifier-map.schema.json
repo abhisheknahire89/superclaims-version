@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/aw/schemas/classifier-map.schema.json",
+  "title": "ClassifierMap",
+  "description": "PROPOSED. Customer-curated dictionaries used before any model: document-type keywords, bill-line category keywords, room categories and procedure-name to procedure-code mapping. Dictionary-first categorisation (CAP-07).",
+  "type": "object",
+  "required": ["map_id", "map_version", "status", "document_types", "line_categories", "room_categories", "procedures"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {"type": "string"},
+    "map_id": {"type": "string", "pattern": "^CLASSMAP-"},
+    "map_version": {"type": "string"},
+    "status": {"enum": ["DRAFT", "IN_REVIEW", "PUBLISHED", "RETIRED", "ILLUSTRATIVE"]},
+    "illustrative_notice": {"type": "string"},
+    "document_types": {
+      "type": "array", "minItems": 1,
+      "items": {"type": "object", "required": ["type", "keywords_any"], "additionalProperties": false,
+        "properties": {"type": {"type": "string"}, "keywords_any": {"type": "array", "items": {"type": "string"}, "minItems": 1}, "priority": {"type": "integer"}}}
+    },
+    "line_categories": {
+      "type": "array", "minItems": 1,
+      "description": "Evaluated in order; the first rule whose keyword appears in the lower-cased description wins.",
+      "items": {"type": "object", "required": ["category", "keywords_any"], "additionalProperties": false,
+        "properties": {"category": {"enum": ["ROOM", "ICU_ROOM", "NURSING", "PROFESSIONAL_FEES", "OT_CHARGES", "PROCEDURE_CHARGES", "PHARMACY", "CONSUMABLES", "IMPLANTS", "DIAGNOSTICS", "OTHER_HOSPITAL_SERVICES"]},
+          "keywords_any": {"type": "array", "items": {"type": "string"}, "minItems": 1}}}
+    },
+    "room_categories": {
+      "type": "array",
+      "items": {"type": "object", "required": ["room_category", "keywords_any"], "additionalProperties": false,
+        "properties": {"room_category": {"type": "string"}, "keywords_any": {"type": "array", "items": {"type": "string"}}}}
+    },
+    "procedures": {
+      "type": "array",
+      "items": {"type": "object", "required": ["code", "keywords_any"], "additionalProperties": false,
+        "properties": {"code": {"type": "string"}, "keywords_any": {"type": "array", "items": {"type": "string"}}}}
+    }
+  }
+}

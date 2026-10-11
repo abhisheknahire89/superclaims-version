@@ -1,0 +1,56 @@
+{
+  "tariff_id": "TARIFF-ILL-HOSP-NW-01",
+  "tariff_version": "2026.07",
+  "status": "ILLUSTRATIVE",
+  "illustrative_notice": "Invented network-hospital tariff for engineering tests. Not a real hospital agreement or PPN rate.",
+  "hospital_id": "HOSP-ILL-NW-01",
+  "hospital_name": "Illustrative Network Hospital 01 (synthetic)",
+  "agreement_doc_id": "ILL-AGREEMENT-NW-01-2026",
+  "agreement_clause": "Schedule 2 Item rates",
+  "effective_from": "2026-04-01",
+  "effective_to": "2027-03-31",
+  "uniform_pricing_across_room_categories": false,
+  "room_rates": [
+    {
+      "room_category": "GENERAL_WARD",
+      "rate_per_day": "1800.00"
+    },
+    {
+      "room_category": "TWIN_SHARING",
+      "rate_per_day": "3000.00"
+    },
+    {
+      "room_category": "SINGLE_AC",
+      "rate_per_day": "6000.00"
+    },
+    {
+      "room_category": "ICU",
+      "rate_per_day": "9000.00"
+    }
+  ],
+  "item_caps": [
+    {
+      "tariff_item_code": "TI-CT-ABD",
+      "description": "CT scan abdomen (contrast)",
+      "category": "DIAGNOSTICS",
+      "max_rate": "4000.00",
+      "unit": "PER_STUDY",
+      "match_keys": [
+        "ct abdomen",
+        "ct scan abdomen"
+      ]
+    },
+    {
+      "tariff_item_code": "TI-SURG-LAPCHOLE",
+      "description": "Surgeon fee - laparoscopic cholecystectomy",
+      "category": "PROFESSIONAL_FEES",
+      "max_rate": "35000.00",
+      "unit": "PER_PROCEDURE",
+      "match_keys": [
+        "surgeon fee lap chole",
+        "surgeon fee - laparoscopic cholecystectomy"
+      ]
+    }
+  ],
+  "packages": []
+}

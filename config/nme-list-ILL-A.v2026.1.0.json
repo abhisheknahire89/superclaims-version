@@ -1,0 +1,153 @@
+{
+  "list_id": "NMELIST-ILL-A",
+  "list_version": "2026.1.0",
+  "status": "ILLUSTRATIVE",
+  "illustrative_notice": "Structure modelled on the four-list structure of IRDAI's 2019 modification of standardisation guidelines (Annexure I). Item membership below uses only examples observed in that annexure (evidence E-REG-07). Whether those lists still have regulatory force after the 2020 standardisation master circular was superseded (E-REG-02) is an open question; in production the list must come from the customer's filed policy wording and claims manual.",
+  "categories": {
+    "NON_PAYABLE": "Optional items not covered by this illustrative policy (cf. 2019 List I)",
+    "SUBSUMED_ROOM": "Part of room charges; not payable when billed separately (cf. 2019 List II)",
+    "SUBSUMED_PROCEDURE": "Part of procedure charges; not payable when billed separately (cf. 2019 List III)",
+    "SUBSUMED_TREATMENT": "Part of cost of treatment; not payable when billed separately (cf. 2019 List IV)"
+  },
+  "items": [
+    {
+      "item_code": "NME-001",
+      "canonical": "Mineral water",
+      "category": "NON_PAYABLE",
+      "synonyms": [
+        "mineral water",
+        "packaged drinking water",
+        "water bottle"
+      ]
+    },
+    {
+      "item_code": "NME-002",
+      "canonical": "Television charges",
+      "category": "NON_PAYABLE",
+      "synonyms": [
+        "television charges",
+        "tv charges",
+        "tv rent"
+      ]
+    },
+    {
+      "item_code": "NME-003",
+      "canonical": "Telephone charges",
+      "category": "NON_PAYABLE",
+      "synonyms": [
+        "telephone charges",
+        "phone charges"
+      ]
+    },
+    {
+      "item_code": "NME-004",
+      "canonical": "Carry bags",
+      "category": "NON_PAYABLE",
+      "synonyms": [
+        "carry bag",
+        "carry bags"
+      ]
+    },
+    {
+      "item_code": "NME-005",
+      "canonical": "Baby food",
+      "category": "NON_PAYABLE",
+      "synonyms": [
+        "baby food"
+      ]
+    },
+    {
+      "item_code": "NME-101",
+      "canonical": "Tooth paste / tooth brush",
+      "category": "SUBSUMED_ROOM",
+      "synonyms": [
+        "toothpaste",
+        "tooth paste",
+        "toothbrush",
+        "tooth brush"
+      ]
+    },
+    {
+      "item_code": "NME-102",
+      "canonical": "Gown",
+      "category": "SUBSUMED_ROOM",
+      "synonyms": [
+        "patient gown",
+        "gown"
+      ]
+    },
+    {
+      "item_code": "NME-103",
+      "canonical": "Bed pan",
+      "category": "SUBSUMED_ROOM",
+      "synonyms": [
+        "bed pan",
+        "bedpan"
+      ]
+    },
+    {
+      "item_code": "NME-104",
+      "canonical": "Hand wash",
+      "category": "SUBSUMED_ROOM",
+      "synonyms": [
+        "hand wash",
+        "handwash"
+      ]
+    },
+    {
+      "item_code": "NME-105",
+      "canonical": "Tissue paper",
+      "category": "SUBSUMED_ROOM",
+      "synonyms": [
+        "tissue paper",
+        "tissues"
+      ]
+    },
+    {
+      "item_code": "NME-201",
+      "canonical": "Ward and theatre booking charges",
+      "category": "SUBSUMED_PROCEDURE",
+      "synonyms": [
+        "ward booking",
+        "theatre booking",
+        "ot booking charges"
+      ]
+    },
+    {
+      "item_code": "NME-202",
+      "canonical": "Surgical blades",
+      "category": "SUBSUMED_PROCEDURE",
+      "synonyms": [
+        "surgical blade",
+        "surgical blades"
+      ]
+    },
+    {
+      "item_code": "NME-301",
+      "canonical": "Admission / registration charges",
+      "category": "SUBSUMED_TREATMENT",
+      "synonyms": [
+        "admission charges",
+        "registration charges",
+        "admission/registration"
+      ]
+    },
+    {
+      "item_code": "NME-302",
+      "canonical": "Infusion pump cost",
+      "category": "SUBSUMED_TREATMENT",
+      "synonyms": [
+        "infusion pump"
+      ]
+    },
+    {
+      "item_code": "NME-303",
+      "canonical": "Urine bag",
+      "category": "SUBSUMED_TREATMENT",
+      "synonyms": [
+        "urine bag",
+        "urobag"
+      ]
+    }
+  ]
+}

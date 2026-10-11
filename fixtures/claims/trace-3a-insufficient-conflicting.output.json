@@ -1,0 +1,432 @@
+{
+  "engine_version": "ref-harness-0.4.0",
+  "claim_id": "CLM-DEMO-0003",
+  "evaluation_id": "EVAL-0003-v1",
+  "config_versions": {
+    "policy_config": "POLCFG-ILL-INDEMNITY-A@2026.1.0",
+    "nme_list": "NMELIST-ILL-A@2026.1.0",
+    "tariff": null,
+    "checklist": "CHECKLIST-IPD-REIMB@2026.1.0",
+    "engine": "ref-harness-0.4.0",
+    "rules": {
+      "R-GATE-IDENTITY": "1.0.0",
+      "R-GATE-DATES": "1.0.0",
+      "R-GATE-ITEMISATION": "1.0.0",
+      "R-DOC-COMPLETENESS": "1.0.0",
+      "R-ELIG-POLICY-ACTIVE": "1.0.0",
+      "R-ELIG-WAITING": "1.1.0",
+      "R-LINE-DUPLICATE": "1.0.0",
+      "R-LINE-NONPAYABLE": "1.0.0",
+      "R-LINE-TARIFF": "1.0.0",
+      "R-LINE-ROOM-CAP": "1.1.0",
+      "R-LINE-PROPORTIONATE": "1.1.0",
+      "R-CLAIM-SUBLIMIT": "1.0.0",
+      "R-CLAIM-DEDUCTIBLE": "1.0.0",
+      "R-CLAIM-COPAY": "1.0.0",
+      "R-CLAIM-SI-CAP": "1.0.0",
+      "R-CLAIM-ROUNDING": "1.0.0",
+      "R-ANOM-BILLNO-REUSE": "0.9.0"
+    }
+  },
+  "input_hash": "sha256:bcc9091dde1b5f4c4aad83fe7657a4a293636577ceedecd5225215e3342117c3",
+  "recommendation": {
+    "type": "QUERY_AND_REFER_MEDICAL",
+    "computed": false,
+    "recommended_payable": null,
+    "billed_total": "0.00",
+    "bill_stated_total": "85850.25",
+    "itemised_lines_available": false,
+    "line_level_deductions": "0.00",
+    "claim_level_deductions": "0.00",
+    "admissible_after_line_rules": null,
+    "blocked_scopes": [
+      "ALL_FINANCIAL",
+      "LINE_RULES",
+      "PRE_POST_WINDOW",
+      "ROOM_DAYS",
+      "WAITING_PERIOD"
+    ],
+    "human_decision_required": true
+  },
+  "lines": [],
+  "adjustments": [],
+  "findings": [
+    {
+      "finding_id": "FND-0001",
+      "rule_id": "R-GATE-IDENTITY",
+      "category": "IDENTITY",
+      "kind": "IDENTITY_CONFLICT",
+      "severity": "HIGH",
+      "blocking": true,
+      "blocked_scopes": [
+        "ALL_FINANCIAL"
+      ],
+      "summary": "Patient identity on one or more documents does not match the policy member record.",
+      "uncertainty_note": null,
+      "evidence_refs": [
+        {
+          "document_id": "DOC-0003-SB",
+          "page": 1,
+          "bbox": [
+            60,
+            88,
+            260,
+            104
+          ],
+          "quote": "Patient: Mr. Sunil Sharma"
+        }
+      ],
+      "route_to": "PROCESSOR",
+      "status": "OPEN"
+    },
+    {
+      "finding_id": "FND-0004",
+      "rule_id": "R-GATE-DATES",
+      "category": "DOCUMENT",
+      "kind": "DATE_CONFLICT",
+      "severity": "HIGH",
+      "blocking": true,
+      "blocked_scopes": [
+        "ROOM_DAYS",
+        "WAITING_PERIOD",
+        "PRE_POST_WINDOW"
+      ],
+      "summary": "Date of admission differs across documents: ['2026-09-02', '2026-09-03'].",
+      "uncertainty_note": null,
+      "evidence_refs": [
+        {
+          "document_id": "DOC-0003-DS",
+          "page": 1,
+          "bbox": [
+            72,
+            130,
+            220,
+            146
+          ],
+          "quote": "DOA: 03/09/2026"
+        },
+        {
+          "document_id": "DOC-0003-SB",
+          "page": 1,
+          "bbox": [
+            400,
+            88,
+            540,
+            104
+          ],
+          "quote": "Admission: 02-09-2026"
+        }
+      ],
+      "route_to": "PROCESSOR",
+      "status": "OPEN"
+    },
+    {
+      "finding_id": "FND-0007",
+      "rule_id": "R-GATE-ITEMISATION",
+      "category": "DOCUMENT",
+      "kind": "DOCUMENT_INCOMPLETE",
+      "severity": "HIGH",
+      "blocking": true,
+      "blocked_scopes": [
+        "LINE_RULES"
+      ],
+      "summary": "Only a summary bill is available; line-level rules cannot run without an itemised break-up.",
+      "uncertainty_note": null,
+      "evidence_refs": [
+        {
+          "document_id": "DOC-0003-SB",
+          "page": 1,
+          "bbox": [
+            40,
+            120,
+            560,
+            420
+          ],
+          "quote": "Category-wise summary only; no item break-up"
+        }
+      ],
+      "route_to": "PROCESSOR",
+      "status": "OPEN"
+    },
+    {
+      "finding_id": "FND-0012",
+      "rule_id": "R-ELIG-WAITING",
+      "category": "CLINICAL",
+      "kind": "POSSIBLE_PED_WITHIN_WAITING_PERIOD",
+      "severity": "HIGH",
+      "blocking": false,
+      "blocked_scopes": [],
+      "summary": "Clinical history mentions 'known case of type 2 diabetes mellitus for 6 years, on oral hypoglycaemic agents'. Continuous cover is 27 months, below the 36-month PED waiting period. Whether the condition is a PED as defined, and whether it is related to this admission, needs medical-officer review. No deduction or denial is applied by the engine.",
+      "uncertainty_note": "Whether the condition meets the policy's PED definition and relates to this admission requires medical-officer judgement; the engine applies no deduction.",
+      "evidence_refs": [
+        {
+          "document_id": "DOC-0003-DS",
+          "page": 1,
+          "bbox": [
+            72,
+            250,
+            520,
+            282
+          ],
+          "quote": "known case of type 2 diabetes mellitus for 6 years, on oral hypoglycaemic agents"
+        }
+      ],
+      "route_to": "MEDICAL_OFFICER",
+      "status": "OPEN"
+    },
+    {
+      "finding_id": "FND-0026",
+      "rule_id": "R-ANOM-BILLNO-REUSE",
+      "category": "ANOMALY",
+      "kind": "ANOMALY_BILL_NUMBER_REUSE",
+      "severity": "MEDIUM",
+      "blocking": false,
+      "blocked_scopes": [],
+      "summary": "Bill number SH/26/0915 from the same hospital also appears on claim(s) ['CLM-DEMO-0088'] for a different member. This is a pattern for review, not a fraud determination.",
+      "uncertainty_note": "Pattern only; common innocent causes include hospital numbering resets and data-entry errors. Not a fraud determination.",
+      "evidence_refs": [
+        {
+          "document_id": "DOC-0003-SB",
+          "page": 1,
+          "bbox": [
+            400,
+            60,
+            540,
+            76
+          ],
+          "quote": "Bill No: SH/26/0915"
+        }
+      ],
+      "route_to": "FWA_REVIEW",
+      "status": "OPEN"
+    }
+  ],
+  "query_items": [
+    {
+      "query_item_id": "QRY-0002",
+      "addressed_to": "HOSPITAL",
+      "requested_document_type": "FINAL_BILL_CORRECTED",
+      "text": "Please provide a corrected final bill showing the patient's name and gender exactly as on the admission record, or confirm the identity of the patient billed.",
+      "linked_findings": [
+        "FND-0001"
+      ]
+    },
+    {
+      "query_item_id": "QRY-0005",
+      "addressed_to": "HOSPITAL",
+      "requested_document_type": "ADMISSION_RECORD",
+      "text": "Please confirm the date and time of admission with a copy of the admission record / indoor case papers.",
+      "linked_findings": [
+        "FND-0004"
+      ]
+    },
+    {
+      "query_item_id": "QRY-0008",
+      "addressed_to": "HOSPITAL",
+      "requested_document_type": "FINAL_BILL_ITEMISED",
+      "text": "Please provide the itemised final bill with date-wise break-up of room, pharmacy, consumables, investigations and professional fees.",
+      "linked_findings": [
+        "FND-0007"
+      ]
+    },
+    {
+      "query_item_id": "QRY-0013",
+      "addressed_to": "HOSPITAL",
+      "requested_document_type": "PAST_TREATMENT_RECORDS",
+      "text": "Please provide the first consultation / past treatment records for the condition noted in the history, if available with the hospital.",
+      "linked_findings": [
+        "FND-0012"
+      ]
+    },
+    {
+      "query_item_id": "QRY-0014",
+      "addressed_to": "INSURER",
+      "requested_document_type": "PROPOSAL_FORM",
+      "text": "Please share the proposal form and underwriting disclosures for the policy, for PED assessment.",
+      "linked_findings": [
+        "FND-0012"
+      ]
+    }
+  ],
+  "rule_executions": [
+    {
+      "execution_id": "EXE-0003",
+      "rule_id": "R-GATE-IDENTITY",
+      "rule_version": "1.0.0",
+      "status": "BLOCKED",
+      "detail": {
+        "mismatch_count": 1,
+        "method": "exact normalised match (harness)"
+      }
+    },
+    {
+      "execution_id": "EXE-0006",
+      "rule_id": "R-GATE-DATES",
+      "rule_version": "1.0.0",
+      "status": "BLOCKED",
+      "detail": {
+        "distinct_admission_dates": [
+          "2026-09-02",
+          "2026-09-03"
+        ]
+      }
+    },
+    {
+      "execution_id": "EXE-0009",
+      "rule_id": "R-GATE-ITEMISATION",
+      "rule_version": "1.0.0",
+      "status": "BLOCKED",
+      "detail": {
+        "itemised": false
+      }
+    },
+    {
+      "execution_id": "EXE-0010",
+      "rule_id": "R-DOC-COMPLETENESS",
+      "rule_version": "1.0.0",
+      "status": "PASSED",
+      "detail": {
+        "required": [
+          "CLAIM_FORM",
+          "DISCHARGE_SUMMARY",
+          "PAYMENT_RECEIPT",
+          "ID_PROOF",
+          "BANK_DETAILS"
+        ],
+        "missing": []
+      }
+    },
+    {
+      "execution_id": "EXE-0011",
+      "rule_id": "R-ELIG-POLICY-ACTIVE",
+      "rule_version": "1.0.0",
+      "status": "PASSED",
+      "detail": {
+        "evaluated_dates": [
+          "2026-09-03"
+        ],
+        "invariant_under_date_conflict": false,
+        "period": [
+          "2026-05-15",
+          "2027-05-14"
+        ]
+      }
+    },
+    {
+      "execution_id": "EXE-0015",
+      "rule_id": "R-ELIG-WAITING",
+      "rule_version": "1.1.0",
+      "status": "REVIEW",
+      "detail": {
+        "continuous_cover_months": 27,
+        "evaluated_dates": [
+          "2026-09-03"
+        ],
+        "invariant_under_date_conflict": false,
+        "ped_signal": "known case of type 2 diabetes mellitus for 6 years, on oral hypoglycaemic agents"
+      }
+    },
+    {
+      "execution_id": "EXE-0016",
+      "rule_id": "R-LINE-DUPLICATE",
+      "rule_version": "1.0.0",
+      "status": "SKIPPED_BLOCKED",
+      "detail": {
+        "reason": "blocked scopes ['ALL_FINANCIAL', 'LINE_RULES', 'PRE_POST_WINDOW', 'ROOM_DAYS', 'WAITING_PERIOD']"
+      }
+    },
+    {
+      "execution_id": "EXE-0017",
+      "rule_id": "R-LINE-NONPAYABLE",
+      "rule_version": "1.0.0",
+      "status": "SKIPPED_BLOCKED",
+      "detail": {
+        "reason": "blocked scopes ['ALL_FINANCIAL', 'LINE_RULES', 'PRE_POST_WINDOW', 'ROOM_DAYS', 'WAITING_PERIOD']"
+      }
+    },
+    {
+      "execution_id": "EXE-0018",
+      "rule_id": "R-LINE-TARIFF",
+      "rule_version": "1.0.0",
+      "status": "SKIPPED_BLOCKED",
+      "detail": {
+        "reason": "blocked scopes ['ALL_FINANCIAL', 'LINE_RULES', 'PRE_POST_WINDOW', 'ROOM_DAYS', 'WAITING_PERIOD']"
+      }
+    },
+    {
+      "execution_id": "EXE-0019",
+      "rule_id": "R-LINE-ROOM-CAP",
+      "rule_version": "1.1.0",
+      "status": "SKIPPED_BLOCKED",
+      "detail": {
+        "reason": "blocked scopes ['ALL_FINANCIAL', 'LINE_RULES', 'PRE_POST_WINDOW', 'ROOM_DAYS', 'WAITING_PERIOD']"
+      }
+    },
+    {
+      "execution_id": "EXE-0020",
+      "rule_id": "R-LINE-PROPORTIONATE",
+      "rule_version": "1.1.0",
+      "status": "SKIPPED_BLOCKED",
+      "detail": {
+        "reason": "blocked scopes ['ALL_FINANCIAL', 'LINE_RULES', 'PRE_POST_WINDOW', 'ROOM_DAYS', 'WAITING_PERIOD']"
+      }
+    },
+    {
+      "execution_id": "EXE-0021",
+      "rule_id": "R-CLAIM-SUBLIMIT",
+      "rule_version": "1.0.0",
+      "status": "SKIPPED_BLOCKED",
+      "detail": {
+        "reason": "blocked scopes ['ALL_FINANCIAL', 'LINE_RULES', 'PRE_POST_WINDOW', 'ROOM_DAYS', 'WAITING_PERIOD']"
+      }
+    },
+    {
+      "execution_id": "EXE-0022",
+      "rule_id": "R-CLAIM-DEDUCTIBLE",
+      "rule_version": "1.0.0",
+      "status": "SKIPPED_BLOCKED",
+      "detail": {
+        "reason": "blocked scopes ['ALL_FINANCIAL', 'LINE_RULES', 'PRE_POST_WINDOW', 'ROOM_DAYS', 'WAITING_PERIOD']"
+      }
+    },
+    {
+      "execution_id": "EXE-0023",
+      "rule_id": "R-CLAIM-COPAY",
+      "rule_version": "1.0.0",
+      "status": "SKIPPED_BLOCKED",
+      "detail": {
+        "reason": "blocked scopes ['ALL_FINANCIAL', 'LINE_RULES', 'PRE_POST_WINDOW', 'ROOM_DAYS', 'WAITING_PERIOD']"
+      }
+    },
+    {
+      "execution_id": "EXE-0024",
+      "rule_id": "R-CLAIM-SI-CAP",
+      "rule_version": "1.0.0",
+      "status": "SKIPPED_BLOCKED",
+      "detail": {
+        "reason": "blocked scopes ['ALL_FINANCIAL', 'LINE_RULES', 'PRE_POST_WINDOW', 'ROOM_DAYS', 'WAITING_PERIOD']"
+      }
+    },
+    {
+      "execution_id": "EXE-0025",
+      "rule_id": "R-CLAIM-ROUNDING",
+      "rule_version": "1.0.0",
+      "status": "SKIPPED_BLOCKED",
+      "detail": {
+        "reason": "blocked scopes ['ALL_FINANCIAL', 'LINE_RULES', 'PRE_POST_WINDOW', 'ROOM_DAYS', 'WAITING_PERIOD']"
+      }
+    },
+    {
+      "execution_id": "EXE-0027",
+      "rule_id": "R-ANOM-BILLNO-REUSE",
+      "rule_version": "0.9.0",
+      "status": "FLAGGED",
+      "detail": {
+        "other_claims": [
+          "CLM-DEMO-0088"
+        ]
+      }
+    }
+  ],
+  "output_hash": "sha256:7d9f3455b6c7f34928a9534caa41d7f3ca2f774793cbaf73966a237ae3be19ea"
+}

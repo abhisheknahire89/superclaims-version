@@ -1,0 +1,46 @@
+# NOT YET RUN on GitHub: written in a sandbox without GitHub access (ADR-12). Expect to adjust on first push.
+# Lives at the repository root (the research pack); the project is in workbench/
+# (the tests read ../schemas, ../config, ../api and ../fixtures).
+name: workbench
+on:
+  push:
+    paths: ["workbench/**", "schemas/**", "config/**", "api/**", "db/**", "fixtures/**", "verification/**"]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    defaults:
+      run:
+        working-directory: workbench
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: PostgreSQL 16 binaries
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y postgresql-16
+          echo "PGBIN=/usr/lib/postgresql/16/bin" >> "$GITHUB_ENV"
+      - name: Install
+        run: pip install -e ".[ui-test]"
+      - name: Pack contract checks
+        working-directory: .
+        run: bash verification/build_all.sh
+      - name: Unit, integration and API tests
+        run: make test
+      - name: Browser smoke test
+        run: |
+          python -m playwright install --with-deps chromium
+          make db AW_DEV_DIR="$RUNNER_TEMP/devdb"
+          . ./.devdb.env
+          AW_OBJECT_STORE_DIR="$RUNNER_TEMP/objects" PYTHONPATH=src python -m aw.server --seed-demo > "$RUNNER_TEMP/server.log" 2>&1 &
+          for i in $(seq 1 90); do curl -sf http://127.0.0.1:8080/healthz && break; sleep 1; done
+          python tests/ui_smoke.py http://127.0.0.1:8080 ui-shots
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: ui-shots
+          path: workbench/ui-shots
