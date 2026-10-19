@@ -271,6 +271,20 @@
         "quote": {
           "type": "string",
           "minLength": 1
+        },
+        "source": {
+          "enum": [
+            "HUMAN_TRANSCRIPTION"
+          ]
+        },
+        "transcription_id": {
+          "type": "string"
+        },
+        "transcription_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       },
       "additionalProperties": false

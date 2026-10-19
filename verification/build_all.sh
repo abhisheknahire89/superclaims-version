@@ -10,7 +10,8 @@ python3 verification/test_rules.py | tail -1 && echo "rule tests: OK"
 python3 verification/test_invariants.py 3000
 python3 verification/validate_contracts.py > /tmp/aw_contracts.json || { cat /tmp/aw_contracts.json; exit 1; }
 python3 -c "import json; d=json.load(open('/tmp/aw_contracts.json')); print('contracts: passed=%d failed=%d' % (d['passed'], d['failed']))"
-python3 verification/mutation_test_contracts.py > /tmp/aw_mut.txt && echo "mutation tests: $(grep -c '^caught' /tmp/aw_mut.txt) caught"
+python3 verification/mutation_test_contracts.py > /tmp/aw_mut.txt
+echo "mutation tests: $(grep -c '^caught' /tmp/aw_mut.txt) caught"
 python3 verification/cost_model.py > /dev/null && echo "cost tables: OK (verification/cost-tables.md)"
 python3 verification/build_ledger.py
 python3 verification/build_wireframe.py

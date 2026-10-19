@@ -1,0 +1,26 @@
+[
+  {
+    "file": "workbench/migrations/0001_schema.sql",
+    "unchanged_from_delivered_backup": true
+  },
+  {
+    "file": "workbench/migrations/0002_app_support.sql",
+    "unchanged_from_delivered_backup": true
+  },
+  {
+    "file": "workbench/migrations/0003_human_transcription.sql",
+    "unchanged_from_delivered_backup": true
+  },
+  {
+    "file": "workbench/migrations/0004_workflow_links.sql",
+    "unchanged_from_delivered_backup": true
+  },
+  {
+    "file": "workbench/migrations/0005_local_platform.sql",
+    "unchanged_from_delivered_backup": true
+  },
+  {
+    "file": "workbench/migrations/0006_operations.sql",
+    "unchanged_from_delivered_backup": true
+  }
+]

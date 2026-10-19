@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://example.invalid/aw/schemas/engine-input.schema.json",
   "title": "EngineInput",
-  "description": "PROPOSED. The rule engine's only input: reviewer-confirmed resolved facts and confirmed bill lines, assembled by the reconcile step from resolved_fact and bill_line rows (mapping in 05 §1.6). The engine never reads raw extraction output.",
+  "description": "PROPOSED. The rule engine's only input: reviewer-confirmed resolved facts and confirmed bill lines, assembled by the reconcile step from resolved_fact and bill_line rows (mapping in 05 \u00a71.6). The engine never reads raw extraction output.",
   "type": "object",
   "$defs": {
     "docEvidence": {
@@ -31,6 +31,20 @@
         "quote": {
           "type": "string",
           "minLength": 1
+        },
+        "source": {
+          "enum": [
+            "HUMAN_TRANSCRIPTION"
+          ]
+        },
+        "transcription_id": {
+          "type": "string"
+        },
+        "transcription_ids": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     },
@@ -388,6 +402,46 @@
           }
         }
       }
+    },
+    "document_reading_blocks": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "clinical_observations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "text",
+          "evidence"
+        ],
+        "properties": {
+          "text": {
+            "type": "string"
+          },
+          "evidence": {
+            "type": "array"
+          }
+        }
+      }
+    },
+    "overlapping_claims": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "tat_breached": {
+      "type": "boolean"
+    },
+    "opd_used": {
+      "$ref": "#/$defs/money"
+    },
+    "prior_decision_count": {
+      "type": "integer",
+      "minimum": 0
     }
   }
 }

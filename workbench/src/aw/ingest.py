@@ -9,6 +9,7 @@ from __future__ import annotations
 import json
 from datetime import datetime, timezone
 
+from .errors import AppError
 from . import audit, jobs
 from .db import Conn, Json
 from .extraction.pages import read_pdf, render_png, sniff_mime
@@ -21,10 +22,8 @@ OPEN_STATES = ("INTAKE", "DOCS_INCOMPLETE", "PROCESSING", "READY_FOR_REVIEW", "I
                "AWAITING_RESPONSE", "PENDING_APPROVAL", "REOPENED")
 
 
-class IngestError(Exception):
-    def __init__(self, status: int, code: str, message: str):
-        super().__init__(message)
-        self.status, self.code = status, code
+class IngestError(AppError):
+    pass
 
 
 def create_claim(conn: Conn, tenant_id: str, body: dict, actor: str) -> dict:
@@ -35,7 +34,7 @@ def create_claim(conn: Conn, tenant_id: str, body: dict, actor: str) -> dict:
     pm = conn.fetch_one("SELECT 1 FROM policy_member WHERE tenant_id=$1 AND policy_no=$2 AND member_id=$3",
                         tenant_id, body["policy_no"], body["member_id"])
     if not pm:
-        raise IngestError(422, "unknown-policy-member", "policy and member are not known; import them first (/imports/policies)")
+        raise IngestError(422, "unknown-policy-member", "policy and member are not known; select a locally configured synthetic member")
     if body.get("hospital_id") and not conn.fetch_one("SELECT 1 FROM hospital WHERE tenant_id=$1 AND hospital_id=$2", tenant_id, body["hospital_id"]):
         raise IngestError(422, "unknown-hospital", "hospital is not known")
     claim_id = body.get("claim_id") or new_id("CLM")
@@ -45,6 +44,8 @@ def create_claim(conn: Conn, tenant_id: str, body: dict, actor: str) -> dict:
         " VALUES ($1,$2,$3,$4::workflow_type,'INTAKE',$5,$6,$7,$8::timestamptz,$9::timestamptz)",
         tenant_id, claim_id, body.get("external_ref"), body["workflow"], body["policy_no"], body["member_id"], body.get("hospital_id"),
         body.get("intimated_at") or now, body.get("submitted_at") or now)
+    from .workflows import link
+    link(conn,tenant_id,get_claim(conn,tenant_id,claim_id),body)
     audit.append(conn, tenant_id, claim_id, actor, "CLAIM_CREATED", {"workflow": body["workflow"], "external_ref": body.get("external_ref")})
     return get_claim(conn, tenant_id, claim_id)
 
@@ -89,7 +90,15 @@ def add_document(conn: Conn, store: ObjectStore, tenant_id: str, claim_id: str, 
         audit.append(conn, tenant_id, claim_id, actor, "DOCUMENT_QUARANTINED", {"document_id": document_id, "sha256": digest, "reason": "TYPE_NOT_ALLOWED"})
         return get_document(conn, tenant_id, document_id)
     store.put_once(key, data)
-    pages = read_pdf(data) if mime == "application/pdf" else []
+    try:
+        if mime == "application/pdf":
+            pages = read_pdf(data)
+        else:
+            from .extraction.ocr import read_image
+            pages = [read_image(data)]
+    except Exception as exc:
+        # No content or parser detail is exposed in logs/API errors.
+        raise IngestError(422, "document-unreadable", "file cannot be decoded or exceeds local processing limits") from exc
     conn.execute(
         "INSERT INTO document (tenant_id, document_id, claim_id, declared_type, status, source_channel, object_key, sha256, mime_type, page_count, supersedes_document_id)"
         " VALUES ($1,$2,$3,$4,'STORED',$5,$6,$7,$8,$9,$10)",
@@ -98,13 +107,19 @@ def add_document(conn: Conn, store: ObjectStore, tenant_id: str, claim_id: str, 
         text_key = f"{key}.p{p.page_no}.json"
         image_key = f"{key}.p{p.page_no}.png"
         store.put_once(text_key, json.dumps(p.to_json()).encode())
-        store.put_once(image_key, render_png(data, p.page_no))
-        conn.execute("INSERT INTO document_page (tenant_id, document_id, page_no, text_layer, image_key, text_key, width_pt, height_pt)"
-                     " VALUES ($1,$2,$3,$4,$5,$6,$7,$8)", tenant_id, document_id, p.page_no, p.text_layer, image_key, text_key, p.width, p.height)
-    if mime != "application/pdf":
-        image_key = key
-        conn.execute("INSERT INTO document_page (tenant_id, document_id, page_no, text_layer, image_key) VALUES ($1,$2,1,'NONE',$3)",
-                     tenant_id, document_id, image_key)
+        if mime == "application/pdf":
+            image_bytes = render_png(data, p.page_no)
+        else:
+            import io
+            from PIL import Image, ImageOps
+            with Image.open(io.BytesIO(data)) as img:
+                buf = io.BytesIO()
+                ImageOps.exif_transpose(img).convert("RGB").save(buf, format="PNG")
+                image_bytes = buf.getvalue()
+        store.put_once(image_key, image_bytes)
+        conn.execute("INSERT INTO document_page (tenant_id, document_id, page_no, text_layer, image_key, text_key, width_pt, height_pt, quality_score)"
+                     " VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)", tenant_id, document_id, p.page_no, p.text_layer, image_key, text_key, p.width, p.height,
+                     sum(w.get("confidence",1) for w in p.words)/len(p.words) if p.words else 0)
     audit.append(conn, tenant_id, claim_id, actor, "DOCUMENT_RECEIVED",
                  {"document_id": document_id, "sha256": digest, "pages": len(pages) or 1, "declared_type": declared_type})
     if supersedes_document_id:
@@ -114,6 +129,9 @@ def add_document(conn: Conn, store: ObjectStore, tenant_id: str, claim_id: str, 
             audit.append(conn, tenant_id, claim_id, actor, "DOCUMENT_SUPERSEDED", {"document_id": supersedes_document_id, "superseded_by": document_id})
     mark_stale(conn, tenant_id, claim_id, actor, "NEW_EVIDENCE")
     new_status = "PROCESSING" if claim["status"] in ("INTAKE", "DOCS_INCOMPLETE", "AWAITING_RESPONSE", "REOPENED", "READY_FOR_REVIEW") else claim["status"]
+    if new_status!=claim['status']:
+        from .workflows import assert_transition
+        assert_transition(claim['workflow'],claim['status'],new_status)
     conn.execute("UPDATE claim SET status=$3::claim_status, updated_at=now(), row_version=row_version+1 WHERE tenant_id=$1 AND claim_id=$2",
                  tenant_id, claim_id, new_status)
     jobs.enqueue(conn, tenant_id, "EXTRACT", document_id, f"extract:{document_id}", {"claim_id": claim_id})

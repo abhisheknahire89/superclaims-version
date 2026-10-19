@@ -1,7 +1,10 @@
 // Adjudication Workbench reviewer UI (Phase 1). Vanilla ES module, no build step, no third-party code.
 // Every string that comes from a document or the API is inserted with textContent, never innerHTML.
+import {showPolicy} from './policy.js';
+import {showConfig} from './config.js';
+import {showOperations,showUsers} from './operations.js';
 
-const S = { token: null, me: null, claim: null, etag: null, ev: null, lines: [], findings: [], facts: null, docs: [],
+const S = { csrf: null, token: null, me: null, claim: null, etag: null, ev: null, lines: [], findings: [], facts: null, docs: [],
             selected: null, tab: "bill", users: [], pollTimer: null };
 
 // ---------------------------------------------------------------- helpers
@@ -56,7 +59,7 @@ function store(k, v) { try { v === null ? sessionStorage.removeItem(k) : session
 function load(k) { try { return sessionStorage.getItem(k); } catch (e) { return null; } }
 
 async function api(method, path, { body, idem = false, ifMatch = false, raw = false } = {}) {
-  const headers = { Authorization: `Bearer ${S.token}` };
+  const headers = S.token==="cookie"?{"X-CSRF-Token":S.csrf||load("aw.csrf")||""}:{ Authorization: `Bearer ${S.token}` };
   if (body !== undefined) headers["Content-Type"] = "application/json";
   if (idem) headers["Idempotency-Key"] = crypto.randomUUID();
   if (ifMatch && S.etag) headers["If-Match"] = S.etag;
@@ -77,28 +80,22 @@ function problemText(res) {
 
 // ---------------------------------------------------------------- auth (development sign-in)
 async function showLogin() {
-  const app = $("#app"); app.replaceChildren();
-  const r = await fetch("/dev/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" });
-  const box = h("section", { class: "login", "aria-labelledby": "lt" },
-    h("h1", { id: "lt" }, "Sign in (development)"),
-    h("p", { class: "cat" }, "Development sign-in for the synthetic demo tenant. Production uses your organisation's single sign-on; roles and approval limits always come from the server."));
-  if (!r.ok) { box.append(h("p", { class: "err" }, "Development sign-in is disabled in this environment.")); app.replaceChildren(box); return; }
-  const { users } = await r.json();
-  S.users = users;
-  const ul = h("ul");
-  for (const u of users) {
-    ul.append(h("li", {}, h("button", { class: "btn", onclick: () => login(u.user_id) },
-      h("span", {}, h("strong", {}, u.user_id), " · ", u.display_name), h("span", { class: "cat" }, u.roles.join(", ")))));
-  }
-  box.append(ul); app.replaceChildren(box);
+ const box=h('div',{class:'wrap'},h('h1',{},'Sign in to Adjudication Workbench'));
+ const tenant=h('input',{id:'login-tenant',value:'TENANT-DEMO','aria-label':'Tenant ID',required:true}),user=h('input',{id:'login-user','aria-label':'User ID',required:true,autocomplete:'username'}),password=h('input',{id:'login-password',type:'password','aria-label':'Password',required:true,autocomplete:'current-password'});
+ box.append(h('form',{onsubmit:e=>{e.preventDefault();login(user.value);}},h('label',{for:'login-tenant'},'Tenant'),tenant,h('label',{for:'login-user'},'User'),user,h('label',{for:'login-password'},'Password'),password,h('button',{type:'submit',class:'btn'},'Sign in')));$('#app').replaceChildren(box);
+ const r=await fetch('/dev/login',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'});
+ if(r.ok){const {users}=await r.json();S.users=users;password.value='Synthetic-demo-2026!';box.append(h('p',{},'Synthetic demo password: Synthetic-demo-2026!'),h('ul',{},...users.map(u=>h('li',{},h('button',{class:'btn',onclick:()=>{user.value=u.user_id;login(u.user_id);}},u.user_id+' · '+u.display_name)))));}
 }
 async function login(userId) {
-  const r = await fetch("/dev/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ user_id: userId }) });
+  const r = await fetch("/v1/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ tenant_id:$("#login-tenant").value,user_id: userId,password:$("#login-password").value }) });
   const d = await r.json();
-  S.token = d.token; store("aw.token", d.token);
+  if(!r.ok){say(d.detail);return;}
+  S.token = "cookie";S.csrf=d.csrf_token;store("aw.csrf",S.csrf); store("aw.token", "cookie");
   location.hash = "#/queue"; await boot();
 }
-function logout() {
+async function logout() {
+  if(S.token==="cookie")await fetch("/v1/auth/logout",{method:"POST",headers:{"X-CSRF-Token":S.csrf||load("aw.csrf")||""}});
+  S.csrf=null;store("aw.csrf",null);
   S.token = null; store("aw.token", null); S.me = null; $("#who").replaceChildren();
   if (location.hash.startsWith("#/login")) route(); else location.hash = "#/login";  // hashchange calls route()
 }
@@ -109,7 +106,7 @@ async function boot() {
   const me = await api("GET", "/v1/me");
   if (!me.ok) return logout();
   S.me = me.data;
-  if (!S.users.length) { try { const r = await fetch("/dev/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" }); if (r.ok) S.users = (await r.json()).users; } catch (e) { /* ignore */ } }
+  if(can("PROCESSOR","MEDICAL_OFFICER","SUPERVISOR","AUDITOR","FWA_ANALYST","READ_ONLY")){const users=await api("GET","/v1/reviewers");if(users.ok)S.users=users.data.items;}
   $("#who").replaceChildren(h("span", {}, `${S.me.display_name} · ${S.me.roles.map(human).join(", ")}`),
     S.me.approval_limit ? h("span", { class: "chip" }, `limit ${rs(S.me.approval_limit)}`) : null,
     h("button", { class: "btn small", onclick: logout }, "Sign out"));
@@ -124,15 +121,23 @@ function route() {
   const hsh = location.hash || "#/queue";
   $("#nav-queue").toggleAttribute("aria-current", hsh.startsWith("#/queue"));
   if (hsh.startsWith("#/login") || !S.token) return showLogin();
+  if(!S.me)return;
   if (hsh.startsWith("#/claim/")) return showClaim(decodeURIComponent(hsh.slice(8)));
+  if (hsh.startsWith("#/operations")) return showOperations({api,h,app:$("#app"),can});
+  if (hsh.startsWith("#/users")) return showUsers({api,h,app:$("#app"),can});
+  if (hsh.startsWith("#/policy")) return showPolicy({api,h,app:$('#app'),can});
+  if (hsh.startsWith("#/config")) return showConfig({api,h,app:$('#app'),can});
   return showQueue();
 }
 
 // ---------------------------------------------------------------- S-01 queue
 async function showQueue() {
+  const requestedHash=location.hash,principal=S.me;
   const app = $("#app"); app.replaceChildren(h("div", { class: "wrap" }, h("p", { class: "empty" }, "Loading…")));
   const status = new URLSearchParams(location.hash.split("?")[1] || "").get("status") || "";
-  const res = await api("GET", "/v1/claims" + (status ? `?status=${status}` : ""));
+  const params=new URLSearchParams(location.hash.split("?")[1]||"");
+  const res = await api("GET", "/v1/claims?"+params.toString());
+  if(location.hash!==requestedHash||S.me!==principal||!principal)return;
   const wrap = h("div", { class: "wrap" }, h("h1", {}, "Work queue"));
   const sel = h("select", { id: "f-status", onchange: (e) => { location.hash = "#/queue" + (e.target.value ? `?status=${e.target.value}` : ""); } },
     h("option", { value: "" }, "Open claims"),
@@ -140,8 +145,12 @@ async function showQueue() {
       .map((s) => h("option", { value: s, selected: s === status }, human(s))));
   wrap.append(h("div", { class: "filters" }, h("div", {}, h("label", { for: "f-status" }, "Status"), sel),
     h("span", { class: "cat" }, "Sorted by settlement due time, earliest first. Press N to open the first claim.")));
+  const filter=(key,value)=>{value?params.set(key,value):params.delete(key);location.hash="#/queue?"+params.toString();};
+  wrap.append(h("div",{class:"filters"},h("label",{},"Workflow",h("select",{"aria-label":"Workflow filter",onchange:e=>filter("workflow",e.target.value)},h("option",{value:""},"All workflows"),...["IPD_REIMBURSEMENT","PREAUTH","ENHANCEMENT","CASHLESS_DISCHARGE","OPD_REIMBURSEMENT"].map(w=>h("option",{value:w,selected:params.get("workflow")===w},human(w))))),h("label",{},"Assignment",h("select",{"aria-label":"Assignment filter",onchange:e=>filter("assigned_to",e.target.value)},h("option",{value:""},"All assignments"),h("option",{value:S.me.user_id,selected:params.get("assigned_to")===S.me.user_id},"My claims"),h("option",{value:"UNASSIGNED",selected:params.get("assigned_to")==="UNASSIGNED"},"Unassigned"))),h("label",{},"Due",h("select",{"aria-label":"Deadline filter",onchange:e=>filter("sla_breach_within_minutes",e.target.value)},h("option",{value:""},"All deadlines"),h("option",{value:"0",selected:params.get("sla_breach_within_minutes")==="0"},"Overdue"),h("option",{value:"60",selected:params.get("sla_breach_within_minutes")==="60"},"Due within an hour")))));
   if (!res.ok) { wrap.append(h("p", { class: "err" }, problemText(res))); app.replaceChildren(wrap); return; }
+  const search=h("input",{"aria-label":"Claim reference search",value:params.get("search")||""});wrap.append(h("form",{onsubmit:e=>{e.preventDefault();filter("search",search.value);}},search,h("button",{class:"btn small",type:"submit"},"Search references")));
   const items = res.data.items;
+  if(can('PROCESSOR','SUPERVISOR'))wrap.append(newClaimForm());
   if (!items.length) { wrap.append(h("p", { class: "empty" }, "No claims in this view.")); app.replaceChildren(wrap); return; }
   const tbody = h("tbody");
   for (const c of items) {
@@ -153,34 +162,41 @@ async function showQueue() {
       h("td", { class: "amt" }, rs(c.recommended_payable)),
       h("td", {}, c.open_blocking_findings ? h("span", { class: "chip block" }, `■ ${c.open_blocking_findings}`) : "—"),
       h("td", {}, human(c.status)),
-      h("td", { title: when(c.sla_due_at) }, relDue(c.sla_due_at))));
+      h("td", { title: when(c.sla_due_at) }, relDue(c.sla_due_at)),h("td",{},c.assigned_to||"Unassigned")));
   }
   wrap.append(h("div", { class: "tablewrap" }, h("table", {}, h("thead", {}, h("tr", {},
     ...["Claim", "Patient", "Hospital", "Recommendation"].map((t) => h("th", {}, t)), h("th", { class: "amt" }, "Proposed payable"),
-    h("th", {}, "Blocks"), h("th", {}, "Status"), h("th", {}, "Due"))), tbody)));
+    h("th", {}, "Blocks"), h("th", {}, "Status"), h("th", {}, "Due"),h("th",{},"Assignee"))), tbody)));
+  if(res.data.next_cursor)wrap.append(h("a",{href:"#/queue?"+new URLSearchParams({...Object.fromEntries(params),cursor:res.data.next_cursor})},"Next claims"));
   app.replaceChildren(wrap);
   S.queueFirst = items[0].claim_id;
 }
 
 // ---------------------------------------------------------------- S-02 workspace
+let claimLoad=0;
 async function loadClaim(id) {
+  const sequence=++claimLoad,requestedHash=location.hash;
   const c = await api("GET", `/v1/claims/${encodeURIComponent(id)}`);
   if (!c.ok) throw new Error(problemText(c));
-  S.claim = c.data; S.etag = c.etag;
   const [ev, docs, lines, findings, facts] = await Promise.all([
     api("GET", `/v1/claims/${encodeURIComponent(id)}/evaluations/current`),
     api("GET", `/v1/claims/${encodeURIComponent(id)}/documents`),
     api("GET", `/v1/claims/${encodeURIComponent(id)}/bill-lines`),
     api("GET", `/v1/claims/${encodeURIComponent(id)}/findings`),
     api("GET", `/v1/claims/${encodeURIComponent(id)}/facts`)]);
+  if(sequence!==claimLoad||location.hash!==requestedHash)return false;
+  S.claim=c.data;S.etag=c.etag;
   S.ev = ev.ok ? ev.data : null; S.docs = docs.ok ? docs.data.items : []; S.lines = lines.ok ? lines.data.items : [];
   S.findings = findings.ok ? findings.data.items : []; S.facts = facts.ok ? facts.data : null;
+  return true;
 }
 
 async function showClaim(id) {
   if (!S.claim || S.claim.claim_id !== id) { S.selected = null; S.tab = "bill"; }  // never carry evidence across claims
   $("#app").replaceChildren(h("div", { class: "wrap" }, h("p", { class: "empty" }, "Loading claim…")));
-  try { await loadClaim(id); } catch (e) { $("#app").replaceChildren(h("div", { class: "wrap" }, h("p", { class: "err" }, e.message))); return; }
+  const requestedHash=location.hash;
+  try { if(!await loadClaim(id))return; } catch (e) { $("#app").replaceChildren(h("div", { class: "wrap" }, h("p", { class: "err" }, e.message))); return; }
+  if(location.hash!==requestedHash)return;
   renderClaim();
   const st = S.claim.evaluation_status;
   if (!S.ev || st === "STALE" || ["PROCESSING", "INTAKE"].includes(S.claim.status)) poll(id);
@@ -193,7 +209,7 @@ function poll(id) {
     const c = await api("GET", `/v1/claims/${encodeURIComponent(id)}`);
     if (c.ok && c.data.evaluation_status && c.data.evaluation_status !== "STALE" && !["PROCESSING", "INTAKE"].includes(c.data.status)
         && c.data.current_evaluation_id !== (S.ev && S.ev.evaluation_id)) {
-      clearInterval(S.pollTimer); await loadClaim(id); renderClaim(); say("Recommendation updated.");
+      clearInterval(S.pollTimer); if(await loadClaim(id)){renderClaim(); say("Recommendation updated.");}
     } else if (n > 40) clearInterval(S.pollTimer);
   }, 1500);
 }
@@ -211,6 +227,8 @@ function renderClaim() {
       h("button", { class: "btn", onclick: () => setTab("decide") }, "Decide ▸"),
       h("button", { class: "btn", onclick: () => setTab("queries") }, "Query ▸")));
   const banners = [];
+  if(['PREAUTH','ENHANCEMENT'].includes(c.workflow))banners.push(h('p',{class:'banner'},'Provisional cashless authorisation. Enhancement amounts are cumulative; final bills are reviewed separately.'));
+  if(can('PROCESSOR','SUPERVISOR') && ['PREAUTH','ENHANCEMENT'].includes(c.workflow) && ['FINALISED','EXPORTED'].includes(c.status))banners.push(newClaimForm(c));
   if (c.evaluation_status === "STALE") banners.push(h("div", { class: "banner stale", role: "status" }, "Recommendation out of date — new evidence or a correction is being processed. Decisions are disabled until it is recomputed."));
   if (rec && rec.blocked_scopes.length) banners.push(h("div", { class: "banner block" }, `Blocked: ${rec.blocked_scopes.map(human).join(", ")}. Resolve the blocking findings to compute the payable.`));
   for (const d of c.decisions) banners.push(h("div", { class: "banner final" }, h("span", { class: "chip final" }, `🔒 ${human(d.disposition)} ${d.approved_payable ? rs(d.approved_payable) : ""}`),
@@ -230,7 +248,7 @@ function leftPane() {
       h("div", { class: "st" }, `${d.page_count || "?"} p · ${human(d.status)}`)));
   }
   const pane = h("aside", { class: "pane", "aria-label": "Documents and facts" }, h("h2", {}, "Documents"), docs);
-  if (can("PROCESSOR", "MEDICAL_OFFICER", "SUPERVISOR")) pane.append(uploadForm());
+  if (can("PROCESSOR", "MEDICAL_OFFICER", "SUPERVISOR")) pane.append(uploadForm(), manualReadingForm());
   pane.append(h("h2", { style: "margin-top:16px" }, "Facts used by the rules"));
   if (S.facts) {
     for (const f of S.facts.items) {
@@ -242,7 +260,7 @@ function leftPane() {
       pane.append(row);
     }
   }
-  return pane;
+  pane.append(claimOperations());return pane;
 }
 function resolveForm(f) {
   const form = h("form", { class: "drawer", onsubmit: async (e) => {
@@ -270,20 +288,21 @@ function uploadForm() {
   const sup = h("select", {}, h("option", { value: "" }, "— none —"), ...S.docs.filter((d) => d.status !== "SUPERSEDED").map((d) => h("option", { value: d.document_id }, human(d.classified_type || "document"))));
   const form = h("form", { class: "drawer", onsubmit: async (e) => {
     e.preventDefault();
-    const file = form.querySelector("input[type=file]").files[0]; if (!file) return;
+    for (const file of form.querySelector("input[type=file]").files) {
     const buf = await file.arrayBuffer();
     const sha = [...new Uint8Array(await crypto.subtle.digest("SHA-256", buf))].map((b) => b.toString(16).padStart(2, "0")).join("");
     const slot = await api("POST", `/v1/claims/${S.claim.claim_id}/documents`, { idem: true, body: { declared_type: form.querySelector("select").value,
       sha256: sha, mime_type: file.type || "application/pdf", size_bytes: buf.byteLength, supersedes_document_id: sup.value || null } });
     const out = form.querySelector(".err");
-    if (slot.status === 200) { out.textContent = "That file is already on this claim."; return; }
+    if (slot.status === 200) { out.textContent = "That file is already on this claim."; continue; }
     if (!slot.ok) { out.textContent = problemText(slot); return; }
     const put = await fetch(slot.data.upload_url, { method: "PUT", body: buf });
     if (!put.ok) { out.textContent = "Upload failed."; return; }
     const done = await api("POST", `/v1/claims/${S.claim.claim_id}/documents/${slot.data.document_id}:complete`, { idem: true });
     if (!done.ok) { out.textContent = problemText(done); return; }
+    }
     say("Document received; processing."); await showClaim(S.claim.claim_id);
-  } }, h("h3", {}, "Add a document"), h("input", { type: "file", accept: "application/pdf,image/png,image/jpeg,image/tiff", "aria-label": "File" }),
+  } }, h("h3", {}, "Add a document"), h("input", { type: "file", multiple: true, accept: "application/pdf,image/png,image/jpeg,image/tiff,application/zip", "aria-label": "File" }),
     h("label", {}, "Type"), h("select", {}, ...types.map((t) => h("option", { value: t }, human(t)))),
     h("label", {}, "Replaces"), sup, h("div", { style: "margin-top:8px" }, h("button", { class: "btn small", type: "submit" }, "Upload")), h("div", { class: "err" }));
   return form;
@@ -393,7 +412,8 @@ async function action(body, errEl) {
 function alertBox() { let el = $("#flash"); if (!el) { el = h("div", { id: "flash", class: "banner block", role: "alert" }); $("#app").prepend(el); } return el; }
 
 function queriesTab() {
-  if (!S.ev || !S.ev.query_items.length) return h("p", { class: "empty" }, "The current evaluation suggests no queries.");
+  const history=queryHistory();
+  if (!S.ev || !S.ev.query_items.length) return history;
   const groups = {};
   for (const q of S.ev.query_items) (groups[q.addressed_to] = groups[q.addressed_to] || []).push(q);
   const wrap = h("div", {}, h("p", { class: "cat" }, "Drafted from the findings. Edit the wording, then approve to release. Claims never close automatically if nobody answers."));
@@ -403,14 +423,14 @@ function queriesTab() {
     wrap.append(h("form", { class: "drawer", onsubmit: async (e) => {
       e.preventDefault();
       const d = await api("POST", `/v1/claims/${S.claim.claim_id}/queries`, { idem: true, body: { addressed_to: addr,
-        items: items.map((q, i) => ({ text: areas[i].value, requested_document_type: q.requested_document_type || undefined, linked_finding_ids: q.linked_findings })) } });
+        items: items.map((q, i) => ({ text: areas[i].value, requested_document_type: q.requested_document_type === "FINAL_BILL_CORRECTED" ? "FINAL_BILL_ITEMISED" : q.requested_document_type || undefined, linked_finding_ids: q.linked_findings })) } });
       if (!d.ok) { err.textContent = problemText(d); return; }
       const a = await api("POST", `/v1/queries/${d.data.query_id}:approve`, { idem: true });
       if (!a.ok) { err.textContent = problemText(a); return; }
       say(`Query to ${human(addr)} approved and sent.`); await showClaim(S.claim.claim_id);
     } }, h("h3", {}, `To: ${human(addr)}`), ...areas, h("button", { class: "btn primary small", type: "submit", disabled: !can("PROCESSOR", "MEDICAL_OFFICER", "SUPERVISOR") }, "Approve and send"), err));
   }
-  return wrap;
+  wrap.append(history);return wrap;
 }
 
 function decideTab() {
@@ -547,8 +567,8 @@ function evidencePane() {
   return pane;
 }
 function overrideForm(a) {
-  const amt = h("input", { class: "mono", value: a.amount, inputmode: "decimal" }), reason = h("input", { value: "", placeholder: "Reason code, e.g. TARIFF_ITEM_NOT_APPLICABLE" });
-  const comment = h("textarea", { rows: 2, style: "width:100%", required: true }), err = h("div", { class: "err" });
+  const amt = h("input", { "aria-label":"Override amount",class: "mono", value: a.amount, inputmode: "decimal" }), reason = h("input", { "aria-label":"Override reason",value: "", placeholder: "Reason code, e.g. TARIFF_ITEM_NOT_APPLICABLE" });
+  const comment = h("textarea", { "aria-label":"Override comment",rows: 2, style: "width:100%", required: true }), err = h("div", { class: "err" });
   return h("form", { class: "drawer", onsubmit: async (e) => {
     e.preventDefault();
     await action({ action: "OVERRIDE_ADJUSTMENT", target: { type: "adjustment", id: a.adjustment_id }, after_value: { amount: amt.value }, reason_code: reason.value || "REVIEWER_JUDGEMENT", comment: comment.value }, err);
@@ -586,3 +606,63 @@ document.addEventListener("keydown", (e) => {
 });
 
 boot();
+
+function manualReadingForm() {
+  const doc=h("select", {"aria-label":"Source document"}, ...S.docs.filter(d=>!["SUPERSEDED","QUARANTINED"].includes(d.status)).map(d=>h("option",{value:d.document_id},human(d.classified_type||d.declared_type))));
+  const page=h("input",{type:"number",value:1,min:1,"aria-label":"Source page"});
+  const dtype=h("select",{"aria-label":"Correct document type"},...["FINAL_BILL_ITEMISED","FINAL_BILL_SUMMARY","CLAIM_FORM","DISCHARGE_SUMMARY","ADMISSION_RECORD","OTHER"].map(v=>h("option",{value:v},human(v))));
+  dtype.value=S.docs.find(d=>d.document_id===doc.value)?.classified_type||"OTHER";
+  doc.addEventListener("change",()=>{dtype.value=S.docs.find(d=>d.document_id===doc.value)?.classified_type||"OTHER";});
+  const lineNo=h("input",{value:"L01","aria-label":"Line number"});
+  const path=h("select",{"aria-label":"Field"}, ...["patient.name","patient.gender","admission.date","discharge.date","bill.number","bill.total","diagnosis.primary_text","bill.line_item"].map(v=>h("option",{value:v},human(v.replaceAll("."," ")))));
+  const value=h("input",{required:true,"aria-label":"Value or line description"});
+  const quote=h("textarea",{required:true,rows:2,"aria-label":"Exact source quote"});
+  const amount=h("input",{"aria-label":"Line amount",placeholder:"1234.50"});
+  const humanSource=h("input",{type:"checkbox","aria-label":"I confirm this quote on the source image"});
+  const fullPage=h("input",{type:"checkbox","aria-label":"I reviewed the whole page for critical conflicts"});
+  let manualPage=null,selection=null;
+  const sourceImage=h("img",{alt:"Immutable source page for human transcription",style:"width:100%;display:none;cursor:crosshair"});
+  const selectionText=h("p",{class:"cat"});
+  humanSource.addEventListener("change",async()=>{
+    if(!humanSource.checked){sourceImage.style.display="none";return;}
+    const r=await api("GET",`/v1/claims/${S.claim.claim_id}/documents/${doc.value}/pages/${page.value}`);
+    if(r.ok){manualPage=r.data;sourceImage.src=r.data.image_url;sourceImage.style.display="block";selectionText.textContent="Drag a box around the quoted text on the original page.";selection=null;}
+  });
+  sourceImage.addEventListener("pointerdown",e=>{sourceImage.setPointerCapture(e.pointerId);const r=sourceImage.getBoundingClientRect();selection=[(e.clientX-r.left)/r.width*manualPage.width_pt,(e.clientY-r.top)/r.height*manualPage.height_pt];});
+  sourceImage.addEventListener("pointerup",e=>{if(!selection||selection.length!==2)return;const r=sourceImage.getBoundingClientRect();const x=(e.clientX-r.left)/r.width*manualPage.width_pt,y=(e.clientY-r.top)/r.height*manualPage.height_pt;selection=[Math.min(selection[0],x),Math.min(selection[1],y),Math.max(selection[0],x),Math.max(selection[1],y)];selectionText.textContent="Source text region selected. Your reading will be recorded as human transcription.";});
+  const err=h("p",{class:"err",role:"alert"});
+  const form=h("form",{class:"drawer",onsubmit:async e=>{
+    e.preventDefault();
+    const pg=await api("GET",`/v1/claims/${S.claim.claim_id}/documents/${doc.value}/pages/${page.value}`);
+    if(!pg.ok||!pg.data.words_url){err.textContent="A legible source text layer is required.";return;}
+    const text=await (await fetch(pg.data.words_url)).json();
+    const ln=text.lines.find(l=>l.text.includes(quote.value));
+    if(!ln && !(humanSource.checked&&selection?.length===4&&manualPage?.image_sha256===pg.data.image_sha256)){err.textContent="Find the source quote or confirm and select its region on the source image.";return;}
+    const evidence=[{page:Number(page.value),quote:quote.value,bbox:ln?[ln.x0,ln.top,ln.x1,ln.bottom]:selection}];
+    const body=path.value==="bill.line_item"?{fields:[],line_items:[{line_no:lineNo.value,description:value.value,amount:amount.value,confidence:1,evidence}]}:{fields:[{path:path.value,value:value.value,normalised:value.value,confidence:1,evidence}]};
+    body.document_type=dtype.value;
+    if(humanSource.checked){body.human_confirmed_source=true;body.human_reviewed_full_page=fullPage.checked;body.source_image_sha256=pg.data.image_sha256;}
+    const res=await api("POST",`/v1/claims/${S.claim.claim_id}/documents/${doc.value}/reading-confirmations`,{idem:true,ifMatch:true,body});
+    if(!res.ok){err.textContent=problemText(res);return;}say("Reading saved with source evidence; reprocessing.");await showClaim(S.claim.claim_id);
+  }},h("h3",{},"Confirm or enter a reading"),h("label",{},"Source document"),doc,h("label",{},"Correct document type"),dtype,h("label",{},"Page"),page,h("label",{},"Field"),path,h("label",{},"Line number (for bill lines)"),lineNo,h("label",{},"Value (dates YYYY-MM-DD) or line description"),value,h("label",{},"Line amount, when adding a bill line"),amount,h("label",{},"Exact quote from the page"),quote,h("label",{},humanSource,"I confirm this quote is visible on the source image (human transcription)"),sourceImage,selectionText,h("label",{},fullPage,"I reviewed the whole page for identity, date and amount conflicts"),h("button",{type:"submit",class:"btn small"},"Save grounded reading"),err);
+  return h("details",{},h("summary",{},"Manual reading"),form);
+}
+
+function newClaimForm(parent=null){
+ const wf=h('select',{'aria-label':'New claim workflow'},...(parent?['ENHANCEMENT','CASHLESS_DISCHARGE']:['IPD_REIMBURSEMENT','PREAUTH','CASHLESS_DISCHARGE','OPD_REIMBURSEMENT']).map(v=>h('option',{value:v},human(v))));
+ const ext=h('input',{required:true,'aria-label':'External claim reference'}),policy=h('input',{required:true,'aria-label':'Policy number',value:parent?.policy_no||''}),member=h('input',{required:true,'aria-label':'Member ID',value:parent?.member_id||''}),hospital=h('input',{'aria-label':'Hospital ID',value:parent?.hospital_id||''}),error=h('p',{role:'alert',class:'err'});
+ return h('details',{},h('summary',{},parent?'Continue cashless case':'Register a synthetic claim'),h('form',{class:'drawer',onsubmit:async e=>{e.preventDefault();const body={external_ref:ext.value,workflow:wf.value,policy_no:policy.value,member_id:member.value,hospital_id:hospital.value||null};if(parent)body.parent_claim_id=parent.claim_id;const r=await api('POST','/v1/claims',{idem:true,body});if(!r.ok){error.textContent=problemText(r);return;}location.hash=`#/claim/${r.data.claim_id}`;}},h('label',{},'Workflow'),wf,h('label',{},'External reference'),ext,h('label',{},'Policy'),policy,h('label',{},'Member'),member,h('label',{},'Hospital'),hospital,h('button',{class:'btn',type:'submit'},'Register claim'),error));
+}
+
+async function download(path){const r=await api('GET',path,{raw:true});if(!r.ok){say('Export failed: '+r.status);return;}const url=URL.createObjectURL(await r.blob());const a=h('a',{href:url,download:path.includes('pdf')?'query.pdf':path.includes('csv')?'claim.csv':'export.json'});a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+function queryHistory(){
+ const box=h('div',{},h('h3',{},'Saved query letters'));
+ api('GET',`/v1/claims/${S.claim.claim_id}/queries`).then(r=>{if(!r.ok){box.append(h('p',{class:'err'},problemText(r)));return;}for(const q of r.data.items){const panel=h('div',{class:'drawer'},h('h4',{},q.query_id+' · '+q.status+' · '+q.addressed_to),h('p',{},'Due '+when(q.due_at)+' · reminders '+q.reminder_count));
+ if(q.approved_by)panel.append(h('button',{class:'btn small',onclick:()=>download(`/v1/queries/${q.query_id}/letter?format=pdf`)},'Export approved letter PDF'),h('button',{class:'btn small',onclick:()=>download(`/v1/queries/${q.query_id}/letter`)},'Export approved letter JSON'));
+ for(const item of q.items){panel.append(h('p',{},item.text+' · '+item.status));if(item.status==='OPEN'&&['SENT','PARTIALLY_ANSWERED'].includes(q.status)&&can('PROCESSOR','MEDICAL_OFFICER','SUPERVISOR')){const doc=h('select',{'aria-label':'Reply evidence '+item.query_item_id},...S.docs.filter(d=>!['SUPERSEDED','QUARANTINED'].includes(d.status)).map(d=>h('option',{value:d.document_id},human(d.classified_type)+' · '+d.document_id)));panel.append(doc,h('button',{class:'btn small',onclick:async()=>{const a=await api('POST',`/v1/queries/${q.query_id}:answer`,{idem:true,body:{query_item_id:item.query_item_id,document_id:doc.value}});if(!a.ok){say(problemText(a));return;}await showClaim(S.claim.claim_id);}},'Record evidence reply'));}}
+ if(['SENT','PARTIALLY_ANSWERED'].includes(q.status)&&new Date(q.due_at)<new Date()&&can('PROCESSOR','MEDICAL_OFFICER','SUPERVISOR'))panel.append(h('button',{class:'btn small',onclick:async()=>{const r=await api('POST',`/v1/queries/${q.query_id}:remind`,{idem:true,body:{}});say(r.ok?'Local reminder recorded; no external message sent.':problemText(r));await showClaim(S.claim.claim_id);}},'Record local reminder'));box.append(panel);}
+ if(!r.data.items.length)box.append(h('p',{},'No saved query letters.'));});return box;
+}
+function claimOperations(){const box=h('div',{class:'drawer'},h('h3',{},'Local operations'));box.append(h('button',{class:'btn small',onclick:()=>download(`/v1/claims/${S.claim.claim_id}/export`)},'Export claim JSON'),h('button',{class:'btn small',onclick:()=>download(`/v1/claims/${S.claim.claim_id}/export?format=csv`)},'Export claim CSV'));if(can('SUPERVISOR','AUDITOR'))box.append(h('button',{class:'btn small',onclick:()=>download(`/v1/claims/${S.claim.claim_id}/audit-export`)},'Export audit JSON'));
+ if(can('SUPERVISOR')&&!['FINALISED','EXPORTED','WITHDRAWN'].includes(S.claim.status)){const users=h('select',{'aria-label':'Assign reviewer'},...S.users.filter(u=>u.roles.some(r=>['PROCESSOR','MEDICAL_OFFICER','SUPERVISOR'].includes(r))).map(u=>h('option',{value:u.user_id},u.user_id+' · '+u.display_name)));box.append(users,h('button',{class:'btn small',onclick:async()=>{const r=await api('POST',`/v1/claims/${S.claim.claim_id}:assign`,{idem:true,ifMatch:true,body:{assignee_user_id:users.value}});if(!r.ok){say(problemText(r));return;}await showClaim(S.claim.claim_id);}},'Assign claim'));}
+ api('GET',`/v1/claims/${S.claim.claim_id}/jobs`).then(r=>{if(r.ok)box.append(h('details',{},h('summary',{},'Worker status'),h('pre',{},JSON.stringify(r.data.items,null,2))));});return box;}

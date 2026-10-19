@@ -4,20 +4,22 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta, timezone
 
+from .errors import AppError
 from . import audit
 from .auth import Principal
 from .db import Conn
 from .ids import new_id
 
 
-class QueryError(Exception):
-    def __init__(self, status: int, code: str, message: str):
-        super().__init__(message)
-        self.status, self.code = status, code
+class QueryError(AppError):
+    pass
 
 
 def draft_from_evaluation(conn: Conn, p: Principal, claim_id: str, evaluation_id: str, edits: dict | None = None) -> list[dict]:
     p.require("query.draft")
+    claim=conn.fetch_one("SELECT status FROM claim WHERE tenant_id=$1 AND claim_id=$2 FOR UPDATE",p.tenant_id,claim_id)
+    if not claim:raise QueryError(404,"claim-not-found","claim not found")
+    if claim["status"] in ("FINALISED","EXPORTED","WITHDRAWN"):raise QueryError(409,"claim-closed","reopen before drafting a query")
     ev = conn.fetch_one("SELECT result FROM evaluation WHERE tenant_id=$1 AND evaluation_id=$2 AND claim_id=$3", p.tenant_id, evaluation_id, claim_id)
     if not ev:
         raise QueryError(404, "evaluation-not-found", "evaluation not found")
@@ -51,6 +53,10 @@ def draft_from_evaluation(conn: Conn, p: Principal, claim_id: str, evaluation_id
 
 def approve(conn: Conn, p: Principal, query_id: str) -> dict:
     p.require("query.approve")
+    ref=conn.fetch_one("SELECT claim_id FROM query_letter WHERE tenant_id=$1 AND query_id=$2",p.tenant_id,query_id)
+    if ref:
+        claim=conn.fetch_one("SELECT status FROM claim WHERE tenant_id=$1 AND claim_id=$2 FOR UPDATE",p.tenant_id,ref["claim_id"])
+        if claim["status"] in ("FINALISED","EXPORTED","WITHDRAWN"):raise QueryError(409,"claim-closed","reopen before releasing a query")
     q = conn.fetch_one("SELECT * FROM query_letter WHERE tenant_id=$1 AND query_id=$2 FOR UPDATE", p.tenant_id, query_id)
     if not q:
         raise QueryError(404, "query-not-found", "query not found")

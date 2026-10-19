@@ -29,10 +29,8 @@ def build(settings: Settings) -> AppContext:
     store = LocalWormStore(settings.object_store_dir)
     if settings.extraction_provider == "fixture":
         provider: ExtractionProvider = FixtureProvider(settings.fixture_dir or Path("."))
-    elif settings.extraction_provider == "bedrock":  # pragma: no cover
-        import os
-        provider = BedrockClaudeProvider(os.environ["AW_BEDROCK_MODEL_ID"], os.environ.get("AW_BEDROCK_REGION", "ap-south-1"),
-                                         settings.pack_dir / "schemas" / "extraction-output.schema.json")
+    elif settings.extraction_provider not in ("heuristic", "layout"):
+        raise RuntimeError("Hosted/model extraction is disabled in this local product; use layout, heuristic or fixture")
     else:
         provider = HeuristicProvider()
     return AppContext(settings, db, worker_db, store, provider)

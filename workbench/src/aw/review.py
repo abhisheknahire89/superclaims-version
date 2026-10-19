@@ -10,6 +10,7 @@ from __future__ import annotations
 from collections import Counter
 from decimal import Decimal
 
+from .errors import AppError
 from . import audit, jobs
 from .auth import Forbidden, Principal
 from .db import Conn, Json
@@ -27,10 +28,8 @@ CORRECTABLE = {"admission.date", "discharge.date", "bill.number", "bill.total", 
                "history.past_illness_text"}
 
 
-class ReviewError(Exception):
-    def __init__(self, status: int, code: str, message: str):
-        super().__init__(message)
-        self.status, self.code = status, code
+class ReviewError(AppError):
+    pass
 
 
 def _record(conn: Conn, p: Principal, claim_id: str, action: str, target: dict, before, after, reason_code: str, comment: str | None,
@@ -72,6 +71,10 @@ def record(conn: Conn, p: Principal, claim_id: str, body: dict) -> dict:
     claim = conn.fetch_one("SELECT * FROM claim WHERE tenant_id=$1 AND claim_id=$2 FOR UPDATE", p.tenant_id, claim_id)
     if not claim:
         raise ReviewError(404, "claim-not-found", "claim not found")
+    if claim["status"] in ("FINALISED","EXPORTED","WITHDRAWN"):
+        raise ReviewError(409,"claim-closed","reopen the claim before changing its review")
+    if body.get("evaluation_id") and body["evaluation_id"]!=claim["current_evaluation_id"]:
+        raise ReviewError(409,"stale-evaluation","review the current evaluation")
     action, target = body["action"], body["target"]
     after, reason, comment = body.get("after_value") or {}, body["reason_code"], body.get("comment")
     eval_id = body.get("evaluation_id") or claim["current_evaluation_id"]
@@ -97,7 +100,10 @@ def _resolve(conn, p, claim, target, after, reason, comment, eval_id, basis: str
         if after.get("evidence_fact_id"):
             sources = sorted(set(sources) | {after["evidence_fact_id"]})
     else:
-        sources = []
+        sources = [f["fact_id"] for f in obs if str(f["normalised_value"]) == value]
+    valid_sources = {f["fact_id"] for f in obs if str(f["normalised_value"]) == value}
+    if not sources or not set(sources) <= valid_sources:
+        raise ReviewError(422, "ungrounded-correction", "choose a grounded source value or enter a reading with a source page quote")
     current = conn.fetch_one("SELECT * FROM resolved_fact WHERE tenant_id=$1 AND claim_id=$2 AND field_path=$3 AND is_active",
                              p.tenant_id, claim["claim_id"], field)
     ra = _record(conn, p, claim["claim_id"], "RESOLVE_CONFLICT" if basis == "REVIEWER_SELECTED" else "CORRECT_FACT", target,

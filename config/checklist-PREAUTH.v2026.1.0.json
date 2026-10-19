@@ -1,0 +1,21 @@
+{
+  "checklist_id": "CHECKLIST-PREAUTH",
+  "checklist_version": "2026.1.0",
+  "status": "ILLUSTRATIVE",
+  "workflow": "PREAUTH",
+  "illustrative_notice": "Illustrative document checklist for IPD reimbursement. The customer's claims manual defines the real list.",
+  "items": [
+    {
+      "type": "PREAUTH_REQUEST",
+      "label": "Preauth Request",
+      "default_addressee": "HOSPITAL",
+      "blocking": true
+    },
+    {
+      "type": "ESTIMATE_BILL",
+      "label": "Estimate Bill",
+      "default_addressee": "HOSPITAL",
+      "blocking": true
+    }
+  ]
+}

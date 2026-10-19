@@ -1,0 +1,20 @@
+test_all_kinds_replay_without_persistence (tests.test_config_admin.ConfigReplay.test_all_kinds_replay_without_persistence) ... ok
+test_draft_validate_replay_four_eyes_publish_and_reevaluate (tests.test_config_admin.ConfigReplay.test_draft_validate_replay_four_eyes_publish_and_reevaluate) ... FAIL
+test_package_consumes_components_without_tariff_double_deduction (tests.test_config_admin.OrderingAndCatalogue.test_package_consumes_components_without_tariff_double_deduction) ... ok
+test_review_catalogue_never_automatically_denies (tests.test_config_admin.OrderingAndCatalogue.test_review_catalogue_never_automatically_denies) ... ok
+test_unsafe_order_fails_and_safe_order_is_used (tests.test_config_admin.OrderingAndCatalogue.test_unsafe_order_fails_and_safe_order_is_used) ... ok
+test_csv_xlsx_exact_money_and_formula_rejection (tests.test_config_admin.PatchImports.test_csv_xlsx_exact_money_and_formula_rejection) ... ok
+
+======================================================================
+FAIL: test_draft_validate_replay_four_eyes_publish_and_reevaluate (tests.test_config_admin.ConfigReplay.test_draft_validate_replay_four_eyes_publish_and_reevaluate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/tests/test_config_admin.py", line 54, in test_draft_validate_replay_four_eyes_publish_and_reevaluate
+    self.worker.drain();self.assertEqual(self.current('CLM-CONFIG-PUBLISH')['recommended_payable_paise'],10749100)
+                        ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 10759100 != 10749100
+
+----------------------------------------------------------------------
+Ran 6 tests in 1.517s
+
+FAILED (failures=1)

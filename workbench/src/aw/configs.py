@@ -47,7 +47,12 @@ def validate(schema_dir: Path, kind: str, body: dict) -> list[str]:
     if kind not in KINDS:
         return [f"unknown artifact kind {kind}"]
     v = _validator(str(schema_dir), KINDS[kind][2])
-    return [f"/{'/'.join(map(str, e.path))}: {e.message}" for e in v.iter_errors(body)]
+    errors=[f"/{'/'.join(map(str, e.path))}: {e.message}" for e in v.iter_errors(body)]
+    if kind=='POLICY_CONFIG':
+        from .engine.core import validate_order
+        try: validate_order(body.get('calculation_order',[]))
+        except Exception as e: errors.append(str(e))
+    return errors
 
 
 def identity(kind: str, body: dict) -> tuple[str, str]:
@@ -58,6 +63,10 @@ def identity(kind: str, body: dict) -> tuple[str, str]:
 def create_draft(conn: Conn, schema_dir: Path, tenant_id: str, kind: str, body: dict, authored_by: str | None,
                  effective_from: date, effective_to: date | None = None, source_documents: list | None = None) -> dict:
     errs = validate(schema_dir, kind, body)
+    if effective_to and effective_to < effective_from:
+        errs.append('effective_to precedes effective_from')
+    if body.get('effective_from') and body['effective_from'] != effective_from.isoformat():
+        errs.append('body effective_from must match version effective_from')
     if errs:
         raise ConfigError("configuration failed schema validation", errs)
     artifact_id, version = identity(kind, body)
@@ -77,6 +86,7 @@ def create_draft(conn: Conn, schema_dir: Path, tenant_id: str, kind: str, body: 
 
 
 def publish(conn: Conn, tenant_id: str, artifact_id: str, version: str, approver: str) -> dict:
+    conn.execute('SELECT pg_advisory_xact_lock(hashtext($1))',tenant_id+':config:'+artifact_id)
     row = conn.fetch_one("SELECT status, authored_by, artifact_kind, effective_from, effective_to, body FROM config_artifact"
                          " WHERE tenant_id=$1 AND artifact_id=$2 AND version=$3 FOR UPDATE", tenant_id, artifact_id, version)
     if not row:

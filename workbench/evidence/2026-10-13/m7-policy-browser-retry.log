@@ -1,0 +1,39 @@
+Traceback (most recent call last):
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/tests/policy_ui.py", line 22, in <module>
+    login('CFG-01');choose('Downloaded research candidate','public · NIVA · ReAssure');result=act('Intake candidate');public_sid=result['source_id'];p.get_by_label('Policy source').select_option(public_sid)
+    ~~~~~^^^^^^^^^^
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/tests/policy_ui.py", line 15, in login
+    p.get_by_role('button',name=user).click();expect(p.locator('#who')).not_to_contain_text('Not signed in');p.goto(url+'/#/policy');expect(p.get_by_label('Downloaded research candidate').locator('option')).not_to_have_count(0)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/lib/python3.13/site-packages/playwright/sync_api/_generated.py", line 18032, in click
+    self._sync(
+    ~~~~~~~~~~^
+        self._impl_obj.click(
+        ^^^^^^^^^^^^^^^^^^^^^
+    ...<11 lines>...
+        )
+        ^
+    )
+    ^
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/lib/python3.13/site-packages/playwright/_impl/_sync_base.py", line 113, in _sync
+    self._dispatcher_fiber.switch()
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/lib/python3.13/site-packages/playwright/sync_api/_context_manager.py", line 55, in greenlet_main
+    self._loop.run_until_complete(self._connection.run_as_sync())
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.15/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 713, in run_until_complete
+    self.run_forever()
+    ~~~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.15/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 684, in run_forever
+    self._run_once()
+    ~~~~~~~~~~~~~~^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.15/Frameworks/Python.framework/Versions/3.13/lib/python3.13/asyncio/base_events.py", line 2023, in _run_once
+    event_list = self._selector.select(timeout)
+  File "/opt/homebrew/Cellar/python@3.13/3.13.15/Frameworks/Python.framework/Versions/3.13/lib/python3.13/selectors.py", line 548, in select
+    kev_list = self._selector.control(None, max_ev, timeout)
+KeyboardInterrupt
+Future exception was never retrieved
+future: <Future finished exception=TargetClosedError('Target page, context or browser has been closed')>
+playwright._impl._errors.TargetClosedError: Target page, context or browser has been closed
+Task was destroyed but it is pending!
+task: <Task cancelling name='Task-8' coro=<Locator.click() running at /Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/lib/python3.13/site-packages/playwright/_impl/_locator.py:165> wait_for=<Future finished result=None> cb=[SyncBase._sync.<locals>.<lambda>() at /Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/lib/python3.13/site-packages/playwright/_impl/_sync_base.py:111]>

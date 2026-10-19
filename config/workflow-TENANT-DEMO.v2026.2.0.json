@@ -1,0 +1,64 @@
+{
+  "workflow_config_id": "WFCFG-TENANT-DEMO",
+  "version": "2026.2.0",
+  "status": "ILLUSTRATIVE",
+  "illustrative_notice": "Illustrative tenant workflow settings; every value is a customer decision.",
+  "approval": {
+    "second_approval_required_when": [
+      {
+        "rule": "PAYABLE_ABOVE_APPROVER_LIMIT"
+      },
+      {
+        "rule": "DEVIATION_FROM_RECOMMENDATION_ABOVE",
+        "amount": "5000.00"
+      },
+      {
+        "rule": "TOTAL_DEDUCTIONS_ABOVE_SHARE_OF_BILLED",
+        "percent": "30.0"
+      }
+    ],
+    "illustrative_limits": {
+      "PROC-07": "150000.00",
+      "PROC-11": "100000.00",
+      "SUP-02": "500000.00"
+    }
+  },
+  "repudiation": {
+    "tenant_kind": "TPA",
+    "behaviour": "RECORD_INSURER_OUTCOME_ONLY",
+    "note": "A TPA cannot itself repudiate; it records the insurer's CRC outcome with reference and does not issue the repudiation letter (E-REG-04)."
+  },
+  "queries": {
+    "approval_required": true,
+    "reminder_days": [
+      7,
+      14
+    ],
+    "auto_close": false
+  },
+  "tat": {
+    "IPD_REIMBURSEMENT": {
+      "clock_start": "FIRST_SUBMISSION",
+      "due_days": 15,
+      "interest_from": "INTIMATION",
+      "pause_on_query": "UNRESOLVED_OQ_21"
+    },
+    "CASHLESS_DISCHARGE": {
+      "clock_start": "DISCHARGE_REQUEST_RECEIVED",
+      "due_minutes": 180
+    },
+    "PREAUTH": {
+      "clock_start": "PREAUTH_REQUEST_RECEIVED",
+      "due_minutes": 60
+    },
+    "ENHANCEMENT": {
+      "clock_start": "ENHANCEMENT_REQUEST_RECEIVED",
+      "due_minutes": 60
+    },
+    "OPD_REIMBURSEMENT": {
+      "clock_start": "FIRST_SUBMISSION",
+      "due_days": 15
+    }
+  },
+  "effective_from": "2026-10-12"
+}

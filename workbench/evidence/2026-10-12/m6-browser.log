@@ -1,0 +1,22 @@
+PYTHONPATH=src:tests /Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/bin/python tests/e2e.py e2e-shots
+Browser flow: reviewer_ui.py
+{"case": "TC-UX-02", "synthetic_only": true, "condition": "same loaded page, warm browser cache, localhost Chromium", "samples_ms": [16.199999928474426, 16.09999990463257, 17.100000023841858, 17, 17, 16.399999976158142, 17, 16, 16, 17.699999928474426], "max_ms": 17.699999928474426, "mean_ms": 16.649999976158142, "override_status": 201, "page_errors": []}
+Browser flow: ui_smoke.py
+screenshots in e2e-shots; 0 problem(s)
+Browser flow: manual_ui.py
+manual reading UI: grounded source and explicit human whole-page attestation saved (201)
+Browser flow: operations_ui.py
+Traceback (most recent call last):
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/tests/operations_ui.py", line 23, in <module>
+    assert not errors,errors;b.close();print('operations UI: assignment, filters, KPIs, approved PDF download, evidence reply, audited user creation;0 page errors')
+           ^^^^^^^^^^
+AssertionError: ["Cannot read properties of null (reading 'user_id')"]
+Traceback (most recent call last):
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/tests/e2e.py", line 9, in <module>
+    print('Browser flow:',name,flush=True);subprocess.run([sys.executable,str(root/'tests'/name),*args],cwd=root,check=True)
+                                           ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/homebrew/Cellar/python@3.13/3.13.15/Frameworks/Python.framework/Versions/3.13/lib/python3.13/subprocess.py", line 577, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/bin/python', '/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/tests/operations_ui.py']' returned non-zero exit status 1.
+make: *** [e2e] Error 1

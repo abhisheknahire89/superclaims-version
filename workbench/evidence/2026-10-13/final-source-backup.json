@@ -1,0 +1,7 @@
+{
+  "archive": "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.backups/policy-intelligence-source-2026-10-13/source-final.tar.gz",
+  "sha256": "91c4ae6e7f309ef0974552d85f17b1e44e878b5cdfc3178c55b6f115a461a074",
+  "files": 230,
+  "original_head": "6bba0ddf48be5b2b738bcec6ca54252f7da39525",
+  "excluded": "secrets, runtime/data, evidence; public sources separately backed up"
+}

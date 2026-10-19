@@ -1,0 +1,101 @@
+Traceback (most recent call last):
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/tests/workflow_ui.py", line 5, in <module>
+    b=pw.chromium.launch();p=b.new_page(viewport={'width':1500,'height':1100});p.goto(base+'/#/login');p.get_by_role('button',name='PROC-07').click();expect(p.locator('#who')).to_contain_text('Processor')
+                                                                                                                                                      ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/lib/python3.13/site-packages/playwright/sync_api/_generated.py", line 22185, in to_contain_text
+    self._sync(
+    ~~~~~~~~~~^
+        self._impl_obj.to_contain_text(
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<4 lines>...
+        )
+        ^
+    )
+    ^
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/lib/python3.13/site-packages/playwright/_impl/_sync_base.py", line 115, in _sync
+    return task.result()
+           ~~~~~~~~~~~^^
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/lib/python3.13/site-packages/playwright/_impl/_assertions.py", line 303, in to_contain_text
+    await self._expect_impl(
+    ...<9 lines>...
+    )
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/lib/python3.13/site-packages/playwright/_impl/_assertions.py", line 128, in _expect_impl
+    _record_soft_or_raise(
+    ~~~~~~~~~~~~~~~~~~~~~^
+        AssertionError(
+        ^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        self._is_soft,
+        ^^^^^^^^^^^^^^
+    )
+    ^
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/lib/python3.13/site-packages/playwright/_impl/_assertions.py", line 60, in _record_soft_or_raise
+    raise error
+AssertionError: Locator expected to contain text 'Processor'
+Actual value:  
+Call log:
+  - Expect "to_contain_text" locator("#who") with timeout 5000ms
+  - waiting for locator("#who")
+    14 × locator resolved to <div id="who" class="who"></div>
+       - unexpected value ""
+
+Aria snapshot:
+- link "Skip to content":
+  - /url: "#app"
+- note: Development build · synthetic data only · every decision is made by a person
+- banner:
+  - text: Adjudication Workbench
+  - navigation "Main":
+    - link "Work queue":
+      - /url: "#/queue"
+    - link "Configuration":
+      - /url: "#/config"
+- text: Not Found
+- main:
+  - region "Sign in (development)":
+    - heading "Sign in (development)" [level=1]
+    - paragraph: Development sign-in for the synthetic demo tenant. Production uses your organisation's single sign-on; roles and approval limits always come from the server.
+    - text: Password
+    - textbox "Password": Synthetic-demo-2026!
+    - paragraph: "Synthetic demo password: Synthetic-demo-2026!"
+    - list:
+      - listitem:
+        - button "ADM-01 · Tenant admin 01 (synthetic) TENANT_ADMIN":
+          - strong: ADM-01
+          - text: · Tenant admin 01 (synthetic) TENANT_ADMIN
+      - listitem:
+        - button "AUD-01 · Auditor 01 (synthetic) AUDITOR":
+          - strong: AUD-01
+          - text: · Auditor 01 (synthetic) AUDITOR
+      - listitem:
+        - button "CFG-01 · Config admin 01 (synthetic) CONFIG_ADMIN":
+          - strong: CFG-01
+          - text: · Config admin 01 (synthetic) CONFIG_ADMIN
+      - listitem:
+        - button "FWA-01 · FWA analyst 01 (synthetic) FWA_ANALYST":
+          - strong: FWA-01
+          - text: · FWA analyst 01 (synthetic) FWA_ANALYST
+      - listitem:
+        - button "MO-01 · Medical officer 01 (synthetic) MEDICAL_OFFICER":
+          - strong: MO-01
+          - text: · Medical officer 01 (synthetic) MEDICAL_OFFICER
+      - listitem:
+        - button "PROC-04 · Processor 04 (synthetic) PROCESSOR":
+          - strong: PROC-04
+          - text: · Processor 04 (synthetic) PROCESSOR
+      - listitem:
+        - button "PROC-07 · Processor 07 (synthetic) PROCESSOR":
+          - strong: PROC-07
+          - text: · Processor 07 (synthetic) PROCESSOR
+      - listitem:
+        - button "PROC-11 · Processor 11 (synthetic) PROCESSOR":
+          - strong: PROC-11
+          - text: · Processor 11 (synthetic) PROCESSOR
+      - listitem:
+        - button "RO-01 · Insurer liaison (read-only, synthetic) READ_ONLY":
+          - strong: RO-01
+          - text: · Insurer liaison (read-only, synthetic) READ_ONLY
+      - listitem:
+        - button "SUP-02 · Supervisor 02 (synthetic) SUPERVISOR":
+          - strong: SUP-02
+          - text: · Supervisor 02 (synthetic) SUPERVISOR

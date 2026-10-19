@@ -1,0 +1,12 @@
+Browser flow: reviewer_ui.py
+{"case": "TC-UX-02", "synthetic_only": true, "condition": "same loaded page, warm browser cache, localhost Chromium", "samples_ms": [17.399999976158142, 16.700000047683716, 15.199999928474426, 17, 17, 17.200000047683716, 17.100000023841858, 17.399999976158142, 17.199999928474426, 17.399999976158142], "max_ms": 17.399999976158142, "mean_ms": 16.959999990463256, "override_status": 201, "page_errors": []}
+Browser flow: ui_smoke.py
+screenshots in evidence/2026-10-13/regression-browser; 0 problem(s)
+Browser flow: manual_ui.py
+manual reading UI: grounded source and explicit human whole-page attestation saved (201)
+Browser flow: operations_ui.py
+operations UI: assignment, filters, KPIs, approved PDF download, evidence reply, audited user creation;0 page errors
+Browser flow: workflow_ui.py
+4 workflow browser reviews and human decisions passed; linked enhancement registration201;9 screenshots
+Browser flow: config_ui.py
+config UI: draft/validate/replay/self-publish blocked/second administrator publish passed

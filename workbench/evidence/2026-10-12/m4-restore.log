@@ -1,0 +1,50 @@
+{
+  "database": "aw_restore_1791823770",
+  "object_dir": "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.backups/1791823712/restored-objects",
+  "claims": 8,
+  "documents": 32,
+  "decisions": 5,
+  "audit_chains": [
+    {
+      "claim_id": "CLM-01a131035c037912aa545a7c5fc39500",
+      "events": 1,
+      "verified": true
+    },
+    {
+      "claim_id": "CLM-DEMO-0001",
+      "events": 95,
+      "verified": true
+    },
+    {
+      "claim_id": "CLM-DEMO-0002",
+      "events": 57,
+      "verified": true
+    },
+    {
+      "claim_id": "CLM-DEMO-0003",
+      "events": 43,
+      "verified": true
+    },
+    {
+      "claim_id": "CLM-DEMO-0088",
+      "events": 0,
+      "verified": true
+    },
+    {
+      "claim_id": "CLM-DEMO-DISCHARGE",
+      "events": 31,
+      "verified": true
+    },
+    {
+      "claim_id": "CLM-DEMO-OPD",
+      "events": 34,
+      "verified": true
+    },
+    {
+      "claim_id": "CLM-DEMO-PREAUTH",
+      "events": 31,
+      "verified": true
+    }
+  ],
+  "manifest_verified": true
+}

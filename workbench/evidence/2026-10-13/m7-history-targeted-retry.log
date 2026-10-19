@@ -1,0 +1,13 @@
+======================================================================
+FAIL: test_remediation_rolls_back_without_touching_shared_journal (tests.test_policy_intelligence.ProductHistoryReview.test_remediation_rolls_back_without_touching_shared_journal)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/tests/test_policy_intelligence.py", line 241, in test_remediation_rolls_back_without_touching_shared_journal
+    with self.db.tenant_tx('TENANT-DEMO') as c:self.assertEqual(c.fetch_val("SELECT count(*) FROM policy_knowledge_record WHERE kind='ResearchRemediation'"),0)
+                                               ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 2 != 0
+
+----------------------------------------------------------------------
+Ran 3 tests in 1.737s
+
+FAILED (failures=1)

@@ -1,0 +1,13 @@
+======================================================================
+FAIL: test_four_eyes_order_immutable_rule_and_role_guards (tests.test_policy_intelligence.RuleLifecycle.test_four_eyes_order_immutable_rule_and_role_guards)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/tests/test_policy_intelligence.py", line 129, in test_four_eyes_order_immutable_rule_and_role_guards
+    self.assertEqual(client.post('/v1/policy-intelligence/actions',headers=h,json_body={'action':'publish_rule','target':key}).status,403)
+    ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 401 != 403
+
+----------------------------------------------------------------------
+Ran 16 tests in 5.437s
+
+FAILED (failures=1)

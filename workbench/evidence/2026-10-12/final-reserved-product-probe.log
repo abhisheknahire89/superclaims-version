@@ -1,0 +1,447 @@
+{
+  "synthetic_only": true,
+  "isolated_database": true,
+  "scope": "Bounded synthetic native-PDF bundles; not an extraction accuracy estimate",
+  "claims": [
+    {
+      "claim_id": "CLM-FINAL-05-01",
+      "documents": 4,
+      "duplicate_uploads": 1,
+      "stored_documents": 3,
+      "jobs_drained": 7,
+      "document_statuses": [
+        {
+          "classified_type": "FINAL_BILL_SUMMARY",
+          "status": "NEEDS_REVIEW"
+        },
+        {
+          "classified_type": "OTHER",
+          "status": "EXTRACTED"
+        },
+        {
+          "classified_type": "OTHER",
+          "status": "EXTRACTED"
+        }
+      ],
+      "non_success_jobs": [],
+      "evaluation_status": "BLOCKED",
+      "recommendation": {
+        "type": "QUERY",
+        "computed": false,
+        "billed_total": "0.00",
+        "blocked_scopes": [
+          "ALL_FINANCIAL",
+          "LINE_RULES"
+        ],
+        "bill_stated_total": null,
+        "recommended_payable": null,
+        "line_level_deductions": "0.00",
+        "claim_level_deductions": "0.00",
+        "human_decision_required": true,
+        "itemised_lines_available": false,
+        "admissible_after_line_rules": null
+      },
+      "findings": [
+        {
+          "kind": "DOCUMENT_READING_UNCONFIRMED",
+          "blocking": true
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": true
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        }
+      ],
+      "attempted_approval_result": "evaluation-blocked",
+      "persisted_decisions": 0
+    },
+    {
+      "claim_id": "CLM-FINAL-06-01",
+      "documents": 4,
+      "duplicate_uploads": 1,
+      "stored_documents": 3,
+      "jobs_drained": 7,
+      "document_statuses": [
+        {
+          "classified_type": "FINAL_BILL_SUMMARY",
+          "status": "NEEDS_REVIEW"
+        },
+        {
+          "classified_type": "OTHER",
+          "status": "EXTRACTED"
+        },
+        {
+          "classified_type": "OTHER",
+          "status": "EXTRACTED"
+        }
+      ],
+      "non_success_jobs": [],
+      "evaluation_status": "BLOCKED",
+      "recommendation": {
+        "type": "QUERY",
+        "computed": false,
+        "billed_total": "0.00",
+        "blocked_scopes": [
+          "ALL_FINANCIAL",
+          "LINE_RULES"
+        ],
+        "bill_stated_total": null,
+        "recommended_payable": null,
+        "line_level_deductions": "0.00",
+        "claim_level_deductions": "0.00",
+        "human_decision_required": true,
+        "itemised_lines_available": false,
+        "admissible_after_line_rules": null
+      },
+      "findings": [
+        {
+          "kind": "DOCUMENT_READING_UNCONFIRMED",
+          "blocking": true
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": true
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        }
+      ],
+      "attempted_approval_result": "evaluation-blocked",
+      "persisted_decisions": 0
+    },
+    {
+      "claim_id": "CLM-FINAL-05-02",
+      "documents": 2,
+      "duplicate_uploads": 0,
+      "stored_documents": 2,
+      "jobs_drained": 5,
+      "document_statuses": [
+        {
+          "classified_type": "FINAL_BILL_SUMMARY",
+          "status": "NEEDS_REVIEW"
+        },
+        {
+          "classified_type": "OTHER",
+          "status": "EXTRACTED"
+        }
+      ],
+      "non_success_jobs": [],
+      "evaluation_status": "BLOCKED",
+      "recommendation": {
+        "type": "QUERY",
+        "computed": false,
+        "billed_total": "0.00",
+        "blocked_scopes": [
+          "ALL_FINANCIAL",
+          "LINE_RULES"
+        ],
+        "bill_stated_total": null,
+        "recommended_payable": null,
+        "line_level_deductions": "0.00",
+        "claim_level_deductions": "0.00",
+        "human_decision_required": true,
+        "itemised_lines_available": false,
+        "admissible_after_line_rules": null
+      },
+      "findings": [
+        {
+          "kind": "DOCUMENT_READING_UNCONFIRMED",
+          "blocking": true
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": true
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        }
+      ],
+      "attempted_approval_result": "evaluation-blocked",
+      "persisted_decisions": 0
+    },
+    {
+      "claim_id": "CLM-FINAL-06-02",
+      "documents": 2,
+      "duplicate_uploads": 0,
+      "stored_documents": 2,
+      "jobs_drained": 5,
+      "document_statuses": [
+        {
+          "classified_type": "FINAL_BILL_SUMMARY",
+          "status": "NEEDS_REVIEW"
+        },
+        {
+          "classified_type": "OTHER",
+          "status": "EXTRACTED"
+        }
+      ],
+      "non_success_jobs": [],
+      "evaluation_status": "BLOCKED",
+      "recommendation": {
+        "type": "QUERY",
+        "computed": false,
+        "billed_total": "0.00",
+        "blocked_scopes": [
+          "ALL_FINANCIAL",
+          "LINE_RULES"
+        ],
+        "bill_stated_total": null,
+        "recommended_payable": null,
+        "line_level_deductions": "0.00",
+        "claim_level_deductions": "0.00",
+        "human_decision_required": true,
+        "itemised_lines_available": false,
+        "admissible_after_line_rules": null
+      },
+      "findings": [
+        {
+          "kind": "DOCUMENT_READING_UNCONFIRMED",
+          "blocking": true
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": true
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "POSSIBLE_DUPLICATE_CLAIM",
+          "blocking": false
+        }
+      ],
+      "attempted_approval_result": "evaluation-blocked",
+      "persisted_decisions": 0
+    },
+    {
+      "claim_id": "CLM-FINAL-05-03",
+      "documents": 3,
+      "duplicate_uploads": 0,
+      "stored_documents": 3,
+      "jobs_drained": 7,
+      "document_statuses": [
+        {
+          "classified_type": "FINAL_BILL_SUMMARY",
+          "status": "NEEDS_REVIEW"
+        },
+        {
+          "classified_type": "OTHER",
+          "status": "EXTRACTED"
+        },
+        {
+          "classified_type": "OTHER",
+          "status": "EXTRACTED"
+        }
+      ],
+      "non_success_jobs": [],
+      "evaluation_status": "BLOCKED",
+      "recommendation": {
+        "type": "QUERY",
+        "computed": false,
+        "billed_total": "0.00",
+        "blocked_scopes": [
+          "ALL_FINANCIAL",
+          "LINE_RULES"
+        ],
+        "bill_stated_total": null,
+        "recommended_payable": null,
+        "line_level_deductions": "0.00",
+        "claim_level_deductions": "0.00",
+        "human_decision_required": true,
+        "itemised_lines_available": false,
+        "admissible_after_line_rules": null
+      },
+      "findings": [
+        {
+          "kind": "DOCUMENT_READING_UNCONFIRMED",
+          "blocking": true
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": true
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        }
+      ],
+      "attempted_approval_result": "evaluation-blocked",
+      "persisted_decisions": 0
+    },
+    {
+      "claim_id": "CLM-FINAL-06-03",
+      "documents": 3,
+      "duplicate_uploads": 0,
+      "stored_documents": 3,
+      "jobs_drained": 7,
+      "document_statuses": [
+        {
+          "classified_type": "FINAL_BILL_SUMMARY",
+          "status": "NEEDS_REVIEW"
+        },
+        {
+          "classified_type": "OTHER",
+          "status": "EXTRACTED"
+        },
+        {
+          "classified_type": "OTHER",
+          "status": "EXTRACTED"
+        }
+      ],
+      "non_success_jobs": [],
+      "evaluation_status": "BLOCKED",
+      "recommendation": {
+        "type": "QUERY",
+        "computed": false,
+        "billed_total": "0.00",
+        "blocked_scopes": [
+          "ALL_FINANCIAL",
+          "LINE_RULES"
+        ],
+        "bill_stated_total": null,
+        "recommended_payable": null,
+        "line_level_deductions": "0.00",
+        "claim_level_deductions": "0.00",
+        "human_decision_required": true,
+        "itemised_lines_available": false,
+        "admissible_after_line_rules": null
+      },
+      "findings": [
+        {
+          "kind": "DOCUMENT_READING_UNCONFIRMED",
+          "blocking": true
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": true
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "DOCUMENT_INCOMPLETE",
+          "blocking": false
+        },
+        {
+          "kind": "POSSIBLE_DUPLICATE_CLAIM",
+          "blocking": false
+        },
+        {
+          "kind": "POSSIBLE_DUPLICATE_CLAIM",
+          "blocking": false
+        }
+      ],
+      "attempted_approval_result": "evaluation-blocked",
+      "persisted_decisions": 0
+    }
+  ],
+  "counts": {
+    "claims": 6,
+    "documents": 18,
+    "blocked": 6,
+    "approvals_refused": 6,
+    "decisions": 0,
+    "duplicate_uploads": 2,
+    "stored_documents": 16
+  },
+  "result": "PASS"
+}

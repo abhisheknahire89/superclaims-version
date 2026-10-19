@@ -1,0 +1,8 @@
+test_assignment_dashboard_exports (tests.test_operations.Operations.test_assignment_dashboard_exports) ... ok
+test_query_unapproved_export_reply_and_nonresponse (tests.test_operations.Operations.test_query_unapproved_export_reply_and_nonresponse) ... ok
+test_user_admin_last_supervisor_and_audit_rls (tests.test_operations.Operations.test_user_admin_last_supervisor_and_audit_rls) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 1.762s
+
+OK

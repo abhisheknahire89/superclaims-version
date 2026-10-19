@@ -1,0 +1,13 @@
+{
+  "checkout": "/tmp/aw-m7-clean-checkout",
+  "commit": "a0d595320257732e2fdbba7e1e0b3649844a751a",
+  "clean_status": "",
+  "dependencies": "existing installed local venv reused; no network installer",
+  "tests_per_driver": 89,
+  "pack_contracts": 59,
+  "mutation_catches": 8,
+  "property_cases": 3000,
+  "startup_ready": true,
+  "demo_exact_traces_passed": true,
+  "dependency_symlink": "local verification-only .git/info/exclude; no source change"
+}

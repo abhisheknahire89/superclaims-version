@@ -1,0 +1,36 @@
+AW_ENV=test AW_REQUIRE_DB=1 PYTHONPATH=src:tests /Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/bin/python -m unittest discover -s tests -p 'test_*.py' -t . -v
+test_contract_validation_permissions_and_isolation (tests.test_api.ApiFlow.test_contract_validation_permissions_and_isolation) ... ok
+test_full_flow_claim_1_and_2 (tests.test_api.ApiFlow.test_full_flow_claim_1_and_2) ... ok
+test_page_urls_are_signed_and_expire (tests.test_api.ApiFlow.test_page_urls_are_signed_and_expire) ... ok
+test_key_payables (tests.test_engine_equivalence.EngineEquivalence.test_key_payables) ... ok
+test_reproduces_all_pack_traces (tests.test_engine_equivalence.EngineEquivalence.test_reproduces_all_pack_traces) ... ok
+test_similar_name_goes_to_review_not_pass (tests.test_engine_equivalence.EngineEquivalence.test_similar_name_goes_to_review_not_pass) ... ok
+test_transliteration_variant_does_not_block (tests.test_engine_equivalence.EngineEquivalence.test_transliteration_variant_does_not_block)
+TC-MAT-02: LAKSHMI vs LAXMI passes; the harness (exact match) would have blocked ALL_FINANCIAL. ... ok
+test_unclassified_line_blocks_line_rules (tests.test_engine_equivalence.EngineEquivalence.test_unclassified_line_blocks_line_rules) ... ok
+test_chain_appends_verifies_and_detects_tampering (tests.test_foundation.AuditChain.test_chain_appends_verifies_and_detects_tampering) ... ok
+test_unknown_event_type_rejected (tests.test_foundation.AuditChain.test_unknown_event_type_rejected) ... ok
+test_enqueue_is_idempotent_and_worker_runs_in_tenant_scope (tests.test_foundation.JobQueue.test_enqueue_is_idempotent_and_worker_runs_in_tenant_scope) ... ok
+test_failure_is_retried_with_backoff_and_error_code_only (tests.test_foundation.JobQueue.test_failure_is_retried_with_backoff_and_error_code_only) ... job 24a0be90-9437-4db9-9751-a8080a238c8c EXTRACT failed: ValueError
+ok
+test_0001_is_byte_identical_to_pack_schema (tests.test_foundation.Migrations.test_0001_is_byte_identical_to_pack_schema) ... ok
+test_error_carries_sqlstate_and_constraint (tests.test_foundation.WireClientAndRls.test_error_carries_sqlstate_and_constraint) ... ok
+test_rls_isolates_tenants_and_app_cannot_create_tenants (tests.test_foundation.WireClientAndRls.test_rls_isolates_tenants_and_app_cannot_create_tenants) ... ok
+test_types_roundtrip (tests.test_foundation.WireClientAndRls.test_types_roundtrip) ... ok
+test_write_once (tests.test_foundation.WormStore.test_write_once) ... ok
+test_four_eyes_and_effective_dating (tests.test_workflow.Configuration.test_four_eyes_and_effective_dating) ... ok
+test_demo_matches_every_pack_trace (tests.test_workflow.DemoReproducesPack.test_demo_matches_every_pack_trace) ... ok
+test_override_reproduces_trace_2b_and_fingerprint_guard (tests.test_workflow.OverridesAndCorrections.test_override_reproduces_trace_2b_and_fingerprint_guard) ... ok
+test_unclassified_line_blocks_until_reclassified (tests.test_workflow.OverridesAndCorrections.test_unclassified_line_blocks_until_reclassified) ... ok
+test_injected_instructions_have_no_effect (tests.test_workflow.SafetyAndIntegrity.test_injected_instructions_have_no_effect) ... ok
+test_quarantine_and_duplicates (tests.test_workflow.SafetyAndIntegrity.test_quarantine_and_duplicates) ... ok
+test_si_ledger_prevents_double_spend (tests.test_workflow.SafetyAndIntegrity.test_si_ledger_prevents_double_spend)
+Two claims for the trace-2 member: the first approval uses up the ₹85,000 available; the second cannot overdraw it. ... ok
+test_stale_evaluation_cannot_be_decided (tests.test_workflow.SafetyAndIntegrity.test_stale_evaluation_cannot_be_decided) ... ok
+test_tpa_repudiation_records_insurer_outcome_without_letter (tests.test_workflow.SafetyAndIntegrity.test_tpa_repudiation_records_insurer_outcome_without_letter) ... ok
+test_ungrounded_values_are_never_used (tests.test_workflow.SafetyAndIntegrity.test_ungrounded_values_are_never_used) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 7.486s
+
+OK

@@ -1,0 +1,198 @@
+[
+  {
+    "id": "1dc0cf4f18aa5ca683b4c888952626ff036c65b99f47ac35eb244ef343377cd9:2",
+    "success": true,
+    "metadata": {
+      "page_count": 45,
+      "title_metadata": "ReAssure-Policy-Wording Updated",
+      "first_page_title_lines": [
+        "ReAssure",
+        "Policy Document",
+        "1. Preamble",
+        "This \u2018ReAssure\u2019 policy is a contract of insurance between You and Us which is subject to payment of full premium in advance and the terms,",
+        "conditions and exclusions of this Policy. This Policy has been issued on the basis of the Disclosure of Information, including the information",
+        "provided by You in the Proposal Form and / or the Information Summary Sheet.",
+        "In addition, please note the list of exclusions is set out in Section 6 of this Policy.",
+        "2. Definitions & Interpretation",
+        "For the purposes of interpretation and understanding of this Policy, We have defined, in Section 3, some of the important words used in",
+        "the Policy which will have the special meaning accorded to these terms for the purposes of this Policy. For the remaining language and",
+        "words used, the usual meaning as described in standard English language dictionaries shall apply. The words and expressions defined in the",
+        "Insurance Act 1938, IRDA Act 1999, regulations notified by the IRDAI and circulars and guidelines issued by the IRDAI, together with their"
+      ],
+      "identified_uins": [
+        "NBHHLIP26050V042526"
+      ],
+      "text_available": true,
+      "url": "https://transactions.nivabupa.com/pages/doc/policy_wording/ReAssure-Policy-Wording.pdf?v=1.2",
+      "referrer_url": "",
+      "etag": "\"0f032b2f3cdd1:0\"",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "retrieved_at": "2026-10-12T22:29:47.139549+00:00",
+      "resumed_bytes": 0,
+      "sha256": "366e08afe7e9b71238d74db9e9988767c901b8e3eabca7ffc30c4892c6b210c5",
+      "duplicate": false,
+      "changed_at_url": false,
+      "identity": {
+        "insurer": "NIVA",
+        "product_name": "ReAssure",
+        "uin": "NBHHLIP26050V042526",
+        "url": "https://transactions.nivabupa.com/pages/doc/policy_wording/ReAssure-Policy-Wording.pdf?v=1.2",
+        "referrer_url": "",
+        "declared_revision": null,
+        "wording_effective_from": null,
+        "wording_effective_to": null,
+        "research_claim": "DISCOVERED",
+        "import_sha256": "1dc0cf4f18aa5ca683b4c888952626ff036c65b99f47ac35eb244ef343377cd9",
+        "line": 2,
+        "raw": {
+          "insurer_name": "Niva Bupa",
+          "product_name": "ReAssure",
+          "uin": "NBHHLIP26050V042526",
+          "url": "https://transactions.nivabupa.com/pages/doc/policy_wording/ReAssure-Policy-Wording.pdf?v=1.2",
+          "verification_status": "DISCOVERED",
+          "referrer_url": ""
+        },
+        "raw_cells": [
+          "Niva Bupa",
+          "ReAssure",
+          "NBHHLIP26050V042526",
+          "https://transactions.nivabupa.com/pages/doc/policy_wording/ReAssure-Policy-Wording.pdf?v=1.2",
+          "DISCOVERED",
+          ""
+        ]
+      },
+      "revision_hash": "366e08afe7e9b71238d74db9e9988767c901b8e3eabca7ffc30c4892c6b210c5",
+      "effective_dates": "UNKNOWN unless separately verified"
+    }
+  },
+  {
+    "id": "1dc0cf4f18aa5ca683b4c888952626ff036c65b99f47ac35eb244ef343377cd9:3",
+    "success": true,
+    "metadata": {
+      "page_count": 37,
+      "title_metadata": null,
+      "first_page_title_lines": [
+        "Health Companion",
+        "Policy Document",
+        "Variant 1, 2, 3, Family First",
+        "1. Preamble",
+        "This is a contract of insurance between You and Us which is subject to the payment of the full premium in advance and the terms, conditions",
+        "and exclusions to this Policy. This Policy has been issued on the basis of the Disclosure of Information Norm, including the information",
+        "provided by You in respect of the Insured Persons in the Proposal and the Information Summary Sheet.",
+        "Please inform Us immediately of any change in the address, state of health or any other changes affecting You or any Insured Person.",
+        "Note: The terms listed in Section 2(Definitions) and used elsewhere in the Policy in Initial Capitals and Bold shall have the meaning set",
+        "out against them in Section 2 wherever they appear in the Policy.",
+        "2. Definitions",
+        "For the purposes of interpretation and understanding of this Policy, We have defined, herein below some of the important words used in"
+      ],
+      "identified_uins": [
+        "NBHHLIP26051V092526"
+      ],
+      "text_available": true,
+      "url": "https://transactions.nivabupa.com/pages/doc/policy_wording/Health-Companion_Variant-1-2-3-EFF_Policy-Wording.pdf?v=1.1",
+      "referrer_url": "",
+      "etag": "\"2c3e9d2140a7dc1:0\"",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "retrieved_at": "2026-10-12T22:29:54.614859+00:00",
+      "resumed_bytes": 0,
+      "sha256": "209a0e88f19e44f5b414955b014856d68235a3fbbcd3aa158a2183e2a4622303",
+      "duplicate": false,
+      "changed_at_url": false,
+      "identity": {
+        "insurer": "NIVA",
+        "product_name": "Health Companion",
+        "uin": "NBHHLIP26051V092526",
+        "url": "https://transactions.nivabupa.com/pages/doc/policy_wording/Health-Companion_Variant-1-2-3-EFF_Policy-Wording.pdf?v=1.1",
+        "referrer_url": "",
+        "declared_revision": null,
+        "wording_effective_from": null,
+        "wording_effective_to": null,
+        "research_claim": "DISCOVERED",
+        "import_sha256": "1dc0cf4f18aa5ca683b4c888952626ff036c65b99f47ac35eb244ef343377cd9",
+        "line": 3,
+        "raw": {
+          "insurer_name": "Niva Bupa",
+          "product_name": "Health Companion",
+          "uin": "NBHHLIP26051V092526",
+          "url": "https://transactions.nivabupa.com/pages/doc/policy_wording/Health-Companion_Variant-1-2-3-EFF_Policy-Wording.pdf?v=1.1",
+          "verification_status": "DISCOVERED",
+          "referrer_url": ""
+        },
+        "raw_cells": [
+          "Niva Bupa",
+          "Health Companion",
+          "NBHHLIP26051V092526",
+          "https://transactions.nivabupa.com/pages/doc/policy_wording/Health-Companion_Variant-1-2-3-EFF_Policy-Wording.pdf?v=1.1",
+          "DISCOVERED",
+          ""
+        ]
+      },
+      "revision_hash": "209a0e88f19e44f5b414955b014856d68235a3fbbcd3aa158a2183e2a4622303",
+      "effective_dates": "UNKNOWN unless separately verified"
+    }
+  },
+  {
+    "id": "1dc0cf4f18aa5ca683b4c888952626ff036c65b99f47ac35eb244ef343377cd9:4",
+    "success": true,
+    "metadata": {
+      "page_count": 38,
+      "title_metadata": "CARE CLASSIC- T&C.cdr",
+      "first_page_title_lines": [
+        "Know Your Policy Better"
+      ],
+      "identified_uins": [
+        "CHIHLIP22047V012122",
+        "CHIHLIP22071V012122"
+      ],
+      "text_available": true,
+      "url": "https://cms.careinsurance.com/cms/public/uploads/download_center/care-classic---%28health-insurance-product%29-policy-terms-%26-conditions.pdf?rv=0.06437300+1717690836",
+      "referrer_url": "",
+      "etag": "\"67da9bea-63aa9\"",
+      "http_status": 200,
+      "content_type": "application/pdf",
+      "retrieved_at": "2026-10-12T22:29:58.855128+00:00",
+      "resumed_bytes": 0,
+      "sha256": "efc6006f49c97cc3e4532f85ba86efc266c20e5763c6b7c2af345aa88b7ef302",
+      "duplicate": false,
+      "changed_at_url": false,
+      "identity": {
+        "insurer": "CARE",
+        "product_name": "Care Classic",
+        "uin": "CHIHLIP22071V012122",
+        "url": "https://cms.careinsurance.com/cms/public/uploads/download_center/care-classic---%28health-insurance-product%29-policy-terms-%26-conditions.pdf?rv=0.06437300+1717690836",
+        "referrer_url": "",
+        "declared_revision": null,
+        "wording_effective_from": null,
+        "wording_effective_to": null,
+        "research_claim": "DISCOVERED",
+        "import_sha256": "1dc0cf4f18aa5ca683b4c888952626ff036c65b99f47ac35eb244ef343377cd9",
+        "line": 4,
+        "raw": {
+          "insurer_name": "Care Health",
+          "product_name": "Care Classic",
+          "uin": "CHIHLIP22071V012122",
+          "url": "https://cms.careinsurance.com/cms/public/uploads/download_center/care-classic---%28health-insurance-product%29-policy-terms-%26-conditions.pdf?rv=0.06437300+1717690836",
+          "verification_status": "DISCOVERED",
+          "referrer_url": ""
+        },
+        "raw_cells": [
+          "Care Health",
+          "Care Classic",
+          "CHIHLIP22071V012122",
+          "https://cms.careinsurance.com/cms/public/uploads/download_center/care-classic---%28health-insurance-product%29-policy-terms-%26-conditions.pdf?rv=0.06437300+1717690836",
+          "DISCOVERED",
+          ""
+        ]
+      },
+      "revision_hash": "efc6006f49c97cc3e4532f85ba86efc266c20e5763c6b7c2af345aa88b7ef302",
+      "effective_dates": "UNKNOWN unless separately verified"
+    }
+  },
+  {
+    "id": "1dc0cf4f18aa5ca683b4c888952626ff036c65b99f47ac35eb244ef343377cd9:5",
+    "success": false,
+    "error": "robots permission unavailable (HTTP 403)"
+  }
+]

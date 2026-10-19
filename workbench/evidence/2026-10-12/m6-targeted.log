@@ -1,0 +1,13 @@
+test_TC_REL_04_actual_worker_kill_rolls_back_and_recovers (tests.test_hardening.Hardening.test_TC_REL_04_actual_worker_kill_rolls_back_and_recovers) ... ok
+test_TC_REV_01_override_comment_and_stale_target (tests.test_hardening.Hardening.test_TC_REV_01_override_comment_and_stale_target) ... ok
+test_TC_SEC_02_full_role_permissions_and_http (tests.test_hardening.Hardening.test_TC_SEC_02_full_role_permissions_and_http) ... ok
+test_contract_routes_synchronized_both_directions (tests.test_hardening.Hardening.test_contract_routes_synchronized_both_directions) ... ok
+test_independent_review_closed_queries_rejected (tests.test_hardening.Hardening.test_independent_review_closed_queries_rejected) ... ok
+test_independent_review_idempotency_does_not_grant_authority (tests.test_hardening.Hardening.test_independent_review_idempotency_does_not_grant_authority) ... ok
+test_independent_review_second_approver_missing_limit_fails_closed (tests.test_hardening.Hardening.test_independent_review_second_approver_missing_limit_fails_closed) ... ok
+test_restore_rejects_tamper_before_creation (tests.test_hardening.Hardening.test_restore_rejects_tamper_before_creation) ... ok
+
+----------------------------------------------------------------------
+Ran 8 tests in 2.549s
+
+OK

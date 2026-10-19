@@ -1,0 +1,79 @@
+{
+  "configs": [
+    {
+      "artifact_id": "CHECKLIST-CASHLESS_DISCHARGE",
+      "version": "2026.1.0",
+      "body_sha256": "62804921f150ae374d4afdac98a99ab77fad9d824aca594dfc8bce6c19eddf1f",
+      "status": "PUBLISHED"
+    },
+    {
+      "artifact_id": "CHECKLIST-ENHANCEMENT",
+      "version": "2026.1.0",
+      "body_sha256": "79c6f340bfce8c5c8c86a7e711e5ff14da8e8115fe089018e419755e44032569",
+      "status": "PUBLISHED"
+    },
+    {
+      "artifact_id": "CHECKLIST-IPD-REIMB",
+      "version": "2026.1.0",
+      "body_sha256": "1c8c6ec0c044dbc8c6b6b4eec6fef022f5bfa89b6a1a8503eaa927b8443e96db",
+      "status": "PUBLISHED"
+    },
+    {
+      "artifact_id": "CHECKLIST-OPD_REIMBURSEMENT",
+      "version": "2026.1.0",
+      "body_sha256": "e7018b74c0eecac1737a6f3d77f67a94d65db8877bdba78f823f387dc4325965",
+      "status": "PUBLISHED"
+    },
+    {
+      "artifact_id": "CHECKLIST-PREAUTH",
+      "version": "2026.1.0",
+      "body_sha256": "8c6bb3ca28e9344ccf80eb9cd3b4d9e303f97aa1ec4587ab63693f19dbf4f4a4",
+      "status": "PUBLISHED"
+    },
+    {
+      "artifact_id": "CLASSMAP-ILL-A",
+      "version": "2026.1.0",
+      "body_sha256": "8b25a74630c7d1a590684d307bbe4bfae725f628935bdae7787d80186e08d015",
+      "status": "PUBLISHED"
+    },
+    {
+      "artifact_id": "NMELIST-ILL-A",
+      "version": "2026.1.0",
+      "body_sha256": "c0efc354ad1fa80cafa1fc514f95d5c6c0579fcd9806e2beeab171143f190efa",
+      "status": "PUBLISHED"
+    },
+    {
+      "artifact_id": "POLCFG-ILL-INDEMNITY-A",
+      "version": "2026.1.0",
+      "body_sha256": "c4ceeef264c263ce9826bfd904d25d93461838a6f5335060709c77778dbbfdff",
+      "status": "PUBLISHED"
+    },
+    {
+      "artifact_id": "POLCFG-ILL-OPD-A",
+      "version": "2026.1.0",
+      "body_sha256": "480325eef9193c003a725377566401d9d48c327ebf9b10004e38d75d8b4d76ff",
+      "status": "PUBLISHED"
+    },
+    {
+      "artifact_id": "TARIFF-ILL-HOSP-NW-01",
+      "version": "2026.07",
+      "body_sha256": "52d9325e7136ea2869a0e64bc99a2bb8e5bb143fe6d08508fa85a7bc4eb31c1a",
+      "status": "PUBLISHED"
+    },
+    {
+      "artifact_id": "WFCFG-TENANT-DEMO",
+      "version": "2026.1.0",
+      "body_sha256": "3e986d0147b488b98cdbe73af5731877b076b7f299c94364cbac894ac9a88607",
+      "status": "PUBLISHED"
+    },
+    {
+      "artifact_id": "WFCFG-TENANT-DEMO",
+      "version": "2026.2.0",
+      "body_sha256": "fbd8760c4f097b01510444ddb6144e7e62c227add233454b2f162c2ed9ca3565",
+      "status": "PUBLISHED"
+    }
+  ],
+  "evaluations": 6,
+  "ledger": 1,
+  "decisions": 0
+}

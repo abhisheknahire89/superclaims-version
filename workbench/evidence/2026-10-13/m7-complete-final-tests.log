@@ -1,0 +1,121 @@
+AW_ENV=test AW_REQUIRE_DB=1 PYTHONPATH=src:tests /Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/bin/python -m unittest discover -s tests -p 'test_*.py' -t . -v
+test_contract_validation_permissions_and_isolation (tests.test_api.ApiFlow.test_contract_validation_permissions_and_isolation) ... ok
+test_full_flow_claim_1_and_2 (tests.test_api.ApiFlow.test_full_flow_claim_1_and_2) ... ok
+test_page_urls_are_signed_and_expire (tests.test_api.ApiFlow.test_page_urls_are_signed_and_expire) ... ok
+test_all_kinds_replay_without_persistence (tests.test_config_admin.ConfigReplay.test_all_kinds_replay_without_persistence) ... ok
+test_draft_validate_replay_four_eyes_publish_and_reevaluate (tests.test_config_admin.ConfigReplay.test_draft_validate_replay_four_eyes_publish_and_reevaluate) ... ok
+test_implant_invoice_and_prepost_outlier_abstain (tests.test_config_admin.OrderingAndCatalogue.test_implant_invoice_and_prepost_outlier_abstain) ... ok
+test_package_consumes_components_without_tariff_double_deduction (tests.test_config_admin.OrderingAndCatalogue.test_package_consumes_components_without_tariff_double_deduction) ... ok
+test_review_catalogue_never_automatically_denies (tests.test_config_admin.OrderingAndCatalogue.test_review_catalogue_never_automatically_denies) ... ok
+test_unsafe_order_fails_and_safe_order_is_used (tests.test_config_admin.OrderingAndCatalogue.test_unsafe_order_fails_and_safe_order_is_used) ... ok
+test_csv_xlsx_exact_money_and_formula_rejection (tests.test_config_admin.PatchImports.test_csv_xlsx_exact_money_and_formula_rejection) ... ok
+test_true_quote_cannot_ground_false_amount_or_impossible_box (tests.test_document_reading.AutomaticGrounding.test_true_quote_cannot_ground_false_amount_or_impossible_box) ... ok
+test_low_confidence_blocks_money_even_if_other_sources_agree (tests.test_document_reading.FinancialReadingGate.test_low_confidence_blocks_money_even_if_other_sources_agree) ... ok
+test_reordered_title_multiple_columns_and_stacked_fields (tests.test_document_reading.GenericLayouts.test_reordered_title_multiple_columns_and_stacked_fields) ... ok
+test_within_document_contradictory_totals_are_not_silently_dropped (tests.test_document_reading.GenericLayouts.test_within_document_contradictory_totals_are_not_silently_dropped) ... ok
+test_visual_transcription_is_image_bound_audited_and_append_only (tests.test_document_reading.HumanTranscription.test_visual_transcription_is_image_bound_audited_and_append_only) ... ok
+test_native_pdf_and_png_jpg_ocr_have_grounded_boxes (tests.test_document_reading.LocalReading.test_native_pdf_and_png_jpg_ocr_have_grounded_boxes) ... ok
+test_safe_zip_returns_documents_without_writing_paths (tests.test_document_reading.LocalReading.test_safe_zip_returns_documents_without_writing_paths) ... ok
+test_scanned_pdf_uses_local_ocr (tests.test_document_reading.LocalReading.test_scanned_pdf_uses_local_ocr) ... ok
+test_zip_rejects_traversal_and_nested_unallowed_files (tests.test_document_reading.LocalReading.test_zip_rejects_traversal_and_nested_unallowed_files) ... ok
+test_manual_confirmation_preserves_source_and_rejects_fake_values (tests.test_document_reading.ManualReading.test_manual_confirmation_preserves_source_and_rejects_fake_values) ... ok
+test_bill_missing_patient_identity_abstains_despite_matching_other_documents (tests.test_document_reading.MissingCriticalReading.test_bill_missing_patient_identity_abstains_despite_matching_other_documents) ... ok
+test_unreadable_continuation_page_blocks_otherwise_valid_claim (tests.test_document_reading.MissingCriticalReading.test_unreadable_continuation_page_blocks_otherwise_valid_claim) ... ok
+test_oversized_pdf_page_rejected_before_render (tests.test_document_reading.ReadingResourceSafety.test_oversized_pdf_page_rejected_before_render) ... ok
+test_stacked_low_confidence_value_remains_low_confidence (tests.test_document_reading.ReadingResourceSafety.test_stacked_low_confidence_value_remains_low_confidence) ... ok
+test_oversize_signed_upload_is_rejected_before_storing (tests.test_document_reading.UploadLimits.test_oversize_signed_upload_is_rejected_before_storing) ... ok
+test_key_payables (tests.test_engine_equivalence.EngineEquivalence.test_key_payables) ... ok
+test_reproduces_all_pack_traces (tests.test_engine_equivalence.EngineEquivalence.test_reproduces_all_pack_traces) ... ok
+test_similar_name_goes_to_review_not_pass (tests.test_engine_equivalence.EngineEquivalence.test_similar_name_goes_to_review_not_pass) ... ok
+test_transliteration_variant_does_not_block (tests.test_engine_equivalence.EngineEquivalence.test_transliteration_variant_does_not_block)
+TC-MAT-02: LAKSHMI vs LAXMI passes; the harness (exact match) would have blocked ALL_FINANCIAL. ... ok
+test_unclassified_line_blocks_line_rules (tests.test_engine_equivalence.EngineEquivalence.test_unclassified_line_blocks_line_rules) ... ok
+test_chain_appends_verifies_and_detects_tampering (tests.test_foundation.AuditChain.test_chain_appends_verifies_and_detects_tampering) ... ok
+test_unknown_event_type_rejected (tests.test_foundation.AuditChain.test_unknown_event_type_rejected) ... ok
+test_enqueue_is_idempotent_and_worker_runs_in_tenant_scope (tests.test_foundation.JobQueue.test_enqueue_is_idempotent_and_worker_runs_in_tenant_scope) ... ok
+test_failure_is_retried_with_backoff_and_error_code_only (tests.test_foundation.JobQueue.test_failure_is_retried_with_backoff_and_error_code_only) ... job dff60633-7ff0-4c70-b6c2-d0f1df289ec4 EXTRACT failed: ValueError
+ok
+test_0001_is_byte_identical_to_pack_schema (tests.test_foundation.Migrations.test_0001_is_byte_identical_to_pack_schema) ... ok
+test_error_carries_sqlstate_and_constraint (tests.test_foundation.WireClientAndRls.test_error_carries_sqlstate_and_constraint) ... ok
+test_rls_isolates_tenants_and_app_cannot_create_tenants (tests.test_foundation.WireClientAndRls.test_rls_isolates_tenants_and_app_cannot_create_tenants) ... ok
+test_types_roundtrip (tests.test_foundation.WireClientAndRls.test_types_roundtrip) ... ok
+test_write_once (tests.test_foundation.WormStore.test_write_once) ... ok
+test_TC_REL_04_actual_worker_kill_rolls_back_and_recovers (tests.test_hardening.Hardening.test_TC_REL_04_actual_worker_kill_rolls_back_and_recovers) ... ok
+test_TC_REV_01_override_comment_and_stale_target (tests.test_hardening.Hardening.test_TC_REV_01_override_comment_and_stale_target) ... ok
+test_TC_SEC_02_full_role_permissions_and_http (tests.test_hardening.Hardening.test_TC_SEC_02_full_role_permissions_and_http) ... ok
+test_contract_routes_synchronized_both_directions (tests.test_hardening.Hardening.test_contract_routes_synchronized_both_directions) ... ok
+test_independent_review_closed_queries_rejected (tests.test_hardening.Hardening.test_independent_review_closed_queries_rejected) ... ok
+test_independent_review_idempotency_does_not_grant_authority (tests.test_hardening.Hardening.test_independent_review_idempotency_does_not_grant_authority) ... ok
+test_independent_review_second_approver_missing_limit_fails_closed (tests.test_hardening.Hardening.test_independent_review_second_approver_missing_limit_fails_closed) ... ok
+test_inherited_receiver_platform_rbac (tests.test_hardening.Hardening.test_inherited_receiver_platform_rbac) ... ok
+test_interrupted_object_publication_recovers_identical_bytes_only (tests.test_hardening.Hardening.test_interrupted_object_publication_recovers_identical_bytes_only) ... ok
+test_restore_rejects_tamper_before_creation (tests.test_hardening.Hardening.test_restore_rejects_tamper_before_creation) ... ok
+test_restore_rejects_unlisted_file_and_symlink (tests.test_hardening.Hardening.test_restore_rejects_unlisted_file_and_symlink) ... ok
+test_assignment_dashboard_exports (tests.test_operations.Operations.test_assignment_dashboard_exports) ... ok
+test_query_unapproved_export_reply_and_nonresponse (tests.test_operations.Operations.test_query_unapproved_export_reply_and_nonresponse) ... ok
+test_user_admin_last_supervisor_and_audit_rls (tests.test_operations.Operations.test_user_admin_last_supervisor_and_audit_rls) ... ok
+test_anchor_job_and_deadline_alert (tests.test_platform.PasswordSessions.test_anchor_job_and_deadline_alert) ... ok
+test_salt_lockout_cookie_csrf_and_revocation (tests.test_platform.PasswordSessions.test_salt_lockout_cookie_csrf_and_revocation) ... ok
+test_atomic_store_race_never_overwrites (tests.test_platform.WorkerFencing.test_atomic_store_race_never_overwrites) ... ok
+test_expired_owned_attempt_cannot_finish_reclaimed_job (tests.test_platform.WorkerFencing.test_expired_owned_attempt_cannot_finish_reclaimed_job) ... ok
+test_handler_holds_lease_row_and_cannot_run_concurrently (tests.test_platform.WorkerFencing.test_handler_holds_lease_row_and_cannot_run_concurrently) ... ok
+test_corrected_import_detects_changed_url_without_overwriting (tests.test_policy_intelligence.AcquisitionIntegrity.test_corrected_import_detects_changed_url_without_overwriting) ... ok
+test_duplicate_and_changed_content_preserve_historical_bytes (tests.test_policy_intelligence.AcquisitionIntegrity.test_duplicate_and_changed_content_preserve_historical_bytes) ... ok
+test_failed_and_interrupted_download_resume_with_strong_etag (tests.test_policy_intelligence.AcquisitionIntegrity.test_failed_and_interrupted_download_resume_with_strong_etag) ... ok
+test_html_and_wrong_document_uin_rejected_or_quarantined (tests.test_policy_intelligence.AcquisitionIntegrity.test_html_and_wrong_document_uin_rejected_or_quarantined) ... ok
+test_candidates_only_from_approved_sources_and_unsupported_quotes_reject (tests.test_policy_intelligence.ClauseGrounding.test_candidates_only_from_approved_sources_and_unsupported_quotes_reject) ... ok
+test_direct_insert_published_candidate_cannot_bypass_lifecycle (tests.test_policy_intelligence.PolicyHardening.test_direct_insert_published_candidate_cannot_bypass_lifecycle) ... ok
+test_private_proofs_freshness_reservations_and_dependencies_block (tests.test_policy_intelligence.PolicyHardening.test_private_proofs_freshness_reservations_and_dependencies_block) ... ok
+test_unguarded_dates_and_truthy_context_are_rejected (tests.test_policy_intelligence.PolicyHardening.test_unguarded_dates_and_truthy_context_are_rejected) ... ok
+test_conflicting_names_stay_nonfinancial_until_reviewed_alias_resolution (tests.test_policy_intelligence.ProductHistoryReview.test_conflicting_names_stay_nonfinancial_until_reviewed_alias_resolution) ... ok
+test_history_names_dates_and_four_eyes_require_actual_evidence (tests.test_policy_intelligence.ProductHistoryReview.test_history_names_dates_and_four_eyes_require_actual_evidence) ... ok
+test_quarantine_resolution_requires_approved_same_original_and_role (tests.test_policy_intelligence.ProductHistoryReview.test_quarantine_resolution_requires_approved_same_original_and_role) ... ok
+test_remediation_rolls_back_without_touching_shared_journal (tests.test_policy_intelligence.ProductHistoryReview.test_remediation_rolls_back_without_touching_shared_journal) ... ok
+test_registry_rls_and_append_only_history (tests.test_policy_intelligence.RegistryIdentity.test_registry_rls_and_append_only_history) ... ok
+test_source_identity_conflict_and_four_eyes_block (tests.test_policy_intelligence.RegistryIdentity.test_source_identity_conflict_and_four_eyes_block) ... ok
+test_source_unknown_dates_retained_and_original_evidence_required (tests.test_policy_intelligence.RegistryIdentity.test_source_unknown_dates_retained_and_original_evidence_required) ... ok
+test_restore_keeps_originals_and_corruption_is_rejected (tests.test_policy_intelligence.ResearchArchive.test_restore_keeps_originals_and_corruption_is_rejected) ... ok
+test_placeholders_malformed_conflicting_uin_are_quarantined (tests.test_policy_intelligence.ResearchValidation.test_placeholders_malformed_conflicting_uin_are_quarantined) ... ok
+test_unofficial_and_webpage_urls_fail (tests.test_policy_intelligence.ResearchValidation.test_unofficial_and_webpage_urls_fail) ... ok
+test_verified_label_does_not_promote_or_guess_effective_dates (tests.test_policy_intelligence.ResearchValidation.test_verified_label_does_not_promote_or_guess_effective_dates) ... ok
+test_four_eyes_order_immutable_rule_and_role_guards (tests.test_policy_intelligence.RuleLifecycle.test_four_eyes_order_immutable_rule_and_role_guards) ... /Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/lib/python3.13/site-packages/pdfplumber/utils/pdfinternals.py:82: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10cf03e20>
+  return type(x)(resolve_all(v) for v in x)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/lib/python3.13/site-packages/pdfplumber/utils/pdfinternals.py:82: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10cf00c70>
+  return type(x)(resolve_all(v) for v in x)
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+ok
+test_optional_membership_and_unknown_effective_dates_block (tests.test_policy_intelligence.RuleLifecycle.test_optional_membership_and_unknown_effective_dates_block) ... ok
+test_shadow_engine_effect_and_runtime_configs_unchanged (tests.test_policy_intelligence.RuleLifecycle.test_shadow_engine_effect_and_runtime_configs_unchanged) ... ok
+test_four_eyes_and_effective_dating (tests.test_workflow.Configuration.test_four_eyes_and_effective_dating) ... ok
+test_demo_matches_every_pack_trace (tests.test_workflow.DemoReproducesPack.test_demo_matches_every_pack_trace) ... ok
+test_override_reproduces_trace_2b_and_fingerprint_guard (tests.test_workflow.OverridesAndCorrections.test_override_reproduces_trace_2b_and_fingerprint_guard) ... ok
+test_unclassified_line_blocks_until_reclassified (tests.test_workflow.OverridesAndCorrections.test_unclassified_line_blocks_until_reclassified) ... ok
+test_injected_instructions_have_no_effect (tests.test_workflow.SafetyAndIntegrity.test_injected_instructions_have_no_effect) ... ok
+test_quarantine_and_duplicates (tests.test_workflow.SafetyAndIntegrity.test_quarantine_and_duplicates) ... ok
+test_si_ledger_prevents_double_spend (tests.test_workflow.SafetyAndIntegrity.test_si_ledger_prevents_double_spend)
+Two claims for the trace-2 member: the first approval uses up the ₹85,000 available; the second cannot overdraw it. ... ok
+test_stale_evaluation_cannot_be_decided (tests.test_workflow.SafetyAndIntegrity.test_stale_evaluation_cannot_be_decided) ... ok
+test_tpa_repudiation_records_insurer_outcome_without_letter (tests.test_workflow.SafetyAndIntegrity.test_tpa_repudiation_records_insurer_outcome_without_letter) ... ok
+test_ungrounded_values_are_never_used (tests.test_workflow.SafetyAndIntegrity.test_ungrounded_values_are_never_used) ... ok
+test_opd_benefit_cap (tests.test_workflows.FourWorkflows.test_opd_benefit_cap) ... ok
+test_preauth_enhancement_discharge_reservation_carry_forward (tests.test_workflows.FourWorkflows.test_preauth_enhancement_discharge_reservation_carry_forward) ... ok
+test_workflow_clock_and_invalid_parent_guards (tests.test_workflows.FourWorkflows.test_workflow_clock_and_invalid_parent_guards) ... ok
+
+----------------------------------------------------------------------
+Ran 93 tests in 45.286s
+
+OK
+AW_ENV=test AW_DB_DRIVER=pgwire AW_REQUIRE_DB=1 PYTHONPATH=src:tests /Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/bin/python -m unittest discover -s tests -p 'test_*.py' -t .
+.................................job 1040bad8-4d14-4290-a3e5-d42221e177f2 EXTRACT failed: ValueError
+............................................./Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/lib/python3.13/site-packages/pdfplumber/page.py:356: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e6c64d0>
+  def process_attr(item: Tuple[str, Any]) -> Optional[Tuple[str, Any]]:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/lib/python3.13/site-packages/pdfplumber/page.py:356: ResourceWarning: unclosed database in <sqlite3.Connection object at 0x10e6c76a0>
+  def process_attr(item: Tuple[str, Any]) -> Optional[Tuple[str, Any]]:
+ResourceWarning: Enable tracemalloc to get the object allocation traceback
+................
+----------------------------------------------------------------------
+Ran 94 tests in 46.477s
+
+OK

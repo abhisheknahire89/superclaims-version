@@ -19,7 +19,7 @@ from typing import Protocol
 from . import normalise as N
 from .pages import PageText
 
-PIPELINE_VERSION = "aw-extract-1.0.0"
+PIPELINE_VERSION = "aw-extract-2.0.0"
 
 INJECTION_PATTERNS = re.compile(
     r"(ignore (all |any )?(previous|prior) instructions|you are an ai|as an ai (model|assistant)|system prompt|"
@@ -33,10 +33,26 @@ class ExtractionProvider(Protocol):
 
 
 def classify(pages: list[PageText], classifier_map: dict) -> tuple[str, float, str | None]:
+    titles=' '.join(ln['text'].lower() for p in pages for ln in p.lines[:6])
+    if 'preauth request' in titles or 'pre-authorisation request' in titles:return 'PREAUTH_REQUEST',.95,'preauth title'
+    if 'prescription' in titles:return 'PRESCRIPTION',.95,'prescription title'
+    if 'estimate bill' in titles or 'itemised estimate' in titles:return 'ESTIMATE_BILL',.95,'estimate title'
     """Keyword classification on the first page's text. Returns (type, confidence, matched keyword)."""
     if not pages or all(p.text_layer == "NONE" for p in pages):
         return "UNREADABLE", 0.0, None
     head = N.text_for_matching(pages[0].text[:1500])
+    # Specific itemised title takes precedence over generic "final bill" keywords.
+    title_text = " ".join(ln["text"] for ln in pages[0].lines[:6] if not INJECTION_PATTERNS.search(ln["text"]))
+    table_headers = [ln["text"].lower() for page in pages for ln in page.lines
+                     if not INJECTION_PATTERNS.search(ln["text"])]
+    has_item_table = any(any(k in ln for k in ("description", "particulars", "service"))
+                         and any(k in ln for k in ("amount", "total"))
+                         and any(k in ln for k in ("qty", "quantity", "units")) for ln in table_headers)
+    if has_item_table or re.search(r"(?:bill|invoice).*(?:break[- ]?up|item[- ]?wise)", title_text, re.I):
+        return "FINAL_BILL_ITEMISED", 0.95, "itemised table structure"
+    title_words = set(re.findall(r"[a-z]+", title_text.lower()))
+    if title_words & {"bill", "invoice"} and title_words & {"itemised", "itemized", "detailed", "itemisation", "itemization"}:
+        return "FINAL_BILL_ITEMISED", 0.95, "specific itemised title tokens"
     best = None
     for rule in classifier_map["document_types"]:
         for kw in rule["keywords_any"]:
@@ -44,7 +60,15 @@ def classify(pages: list[PageText], classifier_map: dict) -> tuple[str, float, s
                 cand = (rule.get("priority", 0), len(kw), rule["type"], kw)
                 if best is None or cand > best:
                     best = cand
+    # Keyword order varies across hospital titles; classify from token sets, never instructions.
     if best is None:
+        words = set(re.findall(r"[a-z]+", head))
+        if "bill" in words and words & {"itemised", "itemized", "detailed", "itemisation", "itemization"}:
+            return "FINAL_BILL_ITEMISED", 0.95, "itemised bill title tokens"
+        if words & {"bill", "invoice"} and words & {"final", "summary"}:
+            return "FINAL_BILL_SUMMARY", 0.90, "summary bill title tokens"
+        if {"discharge", "summary"} <= words:
+            return "DISCHARGE_SUMMARY", 0.95, "discharge summary title tokens"
         return "OTHER", 0.3, None
     return best[2], 0.95, best[3]
 
@@ -67,9 +91,54 @@ _FIELD_PATTERNS: list[tuple[str, re.Pattern]] = [
     ("bill.number", re.compile(r"^(?:bill no\.?|bill number)\s*[:\-]\s*(?P<v>\S+)", re.I)),
     ("bill.total", re.compile(r"^(?:grand total|net amount|total amount|bill total)\s*[:\-]?\s*(?:rs\.?|₹)?\s*(?P<v>[\d,]+(?:\.\d{1,2})?)\s*$", re.I)),
 ]
+_EXTRA_LABELS = {
+    "patient.name": ["beneficiary name", "insured name"],
+    "patient.member_id": ["member id", "member no", "uhid", "patient id"],
+    "bill.number": ["invoice number", "invoice no", "bill #"],
+    "bill.date": ["invoice date", "bill date"],
+    "bill.total": ["total payable", "net total", "total bill amount", "net bill amount", "total charges"],
+    "diagnosis.primary_text": ["primary diagnosis", "diagnosis on discharge"],
+    "discharge.type": ["discharge type", "discharge status"],
+    "hospital.name": ["provider name", "facility name"],
+}
+for _path, _labels in _EXTRA_LABELS.items():
+    _FIELD_PATTERNS.append((_path, re.compile(r"^(?:"+"|".join(map(re.escape,_labels))+r")\s*[:\-]\s*(?P<v>.+)$",re.I)))
+_LABELS = ["patient name", "name of patient", "patient", "name", "gender", "sex", "age", "dob", "date of birth",
+           "policy number", "policy no", "hospital name", "hospital", "admission date", "date of admission", "doa",
+           "discharge date", "date of discharge", "dod", "final diagnosis", "diagnosis", "procedure", "surgery",
+           "past medical history", "past history", "history", "bill number", "bill no", "grand total", "bill total", "net amount", "total amount"]
+_LABELS += [label for labels in _EXTRA_LABELS.values() for label in labels]
+_LABEL_START = re.compile(r"(?<!\w)(?:"+"|".join(map(re.escape,sorted(_LABELS,key=len,reverse=True)))+r")\s*[:\-]",re.I)
+
+
+def _logical_fields(page):
+    lines=[]
+    for index, ln in enumerate(page.lines):
+        text=ln["text"].strip();matches=list(_LABEL_START.finditer(text))
+        if matches:
+            for n,m in enumerate(matches):
+                chunk=text[m.start():matches[n+1].start() if n+1<len(matches) else len(text)].strip()
+                if not chunk[m.end()-m.start():].strip() and index+1<len(page.lines):
+                    nxt=page.lines[index+1]
+                    if not _LABEL_START.search(nxt["text"]) and nxt["top"]-ln["bottom"] < 35:
+                        chunk += " "+nxt["text"]
+                        lines.append({**ln,"text":chunk,"bottom":nxt["bottom"],"x0":min(ln["x0"],nxt["x0"]),"x1":max(ln["x1"],nxt["x1"]),"source_quote":text+"\n"+nxt["text"],"confidence":min(ln.get("confidence",.99),nxt.get("confidence",.99))})
+                        continue
+                lines.append({**ln,"text":chunk,"source_quote":text})
+        else:
+            # A standalone label followed by a value is common on discharge forms.
+            label=text.rstrip(':').lower()
+            if label in _LABELS and index+1<len(page.lines):
+                nxt=page.lines[index+1]
+                if nxt["top"]-ln["bottom"] < 35:
+                    lines.append({**ln,"text":text+": "+nxt["text"],"source_quote":text+"\n"+nxt["text"],"bottom":nxt["bottom"],"x0":min(ln["x0"],nxt["x0"]),"x1":max(ln["x1"],nxt["x1"]),"confidence":min(ln.get("confidence",.99),nxt.get("confidence",.99))})
+                    continue
+            lines.append(ln)
+    return PageText(page.page_no,page.width,page.height,page.text,lines,page.words,page.text_layer)
+
 _BILL_ONLY = {"bill.number", "bill.total"}
-_BILL_TYPES = {"FINAL_BILL_ITEMISED", "FINAL_BILL_SUMMARY"}
-_LINE_NO = re.compile(r"^L\d{2,3}$")
+_BILL_TYPES = {"FINAL_BILL_ITEMISED", "FINAL_BILL_SUMMARY", "ESTIMATE_BILL"}
+_LINE_NO = re.compile(r"^(?:L\d{1,3}|\d{1,3}[.)]?)$")
 _HEADER_KEYS = ["no", "date", "description", "inv no", "ward", "qty", "rate", "amount"]
 
 
@@ -89,6 +158,8 @@ class HeuristicProvider:
     name = "heuristic"
 
     def extract(self, document_type: str, pages: list[PageText]) -> dict:
+        # Convert multiple column labels and stacked label/value rows into logical lines.
+        pages = [_logical_fields(p) for p in pages]
         fields, items, warnings = [], [], set()
         seen_paths: set[str] = set()
         for page in pages:
@@ -104,27 +175,31 @@ class HeuristicProvider:
                     if path in _BILL_ONLY and document_type not in _BILL_TYPES:
                         continue
                     m = pat.match(text)
-                    if not m or path in seen_paths:
+                    if not m:
                         continue
                     raw = m.group("v").strip()
+                    if path == "hospital.name" and re.search(r"for (?:software )?test|testing only|not a real|synthetic",raw,re.I):
+                        continue
                     norm = _normalise_field(path, raw)
                     if norm is None and path not in ("history.past_illness_text",):
                         continue
+                    if any(f["path"] == path and f.get("normalised") == norm for f in fields):
+                        continue
                     seen_paths.add(path)
-                    span = {"page": page.page_no, "quote": text[:400], "bbox": [ln["x0"], ln["top"], ln["x1"], ln["bottom"]]}
-                    fields.append({"path": path, "value": raw, "normalised": norm, "confidence": 0.9, "evidence": [span]})
+                    span = {"page": page.page_no, "quote": ln.get("source_quote",text)[:400], "bbox": [ln["x0"], ln["top"], ln["x1"], ln["bottom"]]}
+                    fields.append({"path": path, "value": raw, "normalised": norm, "confidence": min(0.99, ln.get("confidence", 0.99)), "evidence": [span]})
                     if path == "admission.date":
                         t = N.time_of_day(raw)
                         if t and "admission.time" not in seen_paths:
                             seen_paths.add("admission.time")
-                            fields.append({"path": "admission.time", "value": raw, "normalised": t, "confidence": 0.9, "evidence": [span]})
+                            fields.append({"path": "admission.time", "value": raw, "normalised": t, "confidence": min(0.99, ln.get("confidence", 0.99)), "evidence": [span]})
         if document_type in _BILL_TYPES:
-            title = pages[0].lines[0] if pages and pages[0].lines else None
+            title = next((ln for p in pages for ln in p.lines if re.search(r"bill|invoice",ln["text"],re.I) and not re.search(r"(?:no|number|date|total)\s*:",ln["text"],re.I)), None)
             if title:
-                fields.append({"path": "bill.is_itemised", "value": document_type == "FINAL_BILL_ITEMISED",
-                               "normalised": document_type == "FINAL_BILL_ITEMISED", "confidence": 0.95,
+                fields.append({"path": "bill.is_itemised", "value": document_type in ("FINAL_BILL_ITEMISED","ESTIMATE_BILL"),
+                               "normalised": document_type in ("FINAL_BILL_ITEMISED","ESTIMATE_BILL"), "confidence": 0.95,
                                "evidence": [{"page": 1, "quote": title["text"][:400], "bbox": [title["x0"], title["top"], title["x1"], title["bottom"]]}]})
-        if document_type == "FINAL_BILL_ITEMISED":
+        if document_type in ("FINAL_BILL_ITEMISED","ESTIMATE_BILL"):
             items = self._bill_lines(pages)
         return {"document_type": document_type, "type_confidence": 0.95, "fields": fields, "line_items": items,
                 "warnings": sorted(warnings)}
@@ -136,7 +211,10 @@ class HeuristicProvider:
         cols, i = [], 0
         while i < len(header_words):
             w = header_words[i]
-            t = w["text"].lower()
+            t = w["text"].lower().strip(".#:")
+            if t in ("unit", "unitrate") and i+1 < len(header_words) and header_words[i+1]["text"].lower() == "rate":
+                cols.append({"name":"rate","x0":w["x0"],"x1":header_words[i+1]["x1"]});i+=2;continue
+            t = {"item":"description", "particulars":"description", "service":"description", "charges":"amount", "total":"amount", "quantity":"qty", "sno":"no", "sn":"no", "s/n":"no"}.get(t,t)
             if t == "inv" and i + 1 < len(header_words) and header_words[i + 1]["text"].lower().startswith("no"):
                 cols.append({"name": "inv no", "x0": w["x0"], "x1": header_words[i + 1]["x1"]})
                 i += 2
@@ -149,7 +227,7 @@ class HeuristicProvider:
     def _assign(word: dict, cols: list[dict]) -> str:
         if re.fullmatch(r"[\d,]+(\.\d+)?", word["text"]):
             for c in cols:
-                if abs(word["x1"] - c["x1"]) <= 4:
+                if abs(word["x1"] - c["x1"]) <= 8:
                     return c["name"]
         name = cols[0]["name"]
         for c in cols:
@@ -164,7 +242,7 @@ class HeuristicProvider:
             # header row: a line containing both "Description" and "Amount"
             for ln in page.lines:
                 low = ln["text"].lower()
-                if "description" in low and "amount" in low:
+                if any(v in low for v in ("description","particulars","service")) and any(v in low for v in ("amount","charges","total")):
                     hw = sorted([w for w in page.words if abs(w["top"] - ln["top"]) < 3], key=lambda w: w["x0"])
                     cols = self._columns(hw)
                     break
@@ -184,7 +262,7 @@ class HeuristicProvider:
                 ward = (get("ward") or "").upper()
                 inv = get("inv no")
                 items.append({
-                    "line_no": get("no"),
+                    "line_no": get("no") or words[0]["text"],
                     "description": get("description") or "",
                     "service_date": N.to_date(get("date")) if get("date") else None,
                     "quantity": N.quantity(get("qty")),
@@ -193,9 +271,24 @@ class HeuristicProvider:
                     "invoice_no": inv if inv not in (None, "-", "—") else None,
                     "ward_context": ward if ward in ("WARD", "ICU", "DAYCARE", "OPD") else "UNKNOWN",
                     "suggested_category": "UNKNOWN",
-                    "confidence": 0.9,
+                    "confidence": min(0.99, ln.get("confidence", 0.99)),
                     "evidence": [{"page": page.page_no, "quote": ln["text"][:400], "bbox": [ln["x0"], ln["top"], ln["x1"], ln["bottom"]]}],
                 })
+        if not items:
+            # Conservative fallback for tables with description followed by qty/rate/amount.
+            for page in pages:
+                for ln in page.lines:
+                    if INJECTION_PATTERNS.search(ln["text"]):
+                        continue
+                    m = re.fullmatch(r"(?:(L?\d+[.)]?)\s+)?(.+?)\s+(\d+(?:\.\d+)?)\s+([\d,]+\.\d{2})\s+([\d,]+\.\d{2})", ln["text"].strip())
+                    if not m or re.search(r"total|balance|forward|subtotal", m[2], re.I):
+                        continue
+                    items.append({"line_no": m[1] or f"L{len(items)+1:03d}", "description": m[2],
+                        "quantity": N.quantity(m[3]), "unit_rate": N.amount(m[4]), "amount": N.amount(m[5]),
+                        "ward_context": "UNKNOWN", "suggested_category": "UNKNOWN",
+                        "confidence": min(0.90, ln.get("confidence",0.90)),
+                        "evidence": [{"page":page.page_no,"quote":ln["text"][:400],
+                                      "bbox":[ln["x0"],ln["top"],ln["x1"],ln["bottom"]]}]})
         return items
 
 

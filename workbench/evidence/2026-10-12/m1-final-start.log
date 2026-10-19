@@ -1,0 +1,70 @@
+prerequisites: ok
+applied: ['0001_schema.sql', '0002_app_support.sql']
+2026-10-12 21:28:05,853 INFO aw.server demo tenant ready; documents loaded for CLM-DEMO-0001, CLM-DEMO-0002, CLM-DEMO-0003
+INFO:     Started server process [64384]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8080 (Press CTRL+C to quit)
+INFO:     127.0.0.1:61025 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61025 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61026 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61025 - "POST /dev/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61025 - "POST /dev/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61025 - "GET /v1/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61026 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61025 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61025 - "GET /v1/claims/CLM-DEMO-0002 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61026 - "GET /v1/claims/CLM-DEMO-0002/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61025 - "GET /v1/claims/CLM-DEMO-0002/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61028 - "GET /v1/claims/CLM-DEMO-0002/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61029 - "GET /v1/claims/CLM-DEMO-0002/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61030 - "GET /v1/claims/CLM-DEMO-0002/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61030 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130d5df9d7c86bbcdab42e71f74f3/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61030 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130d5df9d7c86bbcdab42e71f74f3/pages/2/image?t=TENANT-DEMO&exp=1791821001&sig=xvj6uBtqL_F9BwLfhVxRKtUgStqd9xhdk9R8dnrefI0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61030 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130d5df9d7c86bbcdab42e71f74f3/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61030 - "POST /v1/claims/CLM-DEMO-0002/decisions HTTP/1.1" 409 Conflict
+INFO:     127.0.0.1:61030 - "POST /v1/claims/CLM-DEMO-0002/approval-requests HTTP/1.1" 201 Created
+INFO:     127.0.0.1:61030 - "GET /v1/claims/CLM-DEMO-0002 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61028 - "GET /v1/claims/CLM-DEMO-0002/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61025 - "GET /v1/claims/CLM-DEMO-0002/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61029 - "GET /v1/claims/CLM-DEMO-0002/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61026 - "GET /v1/claims/CLM-DEMO-0002/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61030 - "GET /v1/claims/CLM-DEMO-0002/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61030 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130d5df9d7c86bbcdab42e71f74f3/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61030 - "POST /dev/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61030 - "POST /dev/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61030 - "GET /v1/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61026 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61030 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61026 - "GET /v1/claims/CLM-DEMO-0002 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61030 - "GET /v1/claims/CLM-DEMO-0002/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61026 - "GET /v1/claims/CLM-DEMO-0002/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61029 - "GET /v1/claims/CLM-DEMO-0002/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61025 - "GET /v1/claims/CLM-DEMO-0002/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61028 - "GET /v1/claims/CLM-DEMO-0002/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61028 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130d5df9d7c86bbcdab42e71f74f3/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61028 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130d5df9d7c86bbcdab42e71f74f3/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61028 - "POST /v1/approval-requests/APR-01a130d61fe775e08fbe2bf892038c72%3Aapprove HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61028 - "GET /v1/claims/CLM-DEMO-0002 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61025 - "GET /v1/claims/CLM-DEMO-0002/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61029 - "GET /v1/claims/CLM-DEMO-0002/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61028 - "GET /v1/claims/CLM-DEMO-0002/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61030 - "GET /v1/claims/CLM-DEMO-0002/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61026 - "GET /v1/claims/CLM-DEMO-0002/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61026 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130d5df9d7c86bbcdab42e71f74f3/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61026 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130d5df9d7c86bbcdab42e71f74f3/pages/2/image?t=TENANT-DEMO&exp=1791821002&sig=ZeZnmtoY2psGX31_w2s1TgGPKaFa47YvWD3cQqWxcb8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61030 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130d5df9d7c86bbcdab42e71f74f3/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61026 - "GET /v1/claims/CLM-DEMO-0002/audit-events HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61026 - "GET /v1/claims/CLM-DEMO-0003 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61028 - "GET /v1/claims/CLM-DEMO-0003/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61030 - "GET /v1/claims/CLM-DEMO-0003/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61025 - "GET /v1/claims/CLM-DEMO-0003/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61029 - "GET /v1/claims/CLM-DEMO-0003/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61026 - "GET /v1/claims/CLM-DEMO-0003/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61026 - "GET /v1/claims/CLM-DEMO-0003/documents/DOC-01a130d5e0ba7c71925b170fc7a61bc8/pages/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61026 - "GET /v1/claims/CLM-DEMO-0003/documents/DOC-01a130d5e0ba7c71925b170fc7a61bc8/pages/1/image?t=TENANT-DEMO&exp=1791821002&sig=aOwek1bMso9FF1EN8PSn_VoYVCouxKfL2BQyyTUfOu8 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:61026 - "GET /v1/claims/CLM-DEMO-0003/documents/DOC-01a130d5e0ba7c71925b170fc7a61bc8/pages/1 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [64384]

@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/tests/policy_ui.py", line 32, in <module>
+    p.get_by_label('Rule interpretation JSON').fill(json.dumps(fields));act('Save interpretation');act('validate rule');act('review rule');p.get_by_label('Policy approval password').fill('Synthetic-demo-2026!');act('approve rule',403);p.screenshot(path=str(out/'policy-reviewed-evidence.png'),full_page=True)
+                                                                                                                                                                                                                   ~~~^^^^^^^^^^^^^^^^^^^^
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/tests/policy_ui.py", line 19, in act
+    r=response.value;assert r.status==expected,(button,r.status,r.text());data=r.json();report['actions'].append({'button':button,'status':r.status,'result':data});return data
+                            ^^^^^^^^^^^^^^^^^^
+AssertionError: ('approve rule', 422, '{"type": "https://aw.example.invalid/problems/policy-intelligence-invalid", "title": "policy intelligence invalid", "status": 422, "detail": "author and approver/publisher must differ", "instance": "/v1/policy-intelligence/actions"}')

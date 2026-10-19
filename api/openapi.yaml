@@ -53,6 +53,20 @@ paths:
                   display_name: {type: string}
                   roles: {type: array, items: {type: string}}
                   approval_limit: {oneOf: [{$ref: '#/components/schemas/Money'}, {type: 'null'}]}
+  /auth/login:
+    post:
+      operationId: localLogin
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {type: object, required: [tenant_id, user_id, password], properties: {tenant_id: {type: string}, user_id: {type: string}, password: {type: string, maxLength: 128}}}
+      responses: {'200': {description: HttpOnly SameSite session cookie and CSRF token}, '401': {description: Invalid credentials or locked account}}
+  /auth/logout:
+    post:
+      operationId: localLogout
+      responses: {'200': {description: Session revoked}}
   /claims:
     post:
       tags: [Claims]
@@ -122,6 +136,11 @@ paths:
             application/json:
               schema: {$ref: '#/components/schemas/Claim'}
         '404': {$ref: '#/components/responses/NotFound'}
+  /claims/{claim_id}/jobs:
+    parameters: [{$ref: '#/components/parameters/ClaimId'}]
+    get:
+      operationId: getClaimJobs
+      responses: {'200': {description: Tenant-scoped processing status and safe error codes}}
   /claims/{claim_id}/documents:
     parameters: [{$ref: '#/components/parameters/ClaimId'}]
     post:
@@ -142,7 +161,7 @@ paths:
               properties:
                 declared_type: {$ref: '#/components/schemas/DocumentType'}
                 sha256: {type: string, pattern: '^[0-9a-f]{64}$'}
-                mime_type: {enum: [application/pdf, image/jpeg, image/png, image/tiff]}
+                mime_type: {enum: [application/pdf, image/jpeg, image/png, image/tiff, application/zip]}
                 size_bytes: {type: integer, minimum: 1, maximum: 52428800}
                 supersedes_document_id: {type: [string, 'null']}
       responses:
@@ -186,6 +205,24 @@ paths:
             application/json:
               schema: {$ref: '#/components/schemas/Document'}
         '422': {$ref: '#/components/responses/Unprocessable'}
+  /claims/{claim_id}/documents/{document_id}/reading-confirmations:
+    parameters:
+      - {$ref: '#/components/parameters/ClaimId'}
+      - {name: document_id, in: path, required: true, schema: {type: string}}
+    post:
+      operationId: confirmDocumentReading
+      parameters:
+        - {$ref: '#/components/parameters/IdempotencyKey'}
+        - {$ref: '#/components/parameters/IfMatch'}
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: {type: object, required: [fields], properties: {fields: {type: array, items: {type: object}}, line_items: {type: array, items: {type: object}}, document_type: {type: string}}}
+      responses:
+        '201': {description: Grounded append-only manual reading recorded}
+        '422': {description: Invalid source evidence, content: {application/problem+json: {schema: {$ref: '#/components/schemas/Problem'}}}}
+
   /claims/{claim_id}/evaluations:
     parameters: [{$ref: '#/components/parameters/ClaimId'}]
     post:
@@ -253,6 +290,24 @@ paths:
         '403': {$ref: '#/components/responses/Forbidden'}
         '412': {$ref: '#/components/responses/PreconditionFailed'}
   /claims/{claim_id}/queries:
+    get:
+      operationId: listQueryLetters
+      summary: listQueryLetters
+      parameters: []
+      responses:
+        '200':
+          description: Local operation response
+        '403':
+          description: Role denied
+    get:
+      operationId: listQueryLetters
+      summary: listQueryLetters
+      parameters: []
+      responses:
+        '200':
+          description: Local operation response
+        '403':
+          description: Role denied
     parameters: [{$ref: '#/components/parameters/ClaimId'}]
     post:
       tags: [Queries]
@@ -526,15 +581,38 @@ paths:
       tags: [Configuration]
       operationId: replayConfig
       summary: Re-evaluate the product's golden claims under the draft; returns per-claim payable deltas
-      responses: {'202': {description: Replay queued; result via GET on the same path with suffix /replay-result}}
+      responses: {'202': {description: Synchronous saved-claim replay preview with deltas; no persistence}}
   /config-artifacts/{artifact_id}/versions/{version}:publish:
     parameters: [{name: artifact_id, in: path, required: true, schema: {type: string}}, {name: version, in: path, required: true, schema: {type: string}}]
     post:
       tags: [Configuration]
       operationId: publishConfig
       summary: Publish (approver must differ from author; step-up authentication)
-      requestBody: {content: {application/json: {schema: {type: object, properties: {retroactive_to_open_claims: {type: boolean, default: false}}}}}}
+      requestBody: {content: {application/json: {schema: {type: object, properties: {current_password: {type: string, maxLength: 128}, retroactive_to_open_claims: {type: boolean, default: false}}}}}}
       responses: {'200': {description: Published}, '403': {$ref: '#/components/responses/Forbidden'}}
+  /config-artifacts/{artifact_id}/versions/{version}:
+    parameters: [{name: artifact_id, in: path, required: true, schema: {type: string}}, {name: version, in: path, required: true, schema: {type: string}}]
+    get:
+      tags: [Configuration]
+      operationId: getConfigVersion
+      responses: {'200': {description: Immutable configuration body and prior-version diff}}
+  /config-artifacts:import:
+    post:
+      tags: [Configuration]
+      operationId: importConfigPatch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [kind, body, filename, file_base64]
+              properties:
+                kind: {$ref: '#/components/schemas/ArtifactKind'}
+                body: {type: object}
+                filename: {type: string, pattern: '\.(csv|xlsx)$'}
+                file_base64: {type: string, maxLength: 1400000}
+      responses: {'200': {description: Validated local configuration preview and diff}}
   /imports/policies:
     post:
       tags: [Configuration]
@@ -563,6 +641,219 @@ paths:
           application/json:
             schema: {type: object, required: [event_id, event_type, external_ref], properties: {event_id: {type: string}, event_type: {enum: [DOCUMENT_ADDED, CLAIM_WITHDRAWN, PAYMENT_CONFIRMED, CLAIM_UPDATED]}, external_ref: {type: string}, data: {type: object}}}
       responses: {'202': {description: Accepted (or replayed response for a duplicate event_id)}}
+  /reviewers:
+    get:
+      operationId: listAssignableUsers
+      summary: listAssignableUsers
+      parameters: []
+      responses:
+        '200':
+          description: Local operation response
+        '403':
+          description: Role denied
+  /operations:
+    get:
+      operationId: getOperations
+      summary: getOperations
+      parameters: []
+      responses:
+        '200':
+          description: Local operation response
+        '403':
+          description: Role denied
+  /claims/{claim_id}/export:
+    parameters: [{name: claim_id, in: path, required: true, schema: {type: string}}]
+    get:
+      operationId: exportClaim
+      summary: exportClaim
+      parameters: []
+      responses:
+        '200':
+          description: Local operation response
+        '403':
+          description: Role denied
+  /claims/{claim_id}/audit-export:
+    parameters: [{name: claim_id, in: path, required: true, schema: {type: string}}]
+    get:
+      operationId: exportAudit
+      summary: exportAudit
+      parameters: []
+      responses:
+        '200':
+          description: Local operation response
+        '403':
+          description: Role denied
+
+  /queries/{query_id}/letter:
+    parameters: [{name: query_id, in: path, required: true, schema: {type: string}}]
+    get:
+      operationId: exportQueryLetter
+      summary: exportQueryLetter
+      parameters: []
+      responses:
+        '200':
+          description: Local operation response
+        '403':
+          description: Role denied
+  /admin/users:
+    get:
+      operationId: listLocalUsers
+      summary: listLocalUsers
+      parameters: []
+      responses:
+        '200':
+          description: Local operation response
+        '403':
+          description: Role denied
+    post:
+      operationId: saveLocalUser
+      summary: saveLocalUser
+      parameters:
+      - &id001
+        $ref: '#/components/parameters/IdempotencyKey'
+      responses:
+        '200':
+          description: Local operation response
+        '403':
+          description: Role denied
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                user_id:
+                  type: string
+                  pattern: ^[A-Za-z0-9_-]{1,64}$
+                display_name:
+                  type: string
+                  minLength: 1
+                  maxLength: 128
+                is_active:
+                  type: boolean
+                roles:
+                  type: array
+                  uniqueItems: true
+                  minItems: 1
+                  items:
+                    enum:
+                    - PROCESSOR
+                    - MEDICAL_OFFICER
+                    - SUPERVISOR
+                    - AUDITOR
+                    - FWA_ANALYST
+                    - CONFIG_ADMIN
+                    - TENANT_ADMIN
+                    - READ_ONLY
+                approval_limit:
+                  type:
+                  - string
+                  - 'null'
+                  pattern: ^[0-9]+\.[0-9]{2}$
+                password:
+                  type: string
+                  minLength: 12
+                  maxLength: 128
+                current_password:
+                  type: string
+                  minLength: 1
+                  maxLength: 128
+              required:
+              - user_id
+              - display_name
+              - is_active
+              - roles
+              - current_password
+  /queries/{query_id}:answer:
+    parameters: [{name: query_id, in: path, required: true, schema: {type: string}}]
+    post:
+      operationId: answerQuery
+      summary: answerQuery
+      parameters:
+      - *id001
+      responses:
+        '200':
+          description: Local operation response
+        '403':
+          description: Role denied
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties:
+                query_item_id:
+                  type: string
+                  minLength: 1
+                  maxLength: 128
+                document_id:
+                  type: string
+                  minLength: 1
+                  maxLength: 128
+              required:
+              - query_item_id
+              - document_id
+  /queries/{query_id}:remind:
+    parameters: [{name: query_id, in: path, required: true, schema: {type: string}}]
+    post:
+      operationId: remindQuery
+      summary: remindQuery
+      parameters:
+      - *id001
+      responses:
+        '200':
+          description: Local operation response
+        '403':
+          description: Role denied
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              properties: {}
+              required: []
+
+  /policy-intelligence:
+    get:
+      operationId: listPolicyIntelligence
+      summary: Tenant review records and isolated public research journal
+      responses:
+        '200': {description: Policy intelligence snapshot}
+  /policy-intelligence/actions:
+    post:
+      operationId: actPolicyIntelligence
+      summary: Local source review and shadow lifecycle; no runtime publication
+      parameters: [{$ref: '#/components/parameters/IdempotencyKey'}]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              additionalProperties: false
+              required: [action, target]
+              properties:
+                action: {enum: [intake_source, verify_source, extract_rules, revise_rule, validate_rule, review_rule, approve_rule, publish_rule, preview, propose_product_history, approve_product_history, reject_research, resolve_research]}
+                target: {type: string, minLength: 1, maxLength: 200}
+                data: {type: object}
+      responses:
+        '200': {description: Reviewed action or blocked shadow preview}
+  /policy-intelligence/sources/{source_id}/pages/{page_no}:
+    parameters:
+      - {name: source_id, in: path, required: true, schema: {type: string}}
+      - {name: page_no, in: path, required: true, schema: {type: integer, minimum: 1}}
+    get:
+      operationId: getPolicySourcePage
+      summary: Hash-checked original research page for authorised reviewer
+      responses:
+        '200': {description: Page rendering and text with SHA256}
+
 webhooks:
   claim.evaluation.completed:
     post:
@@ -598,6 +889,7 @@ webhooks:
             schema: {$ref: '#/components/schemas/WebhookEvent'}
       responses:
         '2XX': {description: Accepted}
+
 components:
   securitySchemes:
     oauth2ClientCredentials:
@@ -635,7 +927,7 @@ components:
     ArtifactKind: {enum: [POLICY_CONFIG, NME_LIST, TARIFF, CHECKLIST, WORKFLOW_CONFIG, RULE_PACK, CLASSIFIER_MAP]}
     Workflow: {enum: [PREAUTH, ENHANCEMENT, CASHLESS_DISCHARGE, IPD_REIMBURSEMENT, OPD_REIMBURSEMENT, OPD_CASHLESS]}
     ClaimStatus: {enum: [INTAKE, DOCS_INCOMPLETE, PROCESSING, READY_FOR_REVIEW, IN_REVIEW, MEDICAL_REVIEW, QUERY_RAISED, AWAITING_RESPONSE, PENDING_APPROVAL, ESCALATED_CRC, FINALISED, EXPORTED, REOPENED, WITHDRAWN]}
-    DocumentType: {enum: [CLAIM_FORM, DISCHARGE_SUMMARY, FINAL_BILL_ITEMISED, FINAL_BILL_SUMMARY, PHARMACY_BILL, INVESTIGATION_REPORT, ADMISSION_RECORD, PRESCRIPTION, PAYMENT_RECEIPT, ID_PROOF, BANK_DETAILS, PREAUTH_REQUEST, IMPLANT_INVOICE, PAST_TREATMENT_RECORDS, PROPOSAL_FORM, OTHER]}
+    DocumentType: {enum: [ESTIMATE_BILL, CLAIM_FORM, DISCHARGE_SUMMARY, FINAL_BILL_ITEMISED, FINAL_BILL_SUMMARY, PHARMACY_BILL, INVESTIGATION_REPORT, ADMISSION_RECORD, PRESCRIPTION, PAYMENT_RECEIPT, ID_PROOF, BANK_DETAILS, PREAUTH_REQUEST, IMPLANT_INVOICE, PAST_TREATMENT_RECORDS, PROPOSAL_FORM, OTHER]}
     ClaimCreate:
       type: object
       required: [external_ref, workflow, policy_no, member_id]
@@ -648,6 +940,7 @@ components:
         hospital_id: {type: [string, 'null']}
         admission_date: {type: [string, 'null'], format: date}
         discharge_date: {type: [string, 'null'], format: date}
+        parent_claim_id: {type: [string, 'null']}
         claimed_amount: {$ref: '#/components/schemas/Money'}
     ClaimSummary:
       type: object

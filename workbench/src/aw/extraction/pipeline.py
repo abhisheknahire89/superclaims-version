@@ -22,7 +22,7 @@ REQUIRED_BY_TYPE = {
     "DISCHARGE_SUMMARY": {"patient.name", "admission.date", "diagnosis.primary_text"},
     "CLAIM_FORM": {"patient.name"},
 }
-LOW_CONFIDENCE = 0.85
+LOW_CONFIDENCE = 0.95
 
 
 @lru_cache(maxsize=4)
@@ -39,6 +39,16 @@ def load_pages(conn: Conn, store, tenant_id: str, document_id: str) -> list[Page
             pages.append(PageText.from_json(json.loads(store.get(r["text_key"]))))
         else:
             pages.append(PageText(r["page_no"], 0, 0, "", [], [], "NONE"))
+    by_number = {p.page_no:p for p in pages}
+    transcripts=conn.fetch_all("SELECT * FROM human_page_transcription WHERE tenant_id=$1 AND document_id=$2 ORDER BY confirmed_at",tenant_id,document_id)
+    for t in transcripts:
+        page=by_number.get(t["page_no"])
+        if page:
+            x0,top,x1,bottom=t["bbox"]
+            page.lines.append({"text":t["quote"],"x0":x0,"top":top,"x1":x1,"bottom":bottom,"confidence":1,
+                               "source":"HUMAN_TRANSCRIPTION","transcription_id":t["transcription_id"]})
+            page.text += "\n"+t["quote"]
+            if page.text_layer=="NONE":page.text_layer="HUMAN_TRANSCRIPTION"
     return pages
 
 
@@ -86,12 +96,13 @@ def run_extraction(conn: Conn, ctx, tenant_id: str, document_id: str) -> dict:
         return {"run_id": run_id, "outcome": "FAILED", "errors": errors[:5]}
 
     page_text = {p.page_no: p.text for p in pages}
+    page_map = {p.page_no: p for p in pages}
     conn.execute("INSERT INTO extraction_run (tenant_id, extraction_run_id, document_id, pipeline_version, model_ref, prompt_version, outcome)"
                  " VALUES ($1,$2,$3,$4,$5,$6,'OK')", tenant_id, run_id, document_id, PIPELINE_VERSION, provider.name, None)
     verified_paths, not_found, low_conf = set(), 0, 0
     for f in raw["fields"]:
         span = f["evidence"][0]
-        g = grounding.check(span["quote"], page_text.get(span["page"], ""))
+        g = grounding.verify_record(f, page_map)
         verified_paths.add(f["path"]) if g == "VERIFIED" else None
         not_found += g != "VERIFIED"
         low_conf += f["confidence"] < LOW_CONFIDENCE
@@ -100,17 +111,20 @@ def run_extraction(conn: Conn, ctx, tenant_id: str, document_id: str) -> dict:
             " VALUES ($1,$2,$3,$4,$5,$6,$7::jsonb,$8,$9::jsonb,$10)",
             tenant_id, new_id("FCT"), claim_id, run_id, f["path"], None if f["value"] is None else str(f["value"]),
             Json(f.get("normalised", f["value"])), round(float(f["confidence"]), 3),
-            Json({"document_id": document_id, "page": span["page"], "bbox": span.get("bbox"), "quote": span["quote"]}), g)
+            Json({"document_id": document_id, "page": span["page"], "bbox": span.get("bbox"), "quote": span["quote"],
+                  "transcription_ids": [ln["transcription_id"] for p in pages if p.page_no==span["page"] for ln in p.lines if ln.get("transcription_id") and grounding.check(ln["text"],span["quote"])=="VERIFIED"]}), g)
     for item in raw.get("line_items", []):
         span = item["evidence"][0]
-        g = grounding.check(span["quote"], page_text.get(span["page"], ""))
+        g = grounding.verify_record(item, page_map)
         not_found += g != "VERIFIED"
+        low_conf += item["confidence"] < LOW_CONFIDENCE
         conn.execute(
             "INSERT INTO extracted_fact (tenant_id, fact_id, claim_id, extraction_run_id, field_path, raw_value, normalised_value, confidence, evidence, grounding_check)"
             " VALUES ($1,$2,$3,$4,'bill.line_item',$5,$6::jsonb,$7,$8::jsonb,$9)",
             tenant_id, new_id("FCT"), claim_id, run_id, item["description"], Json({k: v for k, v in item.items() if k != "evidence"}),
             round(float(item["confidence"]), 3),
-            Json({"document_id": document_id, "page": span["page"], "bbox": span.get("bbox"), "quote": span["quote"]}), g)
+            Json({"document_id": document_id, "page": span["page"], "bbox": span.get("bbox"), "quote": span["quote"],
+                  "transcription_ids": [ln["transcription_id"] for p in pages if p.page_no==span["page"] for ln in p.lines if ln.get("transcription_id") and grounding.check(ln["text"],span["quote"])=="VERIFIED"]}), g)
     required = REQUIRED_BY_TYPE.get(dtype, set())
     complete = required <= verified_paths and (dtype != "FINAL_BILL_ITEMISED" or raw.get("line_items"))
     status = "EXTRACTED" if complete and not low_conf else "NEEDS_REVIEW"

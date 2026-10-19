@@ -37,11 +37,12 @@ class Worker:
 
     def _claim(self) -> dict | None:
         with self.poll_db.system_tx() as c:
+            c.execute("UPDATE processing_job SET state='FAILED_FINAL',last_error_code='LEASE_EXHAUSTED',locked_by=NULL,locked_until=NULL,finished_at=now() WHERE job_id IN (SELECT job_id FROM processing_job WHERE state='RUNNING' AND locked_until<now() AND attempts>=max_attempts FOR UPDATE SKIP LOCKED)")
             return c.fetch_one(
                 "UPDATE processing_job SET state = 'RUNNING', attempts = attempts + 1, locked_by = $1,"
                 " locked_until = now() + make_interval(secs => $2) WHERE job_id = ("
-                "  SELECT job_id FROM processing_job WHERE (state IN ('QUEUED','FAILED_RETRYABLE') AND run_after <= now())"
-                "     OR (state = 'RUNNING' AND locked_until < now())"
+                "  SELECT job_id FROM processing_job WHERE attempts<max_attempts AND ((state IN ('QUEUED','FAILED_RETRYABLE') AND run_after <= now())"
+                "     OR (state = 'RUNNING' AND locked_until < now()))"
                 "  ORDER BY run_after, created_at FOR UPDATE SKIP LOCKED LIMIT 1)"
                 " RETURNING job_id, tenant_id, job_kind, subject_id, payload, attempts, max_attempts",
                 self.name, self.lease)
@@ -50,14 +51,14 @@ class Worker:
         with self.poll_db.system_tx() as c:
             if ok:
                 c.execute("UPDATE processing_job SET state='SUCCEEDED', locked_by=NULL, locked_until=NULL, finished_at=now()"
-                          " WHERE job_id=$1", job["job_id"])
+                          " WHERE job_id=$1 AND locked_by=$2 AND attempts=$3", job["job_id"],self.name,job['attempts'])
             else:
                 final = job["attempts"] >= job["max_attempts"]
                 delay = BACKOFF_SECONDS[min(job["attempts"] - 1, len(BACKOFF_SECONDS) - 1)]
                 c.execute("UPDATE processing_job SET state=$2, last_error_code=$3, locked_by=NULL, locked_until=NULL,"
                           " run_after = now() + make_interval(secs => $4), finished_at = CASE WHEN $2 = 'FAILED_FINAL' THEN now() END"
-                          " WHERE job_id=$1",
-                          job["job_id"], "FAILED_FINAL" if final else "FAILED_RETRYABLE", error_code, delay)
+                          " WHERE job_id=$1 AND locked_by=$5 AND attempts=$6",
+                          job["job_id"], "FAILED_FINAL" if final else "FAILED_RETRYABLE", error_code, delay,self.name,job['attempts'])
 
     def run_once(self) -> bool:
         job = self._claim()
@@ -68,12 +69,13 @@ class Worker:
             if handler is None:
                 raise RuntimeError(f"no handler for {job['job_kind']}")
             with self.app_db.tenant_tx(job["tenant_id"]) as conn:
+                current=conn.fetch_one('SELECT locked_by,attempts,state FROM processing_job WHERE tenant_id=$1 AND job_id=$2 FOR UPDATE',job['tenant_id'],job['job_id'])
+                if not current or current['locked_by']!=self.name or current['attempts']!=job['attempts'] or current['state']!='RUNNING':return True
                 handler(conn, job)
-            self._finish(job, True)
+                conn.execute("UPDATE processing_job SET state='SUCCEEDED',locked_by=NULL,locked_until=NULL,finished_at=now() WHERE tenant_id=$1 AND job_id=$2",job['tenant_id'],job['job_id'])
         except Exception as e:  # noqa: BLE001
             code = type(e).__name__
             log.warning("job %s %s failed: %s", job["job_id"], job["job_kind"], code)
-            log.debug("%s", traceback.format_exc())
             self._finish(job, False, code)
         return True
 

@@ -1,0 +1,20 @@
+{
+  "clean_commit": "7a777f8db9db50dd2f6792ecc5d1f4b2c1468122",
+  "git_status": "?? workbench/evidence/",
+  "local_snapshot_includes_pending_changes": true,
+  "original_repository_commit_unchanged": true,
+  "dependency_source": "fresh venv; PIP_NO_INDEX=1 from cached local wheels",
+  "checksums_equal": {
+    "src/aw/storage.py": true,
+    "src/aw/backup.py": true,
+    "src/aw/web/app.js": true,
+    "tests/test_hardening.py": true,
+    "tests/e2e.py": true,
+    "src/aw/engine/core.py": true,
+    "src/aw/evaluations.py": true
+  },
+  "pack_final": "clean-pack-verified.log: 59 contracts, 8 caught mutations, 3000 property cases; exit0",
+  "source_addendum": "final verification runner repair fast-forwarded after application tests; changes confined to verification scripts",
+  "final_documentation_snapshot": "f0510fd",
+  "post_verification_change": "delivery/context/traceability documents and trailing-whitespace cleanup only"
+}

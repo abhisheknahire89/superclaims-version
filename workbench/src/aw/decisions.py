@@ -18,6 +18,7 @@ from pathlib import Path
 
 from jsonschema import Draft202012Validator
 
+from .errors import AppError
 from . import audit, configs, jobs
 from .auth import Forbidden, Principal
 from .db import Conn, Json
@@ -34,10 +35,8 @@ GRIEVANCE_PLACEHOLDER = {  # customer-supplied per tenant before go-live; placeh
 }
 
 
-class DecisionError(Exception):
-    def __init__(self, status: int, code: str, message: str, extra: dict | None = None):
-        super().__init__(message)
-        self.status, self.code, self.extra = status, code, extra or {}
+class DecisionError(AppError):
+    pass
 
 
 @lru_cache(maxsize=2)
@@ -86,6 +85,9 @@ def second_approval_triggers(cfg: dict, principal: Principal, ev: dict, approved
 
 def _preconditions(conn: Conn, p: Principal, claim: dict, ev: dict, body: dict) -> int | None:
     disp = body["disposition"]
+    if claim['workflow']=='ENHANCEMENT' and disp in APPROVALS:
+        prior=conn.fetch_val('SELECT approved_payable_paise FROM decision WHERE tenant_id=$1 AND claim_id=$2 ORDER BY decided_at DESC LIMIT 1',p.tenant_id,claim['parent_claim_id'])
+        if to_paise(body['approved_payable'])<prior:raise DecisionError(422,'enhancement-below-authorisation','enhancement amount is cumulative and cannot be below previous authorisation')
     if claim["status"] not in DECIDABLE_STATES + ("PENDING_APPROVAL",):
         raise DecisionError(409, "claim-not-decidable", f"claim is {claim['status']}")
     if claim["investigation_hold"]:
@@ -171,7 +173,7 @@ def _pending(conn: Conn, p: Principal, arid: str) -> dict:
 def approve_request(conn: Conn, p: Principal, schema_dir: Path, arid: str, comment: str | None = None) -> dict:
     ar = _pending(conn, p, arid)
     claim, ev = _load(conn, p.tenant_id, ar["claim_id"], ar["evaluation_id"])
-    if p.approval_limit_paise is not None and ar["proposed_payable_paise"] and ar["proposed_payable_paise"] > p.approval_limit_paise:
+    if ar["proposed_payable_paise"] is not None and (p.approval_limit_paise is None or ar["proposed_payable_paise"] > p.approval_limit_paise):
         raise Forbidden("the approved amount is above the approver's own limit")
     conn.execute("UPDATE approval_request SET state='APPROVED', decided_at=now(), comment=coalesce($3, comment) WHERE tenant_id=$1 AND approval_request_id=$2",
                  p.tenant_id, arid, comment)
@@ -197,6 +199,17 @@ def _reserve_si(conn: Conn, tenant_id: str, claim: dict, ev: dict, approved: int
                         tenant_id, claim["policy_no"], claim["member_id"])
     pol = conn.fetch_one("SELECT period_start, config_artifact_id, config_version FROM policy WHERE tenant_id=$1 AND policy_no=$2", tenant_id, claim["policy_no"])
     cfg = configs.get(conn, tenant_id, pol["config_artifact_id"], pol["config_version"])
+    from .workflows import group_claims
+    group=group_claims(conn,tenant_id,claim)
+    for cid in group:
+        rows0=conn.fetch_all("SELECT entry_kind,sum(amount_paise) AS amount FROM si_ledger_entry WHERE tenant_id=$1 AND claim_id=$2 AND policy_year_start=$3 GROUP BY entry_kind",tenant_id,cid,pol['period_start'])
+        amounts={r['entry_kind']:int(r['amount']) for r in rows0};release=amounts.get('RESERVED',0)-amounts.get('RELEASED',0)
+        if release>0:conn.execute("INSERT INTO si_ledger_entry (tenant_id,policy_no,member_id,policy_year_start,claim_id,entry_kind,amount_paise) VALUES ($1,$2,$3,$4,$5,'RELEASED',$6)",tenant_id,claim['policy_no'],claim['member_id'],pol['period_start'],cid,release)
+    if claim['workflow'].startswith('OPD'):
+        benefit=cfg.get('opd_benefit')
+        rows1=conn.fetch_all("SELECT l.entry_kind,sum(l.amount_paise) AS amount FROM si_ledger_entry l JOIN claim c ON c.tenant_id=l.tenant_id AND c.claim_id=l.claim_id WHERE l.tenant_id=$1 AND l.policy_no=$2 AND l.member_id=$3 AND l.policy_year_start=$4 AND c.workflow IN ('OPD_REIMBURSEMENT','OPD_CASHLESS') GROUP BY l.entry_kind",tenant_id,claim['policy_no'],claim['member_id'],pol['period_start'])
+        values={r['entry_kind']:int(r['amount']) for r in rows1};used_opd=values.get('RESERVED',0)+values.get('PAID',0)-values.get('RELEASED',0)
+        if not benefit or approved>min(to_paise(benefit['per_claim_limit']),to_paise(benefit['annual_limit'])-used_opd):raise DecisionError(409,'opd-benefit-exhausted','re-evaluate OPD benefit balance')
     rows = conn.fetch_all("SELECT entry_kind, sum(amount_paise) AS s FROM si_ledger_entry WHERE tenant_id=$1 AND policy_no=$2 AND member_id=$3"
                           " AND policy_year_start=$4 GROUP BY entry_kind", tenant_id, claim["policy_no"], claim["member_id"], pol["period_start"])
     s = {r["entry_kind"]: int(r["s"]) for r in rows}
@@ -266,6 +279,8 @@ def _write_decision(conn: Conn, tenant_id: str, schema_dir: Path, claim: dict, e
                  " VALUES ($1,$2,$3,$4,$5::disposition_type,$6,$7,$8,$9,$10,$11,$12,$13::jsonb)",
                  tenant_id, did, claim["claim_id"], ev["evaluation_id"], disp, approved, decided_by, second_approver, body.get("crc_reference"),
                  communicated_by, body.get("duplicate_of_claim_id"), dev, Json(ws))
+    from .workflows import assert_transition
+    assert_transition(claim["workflow"],claim["status"],"WITHDRAWN" if disp=="WITHDRAWN" else "FINALISED")
     new_status = "WITHDRAWN" if disp == "WITHDRAWN" else "FINALISED"
     conn.execute("UPDATE claim SET status=$3::claim_status, row_version=row_version+1, updated_at=now() WHERE tenant_id=$1 AND claim_id=$2",
                  tenant_id, claim["claim_id"], new_status)

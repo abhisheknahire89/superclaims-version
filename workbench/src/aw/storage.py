@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import tempfile
 from pathlib import Path
 from typing import Protocol
 
@@ -38,21 +39,38 @@ class LocalWormStore:
         digest = hashlib.sha256(data).hexdigest()
         if p.exists():
             if hashlib.sha256(p.read_bytes()).hexdigest() == digest:
-                return digest            # idempotent re-put of identical bytes
+                self._checksum(p,digest)
+                return digest            # recover publication interrupted before checksum
             raise ImmutableObjectError(f"object {key} already exists with different content")
         p.parent.mkdir(parents=True, exist_ok=True)
-        tmp = p.with_suffix(p.suffix + ".tmp")
-        tmp.write_bytes(data)
-        os.chmod(tmp, 0o444)
-        tmp.rename(p)
-        (p.parent / (p.name + ".sha256")).write_text(digest)
+        fd,name=tempfile.mkstemp(prefix='.aw-write-',dir=p.parent)
+        tmp=Path(name)
+        try:
+            with os.fdopen(fd,'wb') as stream:stream.write(data);stream.flush();os.fsync(stream.fileno())
+            os.chmod(tmp,0o444)
+            try:os.link(tmp,p)
+            except FileExistsError:
+                if hashlib.sha256(p.read_bytes()).hexdigest()!=digest:raise ImmutableObjectError('object already exists with different content')
+            self._checksum(p,digest)
+        finally:tmp.unlink(missing_ok=True)
         return digest
+
+    def _checksum(self,p:Path,digest:str):
+        side=p.parent/(p.name+'.sha256')
+        fd,name=tempfile.mkstemp(prefix='.aw-write-',dir=p.parent);tmp=Path(name)
+        try:
+            with os.fdopen(fd,'w') as stream:stream.write(digest);stream.flush();os.fsync(stream.fileno())
+            os.chmod(tmp,0o444)
+            try:os.link(tmp,side)
+            except FileExistsError:
+                if side.read_text().strip()!=digest:raise ImmutableObjectError('existing checksum differs from object')
+        finally:tmp.unlink(missing_ok=True)
 
     def get(self, key: str) -> bytes:
         p = self._path(key)
         data = p.read_bytes()
         side = p.parent / (p.name + ".sha256")
-        if side.exists() and hashlib.sha256(data).hexdigest() != side.read_text().strip():
+        if not side.exists() or hashlib.sha256(data).hexdigest() != side.read_text().strip():
             raise ImmutableObjectError(f"object {key} failed its integrity check")
         return data
 

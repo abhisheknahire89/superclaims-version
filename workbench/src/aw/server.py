@@ -31,7 +31,8 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--seed-demo", action="store_true", help="seed the synthetic demo tenant and load the three demo claims (needs AW_OWNER_DSN)")
     ap.add_argument("--no-worker", action="store_true", help="do not start the in-process job worker")
     args = ap.parse_args(argv)
-    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s %(message)s")
+    from .logging_safe import configure
+    configure()
 
     settings = load()
     if settings.environment != "prod" and args.host not in ("127.0.0.1", "localhost", "::1") and os.environ.get("AW_BIND_ANY") != "1":
@@ -54,12 +55,16 @@ def main(argv: list[str] | None = None) -> int:
             print("--seed-demo needs AW_OWNER_DSN", file=sys.stderr)
             return 2
         loaded = demo.prepare(ctx, Database(owner_dsn), worker)
+        from .workflow_demo import prepare as prepare_workflows
+        prepare_workflows(ctx,worker)
         log.info("demo tenant ready; documents loaded for %s", ", ".join(loaded) or "no new claims")
     if worker is not None:
         threading.Thread(target=worker.forever, name="aw-worker", daemon=True).start()
+        from .maintenance import forever
+        threading.Thread(target=forever,args=(ctx,),name="aw-maintenance",daemon=True).start()
 
     import uvicorn  # imported late so `--help` works without it
-    uvicorn.run(create_app(ctx), host=args.host, port=args.port, log_level="info", proxy_headers=False, server_header=False)
+    uvicorn.run(create_app(ctx), host=args.host, port=args.port, log_level="info", proxy_headers=False, server_header=False,access_log=False)
     return 0
 
 

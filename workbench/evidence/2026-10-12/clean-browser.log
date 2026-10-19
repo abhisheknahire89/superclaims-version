@@ -1,0 +1,13 @@
+PYTHONPATH=src:tests /private/tmp/aw-clean-checkout/workbench/.venv/bin/python tests/e2e.py e2e-shots
+Browser flow: reviewer_ui.py
+{"case": "TC-UX-02", "synthetic_only": true, "condition": "same loaded page, warm browser cache, localhost Chromium", "samples_ms": [18.799999952316284, 17.600000023841858, 16.59999990463257, 17, 17.600000023841858, 16.09999990463257, 16.800000071525574, 17, 16.299999952316284, 16.899999976158142], "max_ms": 18.799999952316284, "mean_ms": 17.069999980926514, "override_status": 201, "page_errors": []}
+Browser flow: ui_smoke.py
+screenshots in e2e-shots; 0 problem(s)
+Browser flow: manual_ui.py
+manual reading UI: grounded source and explicit human whole-page attestation saved (201)
+Browser flow: operations_ui.py
+operations UI: assignment, filters, KPIs, approved PDF download, evidence reply, audited user creation;0 page errors
+Browser flow: workflow_ui.py
+4 workflow browser reviews and human decisions passed; linked enhancement registration201;9 screenshots
+Browser flow: config_ui.py
+config UI: draft/validate/replay/self-publish blocked/second administrator publish passed

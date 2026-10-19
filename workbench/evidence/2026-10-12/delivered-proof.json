@@ -1,0 +1,15 @@
+{
+  "ready": {
+    "ready": true,
+    "database": true,
+    "storage": true,
+    "local_ocr": true,
+    "manual_entry": true,
+    "worker_configured": true
+  },
+  "login": "PROC-07",
+  "queue_claims": 6,
+  "trace1_payable": "107591.00",
+  "page_errors": [],
+  "claim_mutations": false
+}

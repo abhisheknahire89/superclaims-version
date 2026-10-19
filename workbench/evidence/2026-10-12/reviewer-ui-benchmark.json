@@ -1,0 +1,21 @@
+{
+  "case": "TC-UX-02",
+  "synthetic_only": true,
+  "condition": "same loaded page, warm browser cache, localhost Chromium",
+  "samples_ms": [
+    17.399999976158142,
+    16.700000047683716,
+    15.199999928474426,
+    17,
+    17,
+    17.200000047683716,
+    17.100000023841858,
+    17.399999976158142,
+    17.199999928474426,
+    17.399999976158142
+  ],
+  "max_ms": 17.399999976158142,
+  "mean_ms": 16.959999990463256,
+  "override_status": 201,
+  "page_errors": []
+}

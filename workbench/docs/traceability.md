@@ -1,4 +1,20 @@
-# Backlog → code → tests
+# Current milestone traceability — 13 October 2026
+
+The current executed feature matrix, tests, benchmark limitations and pilot gaps are in [DELIVERY.md](../DELIVERY.md). Milestones0–6 extend the existing implementation; the older Phase1 table below is retained as historical context and is not a current status report.
+
+| Milestone | Current implementation | Actual proof |
+|---|---|---|
+| 0 native baseline | FastAPI/psycopg, native PostgreSQL startup, preserved legacy driver | Final71 tests each driver, five exact demo traces, full pack |
+| 1 local reading | `extraction/{ocr,pages,providers,grounding,manual}.py`, `bundles.py`, migration0003 | `test_document_reading`, manual browser; independent per-type/quality/held-back metrics in delivery; accuracy inadequate |
+| 2 config admin | `config_admin.py`, `web/config.js`, config routes, extended engine | `test_config_admin`, browser draft/replay/four-eyes publish |
+| 3 workflows | `workflows.py`, `workflow_demo.py`, migration0004, checklists | `test_workflows`, four browser workflows and enhancement |
+| 4 platform | `local_auth.py`, sessions, jobs/worker/maintenance, anchors, backup, migration0005 | `test_platform`, RLS/role/CSRF/revocation, actual kill/recovery and restored restricted app |
+| 5 operations | `queries.py`, operations API/UI, migration0006 | `test_operations` including TC-QRY-01, query PDF/reply/assignment/admin browser |
+| 6 hardening | `test_hardening`, reviewer timing, independent review, clean snapshot | TC-REV-01/REL-04/SEC-02; browser TC-UX-02; corrected mutation runner/full pack, actual DR |
+
+Docker and remote CI are NOT RUN. New external integrations, hosted application AI/OCR and customer production deployment are NOT BUILT. See the delivery matrix for precise three-state reporting and per-feature limits.
+
+# Historical Phase1 backlog → code → tests
 
 This table maps the backlog in `../11-build-backlog.md` to what the Phase 1 workbench build contains.
 
@@ -53,3 +69,8 @@ The UI smoke test (`tests/ui_smoke.py`, run with `make ui-smoke`) is separate. I
 5. Supervisor approves.
 6. Check the audit-chain verification.
 7. Open blocked claim 3: findings, evidence and drafted queries.
+
+Policy intelligence: ADR-20, migrations0007–0008, aw.policy_intelligence and
+api.policy_intelligence implement isolated public provenance, evidence candidates,
+four-eyes shadow publication and blocked unknown private inputs. Executed proof and
+remaining gaps are in POLICY_INTELLIGENCE_DELIVERY.md and evidence/2026-10-13.

@@ -1,0 +1,7 @@
+AW_ENV=test AW_DB_DRIVER=pgwire AW_REQUIRE_DB=1 PYTHONPATH=src:tests /Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/bin/python -m unittest discover -s tests -p 'test_*.py' -t .
+.........................job 2f2496f1-9fd0-491d-9a55-586df37e4c4d EXTRACT failed: ValueError
+................
+----------------------------------------------------------------------
+Ran 41 tests in 10.279s
+
+OK

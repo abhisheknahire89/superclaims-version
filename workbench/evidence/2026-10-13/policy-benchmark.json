@@ -1,0 +1,20 @@
+[
+  {
+    "sha256": "366e08afe7e9b71238d74db9e9988767c901b8e3eabca7ffc30c4892c6b210c5",
+    "pages": 45,
+    "candidate_count": 201,
+    "seconds": 7.044,
+    "confidence": "UNMEASURED",
+    "source_review": "NEEDS_HUMAN_REVIEW",
+    "all_quotes_and_boxes_checked": true
+  },
+  {
+    "sha256": "209a0e88f19e44f5b414955b014856d68235a3fbbcd3aa158a2183e2a4622303",
+    "pages": 37,
+    "candidate_count": 143,
+    "seconds": 4.285,
+    "confidence": "UNMEASURED",
+    "source_review": "NEEDS_HUMAN_REVIEW",
+    "all_quotes_and_boxes_checked": true
+  }
+]

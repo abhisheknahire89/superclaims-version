@@ -1,0 +1,2 @@
+PYTHONPATH=src /Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/bin/python -m aw.corpus.generate corpus/out
+{"claims": 20, "layouts": 5, "documents": 120}

@@ -1,0 +1,31 @@
+test_assignment_dashboard_exports (tests.test_operations.Operations.test_assignment_dashboard_exports) ... unhandled operation=getOperations error_code=PgError
+FAIL
+test_query_unapproved_export_reply_and_nonresponse (tests.test_operations.Operations.test_query_unapproved_export_reply_and_nonresponse) ... job 5f539835-7b21-425d-a6df-16c5bc92a7dd EVALUATE failed: AppError
+ok
+test_user_admin_last_supervisor_and_audit_rls (tests.test_operations.Operations.test_user_admin_last_supervisor_and_audit_rls) ... unhandled operation=saveLocalUser error_code=PgError
+FAIL
+
+======================================================================
+FAIL: test_assignment_dashboard_exports (tests.test_operations.Operations.test_assignment_dashboard_exports)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/tests/test_operations.py", line 27, in test_assignment_dashboard_exports
+    for user,status in [('PROC-07',403),('SUP-02',200),('ADM-01',200)]:self.assertEqual(self.client.get('/v1/operations',headers=self.h(user)).status,status)
+                                                                       ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: 500 != 200
+
+======================================================================
+FAIL: test_user_admin_last_supervisor_and_audit_rls (tests.test_operations.Operations.test_user_admin_last_supervisor_and_audit_rls)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/tests/test_operations.py", line 51, in test_user_admin_last_supervisor_and_audit_rls
+    r=self.client.post('/v1/admin/users',json_body=body,headers=self.idem('ADM-01'));self.assertEqual(r.status,200,r)
+                                                                                     ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^
+AssertionError: 500 != 200 : <Response 500 b'{"type": "https://aw.example.invalid/problems/internal", "title": "internal", "status": 500, "detail": "unexpected error", "instance": "/v1/admin/users"}'>
+
+----------------------------------------------------------------------
+Ran 3 tests in 1.697s
+
+FAILED (failures=2)
+PgError 42703: column a.rule_id does not exist
+PgError 42501: permission denied for table tenant

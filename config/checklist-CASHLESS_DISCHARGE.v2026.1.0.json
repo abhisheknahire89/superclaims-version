@@ -1,0 +1,21 @@
+{
+  "checklist_id": "CHECKLIST-CASHLESS_DISCHARGE",
+  "checklist_version": "2026.1.0",
+  "status": "ILLUSTRATIVE",
+  "workflow": "CASHLESS_DISCHARGE",
+  "illustrative_notice": "Illustrative document checklist for IPD reimbursement. The customer's claims manual defines the real list.",
+  "items": [
+    {
+      "type": "DISCHARGE_SUMMARY",
+      "label": "Discharge Summary",
+      "default_addressee": "HOSPITAL",
+      "blocking": true
+    },
+    {
+      "type": "FINAL_BILL_ITEMISED",
+      "label": "Final Bill Itemised",
+      "default_addressee": "HOSPITAL",
+      "blocking": true
+    }
+  ]
+}

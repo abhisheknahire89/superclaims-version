@@ -1,0 +1,4 @@
+prerequisites: ok
+pg_ctl: could not start server
+Examine the log output.
+make: *** [db] Error 1

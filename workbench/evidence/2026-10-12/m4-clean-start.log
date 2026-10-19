@@ -1,0 +1,71 @@
+prerequisites: ok
+applied: ['0001_schema.sql', '0002_app_support.sql', '0003_human_transcription.sql', '0004_workflow_links.sql', '0005_local_platform.sql']
+2026-10-12 22:16:16,028 INFO aw.server demo tenant ready; documents loaded for CLM-DEMO-0001, CLM-DEMO-0002, CLM-DEMO-0003
+INFO:     Started server process [74086]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8080 (Press CTRL+C to quit)
+INFO:     127.0.0.1:62356 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62356 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62357 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62357 - "GET /static/config.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62357 - "POST /dev/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62357 - "POST /v1/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62357 - "GET /v1/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62356 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62357 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62357 - "GET /v1/claims/CLM-DEMO-0002 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62356 - "GET /v1/claims/CLM-DEMO-0002/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62357 - "GET /v1/claims/CLM-DEMO-0002/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62361 - "GET /v1/claims/CLM-DEMO-0002/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62360 - "GET /v1/claims/CLM-DEMO-0002/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62362 - "GET /v1/claims/CLM-DEMO-0002/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62362 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a13101f82472e39a780423991b3740/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62362 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a13101f82472e39a780423991b3740/pages/2/image?t=TENANT-DEMO&exp=1791823896&sig=K-9HitQG0IzdPfLtPu5EWhXED-i0SxtrCc98nT6reUY HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62362 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a13101f82472e39a780423991b3740/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62362 - "POST /v1/claims/CLM-DEMO-0002/decisions HTTP/1.1" 409 Conflict
+INFO:     127.0.0.1:62362 - "POST /v1/claims/CLM-DEMO-0002/approval-requests HTTP/1.1" 201 Created
+INFO:     127.0.0.1:62362 - "GET /v1/claims/CLM-DEMO-0002 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62360 - "GET /v1/claims/CLM-DEMO-0002/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62361 - "GET /v1/claims/CLM-DEMO-0002/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62357 - "GET /v1/claims/CLM-DEMO-0002/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62356 - "GET /v1/claims/CLM-DEMO-0002/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62362 - "GET /v1/claims/CLM-DEMO-0002/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62362 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a13101f82472e39a780423991b3740/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62362 - "POST /v1/auth/logout HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:62362 - "POST /dev/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62362 - "POST /v1/auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62362 - "GET /v1/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62356 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62362 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62362 - "GET /v1/claims/CLM-DEMO-0002 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62356 - "GET /v1/claims/CLM-DEMO-0002/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62360 - "GET /v1/claims/CLM-DEMO-0002/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62361 - "GET /v1/claims/CLM-DEMO-0002/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62362 - "GET /v1/claims/CLM-DEMO-0002/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62357 - "GET /v1/claims/CLM-DEMO-0002/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62357 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a13101f82472e39a780423991b3740/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62357 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a13101f82472e39a780423991b3740/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62357 - "POST /v1/approval-requests/APR-01a131024b827ea8affc9e5e71c0e97b%3Aapprove HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62357 - "GET /v1/claims/CLM-DEMO-0002 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62362 - "GET /v1/claims/CLM-DEMO-0002/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62361 - "GET /v1/claims/CLM-DEMO-0002/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62357 - "GET /v1/claims/CLM-DEMO-0002/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62356 - "GET /v1/claims/CLM-DEMO-0002/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62360 - "GET /v1/claims/CLM-DEMO-0002/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62360 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a13101f82472e39a780423991b3740/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62360 - "GET /v1/claims/CLM-DEMO-0002/audit-events HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62356 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a13101f82472e39a780423991b3740/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62356 - "GET /v1/claims/CLM-DEMO-0003 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62357 - "GET /v1/claims/CLM-DEMO-0003/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62361 - "GET /v1/claims/CLM-DEMO-0003/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62362 - "GET /v1/claims/CLM-DEMO-0003/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62360 - "GET /v1/claims/CLM-DEMO-0003/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62356 - "GET /v1/claims/CLM-DEMO-0003/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62356 - "GET /v1/claims/CLM-DEMO-0003/documents/DOC-01a13101f94f71639c776aadd7de00c6/pages/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62356 - "GET /v1/claims/CLM-DEMO-0003/documents/DOC-01a13101f94f71639c776aadd7de00c6/pages/1/image?t=TENANT-DEMO&exp=1791823897&sig=pWbeDz38G44gJ85X2dcFKywikzU6xuf7GvdlvVLRKsI HTTP/1.1" 200 OK
+INFO:     127.0.0.1:62356 - "GET /v1/claims/CLM-DEMO-0003/documents/DOC-01a13101f94f71639c776aadd7de00c6/pages/1 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [74086]

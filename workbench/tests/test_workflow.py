@@ -212,7 +212,9 @@ class SafetyAndIntegrity(Seeded):
         self.assertIsNone(rf)       # the only bill total was ungrounded, so there is no resolved total at all
         e = self.current("CLM-HALL")
         self.assertIsNone(e["result"]["recommendation"]["bill_stated_total"])          # the invented total never reaches the rules
-        self.assertEqual(e["result"]["recommendation"]["recommended_payable"], "107591.00")
+        # ADR-14: missing grounded critical total now abstains; never infer it from lines.
+        self.assertIsNone(e["result"]["recommendation"]["recommended_payable"])
+        self.assertIn("ALL_FINANCIAL", e["result"]["recommendation"]["blocked_scopes"])
         with self.db.tenant_tx(T) as c:
             bill = c.fetch_one("SELECT status FROM document WHERE tenant_id=$1 AND claim_id='CLM-HALL' AND classified_type='FINAL_BILL_ITEMISED'", T)
         self.assertEqual(bill["status"], "NEEDS_REVIEW")                                 # and the bill is flagged for a person to check
@@ -291,6 +293,7 @@ class Configuration(Seeded):
     def test_four_eyes_and_effective_dating(self):
         body = json.loads((PACK / "config" / "policy-ILL-INDEMNITY-A.v2026.1.0.json").read_text())
         body["config_version"] = "2026.2.0"
+        body["effective_from"] = "2026-11-01"
         body["co_payment"]["rules"][0]["percent"] = "20.0"
         with self.db.tenant_tx(T) as c:
             configs.create_draft(c, self.ctx.schema_dir, T, "POLICY_CONFIG", body, "CFG-01", __import__("datetime").date(2026, 11, 1))

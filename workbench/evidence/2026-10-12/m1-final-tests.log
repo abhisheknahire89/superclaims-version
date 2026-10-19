@@ -1,0 +1,58 @@
+AW_ENV=test AW_REQUIRE_DB=1 PYTHONPATH=src:tests /Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/bin/python -m unittest discover -s tests -p 'test_*.py' -t . -v
+test_contract_validation_permissions_and_isolation (tests.test_api.ApiFlow.test_contract_validation_permissions_and_isolation) ... ok
+test_full_flow_claim_1_and_2 (tests.test_api.ApiFlow.test_full_flow_claim_1_and_2) ... ok
+test_page_urls_are_signed_and_expire (tests.test_api.ApiFlow.test_page_urls_are_signed_and_expire) ... ok
+test_true_quote_cannot_ground_false_amount_or_impossible_box (tests.test_document_reading.AutomaticGrounding.test_true_quote_cannot_ground_false_amount_or_impossible_box) ... ok
+test_low_confidence_blocks_money_even_if_other_sources_agree (tests.test_document_reading.FinancialReadingGate.test_low_confidence_blocks_money_even_if_other_sources_agree) ... ok
+test_reordered_title_multiple_columns_and_stacked_fields (tests.test_document_reading.GenericLayouts.test_reordered_title_multiple_columns_and_stacked_fields) ... ok
+test_within_document_contradictory_totals_are_not_silently_dropped (tests.test_document_reading.GenericLayouts.test_within_document_contradictory_totals_are_not_silently_dropped) ... ok
+test_visual_transcription_is_image_bound_audited_and_append_only (tests.test_document_reading.HumanTranscription.test_visual_transcription_is_image_bound_audited_and_append_only) ... ok
+test_native_pdf_and_png_jpg_ocr_have_grounded_boxes (tests.test_document_reading.LocalReading.test_native_pdf_and_png_jpg_ocr_have_grounded_boxes) ... ok
+test_safe_zip_returns_documents_without_writing_paths (tests.test_document_reading.LocalReading.test_safe_zip_returns_documents_without_writing_paths) ... ok
+test_scanned_pdf_uses_local_ocr (tests.test_document_reading.LocalReading.test_scanned_pdf_uses_local_ocr) ... ok
+test_zip_rejects_traversal_and_nested_unallowed_files (tests.test_document_reading.LocalReading.test_zip_rejects_traversal_and_nested_unallowed_files) ... ok
+test_manual_confirmation_preserves_source_and_rejects_fake_values (tests.test_document_reading.ManualReading.test_manual_confirmation_preserves_source_and_rejects_fake_values) ... ok
+test_bill_missing_patient_identity_abstains_despite_matching_other_documents (tests.test_document_reading.MissingCriticalReading.test_bill_missing_patient_identity_abstains_despite_matching_other_documents) ... ok
+test_unreadable_continuation_page_blocks_otherwise_valid_claim (tests.test_document_reading.MissingCriticalReading.test_unreadable_continuation_page_blocks_otherwise_valid_claim) ... ok
+test_oversized_pdf_page_rejected_before_render (tests.test_document_reading.ReadingResourceSafety.test_oversized_pdf_page_rejected_before_render) ... ok
+test_stacked_low_confidence_value_remains_low_confidence (tests.test_document_reading.ReadingResourceSafety.test_stacked_low_confidence_value_remains_low_confidence) ... ok
+test_oversize_signed_upload_is_rejected_before_storing (tests.test_document_reading.UploadLimits.test_oversize_signed_upload_is_rejected_before_storing) ... ok
+test_key_payables (tests.test_engine_equivalence.EngineEquivalence.test_key_payables) ... ok
+test_reproduces_all_pack_traces (tests.test_engine_equivalence.EngineEquivalence.test_reproduces_all_pack_traces) ... ok
+test_similar_name_goes_to_review_not_pass (tests.test_engine_equivalence.EngineEquivalence.test_similar_name_goes_to_review_not_pass) ... ok
+test_transliteration_variant_does_not_block (tests.test_engine_equivalence.EngineEquivalence.test_transliteration_variant_does_not_block)
+TC-MAT-02: LAKSHMI vs LAXMI passes; the harness (exact match) would have blocked ALL_FINANCIAL. ... ok
+test_unclassified_line_blocks_line_rules (tests.test_engine_equivalence.EngineEquivalence.test_unclassified_line_blocks_line_rules) ... ok
+test_chain_appends_verifies_and_detects_tampering (tests.test_foundation.AuditChain.test_chain_appends_verifies_and_detects_tampering) ... ok
+test_unknown_event_type_rejected (tests.test_foundation.AuditChain.test_unknown_event_type_rejected) ... ok
+test_enqueue_is_idempotent_and_worker_runs_in_tenant_scope (tests.test_foundation.JobQueue.test_enqueue_is_idempotent_and_worker_runs_in_tenant_scope) ... ok
+test_failure_is_retried_with_backoff_and_error_code_only (tests.test_foundation.JobQueue.test_failure_is_retried_with_backoff_and_error_code_only) ... job 7cb1c8c3-e4e7-487a-8567-76cd885d5e66 EXTRACT failed: ValueError
+ok
+test_0001_is_byte_identical_to_pack_schema (tests.test_foundation.Migrations.test_0001_is_byte_identical_to_pack_schema) ... ok
+test_error_carries_sqlstate_and_constraint (tests.test_foundation.WireClientAndRls.test_error_carries_sqlstate_and_constraint) ... ok
+test_rls_isolates_tenants_and_app_cannot_create_tenants (tests.test_foundation.WireClientAndRls.test_rls_isolates_tenants_and_app_cannot_create_tenants) ... ok
+test_types_roundtrip (tests.test_foundation.WireClientAndRls.test_types_roundtrip) ... ok
+test_write_once (tests.test_foundation.WormStore.test_write_once) ... ok
+test_four_eyes_and_effective_dating (tests.test_workflow.Configuration.test_four_eyes_and_effective_dating) ... ok
+test_demo_matches_every_pack_trace (tests.test_workflow.DemoReproducesPack.test_demo_matches_every_pack_trace) ... ok
+test_override_reproduces_trace_2b_and_fingerprint_guard (tests.test_workflow.OverridesAndCorrections.test_override_reproduces_trace_2b_and_fingerprint_guard) ... ok
+test_unclassified_line_blocks_until_reclassified (tests.test_workflow.OverridesAndCorrections.test_unclassified_line_blocks_until_reclassified) ... ok
+test_injected_instructions_have_no_effect (tests.test_workflow.SafetyAndIntegrity.test_injected_instructions_have_no_effect) ... ok
+test_quarantine_and_duplicates (tests.test_workflow.SafetyAndIntegrity.test_quarantine_and_duplicates) ... ok
+test_si_ledger_prevents_double_spend (tests.test_workflow.SafetyAndIntegrity.test_si_ledger_prevents_double_spend)
+Two claims for the trace-2 member: the first approval uses up the ₹85,000 available; the second cannot overdraw it. ... ok
+test_stale_evaluation_cannot_be_decided (tests.test_workflow.SafetyAndIntegrity.test_stale_evaluation_cannot_be_decided) ... ok
+test_tpa_repudiation_records_insurer_outcome_without_letter (tests.test_workflow.SafetyAndIntegrity.test_tpa_repudiation_records_insurer_outcome_without_letter) ... ok
+test_ungrounded_values_are_never_used (tests.test_workflow.SafetyAndIntegrity.test_ungrounded_values_are_never_used) ... ok
+
+----------------------------------------------------------------------
+Ran 42 tests in 9.488s
+
+OK
+AW_ENV=test AW_DB_DRIVER=pgwire AW_REQUIRE_DB=1 PYTHONPATH=src:tests /Users/abhishekpravinnahire/Desktop/SUperclaims/workbench/.venv/bin/python -m unittest discover -s tests -p 'test_*.py' -t .
+..........................job 3500a352-b805-4b6d-acb4-7f3acfc36090 EXTRACT failed: ValueError
+................
+----------------------------------------------------------------------
+Ran 42 tests in 9.487s
+
+OK

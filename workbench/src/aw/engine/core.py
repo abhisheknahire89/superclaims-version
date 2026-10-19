@@ -44,10 +44,13 @@ from ..matching import score_identity, PASS_MIN, REVIEW_MIN
 
 PAISE = Decimal("0.01")
 RUPEE = Decimal("1")
-ENGINE_VERSION = "aw-engine-1.0.0"
+ENGINE_VERSION = "aw-engine-1.2.0"
 
 RULE_VERSIONS = {
+    **{r:"1.0.0" for r in ["R-ELIG-EXCLUSION","R-ELIG-PREPOST-WINDOW","R-LINE-PACKAGE","R-LINE-IMPLANT-INVOICE","R-ANOM-DUP-CLAIM","R-ANOM-LOS-OUTLIER","R-TAT-CLOCK","R-CLIN-SUMMARY"]},
+    "R-CLAIM-OPD-BENEFIT":"1.0.0",
     "R-GATE-IDENTITY": "1.1.0",
+    "R-GATE-READING": "1.0.0",
     "R-GATE-DATES": "1.0.0",
     "R-GATE-ITEMISATION": "1.0.0",
     "R-GATE-LINE-CATEGORY": "1.0.0",
@@ -67,11 +70,19 @@ RULE_VERSIONS = {
     "R-ANOM-BILLNO-REUSE": "0.9.0",
 }
 
-FINDING_META = {  # kind -> (category, uncertainty note or None)
+FINDING_META = {
+    "OPD_BENEFIT_UNCONFIGURED":("ELIGIBILITY",None),
+    "EXCLUSION_REQUIRES_REVIEW":("ELIGIBILITY","Matching text requires clinical and policy judgement."),
+    "SERVICE_DATE_OUTSIDE_WINDOW":("ELIGIBILITY",None),
+    "IMPLANT_INVOICE_MISSING":("DOCUMENT",None),
+    "LOS_REQUIRES_REVIEW":("CLINICAL","Customer norm is a review cue, not a clinical conclusion."),
+    "POSSIBLE_DUPLICATE_CLAIM":("ANOMALY","Overlap can be legitimate; this is not a fraud finding."),
+    "DEADLINE_BREACHED":("DOCUMENT",None),  # kind -> (category, uncertainty note or None)
     "IDENTITY_CONFLICT": ("IDENTITY", None),
     "IDENTITY_NEEDS_REVIEW": ("IDENTITY", None),
     "DATE_CONFLICT": ("DOCUMENT", None),
     "DOCUMENT_INCOMPLETE": ("DOCUMENT", None),
+    "DOCUMENT_READING_UNCONFIRMED": ("DOCUMENT", None),
     "BILL_TOTAL_MISMATCH": ("FINANCIAL", None),
     "LINE_CATEGORY_UNCONFIRMED": ("FINANCIAL", None),
     "ROOM_DAYS_EXCEED_STAY": ("FINANCIAL", None),
@@ -144,8 +155,25 @@ class Line:
         self.remaining = self.billed
 
 
+CORE_ORDER = ["R-GATE-IDENTITY","R-GATE-DATES","R-GATE-ITEMISATION","R-DOC-COMPLETENESS",
+ "R-ELIG-POLICY-ACTIVE","R-ELIG-WAITING","R-LINE-DUPLICATE","R-LINE-NONPAYABLE","R-LINE-TARIFF",
+ "R-LINE-ROOM-CAP","R-LINE-PROPORTIONATE","R-CLAIM-SUBLIMIT","R-CLAIM-DEDUCTIBLE",
+ "R-CLAIM-COPAY","R-CLAIM-SI-CAP","R-CLAIM-ROUNDING"]
+
+def validate_order(order):
+    if len(order)!=len(set(order)) or set(order)!=set(CORE_ORDER):
+        raise ConfigurationError('calculation_order must contain each supported core rule exactly once')
+    constraints=[('R-LINE-DUPLICATE',r) for r in CORE_ORDER[7:11]]
+    constraints += [('R-LINE-ROOM-CAP','R-LINE-PROPORTIONATE'),('R-LINE-NONPAYABLE','R-LINE-TARIFF'),('R-CLAIM-COPAY','R-CLAIM-SI-CAP')]
+    constraints += [(r,'R-CLAIM-ROUNDING') for r in CORE_ORDER[11:15]]
+    constraints += [(a,b) for a in CORE_ORDER[:6] for b in CORE_ORDER[6:]]
+    constraints += [(a,b) for a in CORE_ORDER[6:11] for b in CORE_ORDER[11:]]
+    if any(order.index(a)>order.index(b) for a,b in constraints):
+        raise ConfigurationError('unsafe calculation order: gates first, duplicate before line rules, room cap before proportionate, lines before claims, co-pay before SI and rounding last')
+
 class Run:
     def __init__(self, claim: dict, policy: dict, nme: dict, tariff: dict | None, checklist: dict | None = None):
+        validate_order(policy["calculation_order"])
         self.claim = claim
         self.policy = policy
         self.nme = nme
@@ -164,6 +192,7 @@ class Run:
         self.blocked_scopes: set[str] = set()
         self.claim_level: dict[str, Any] = {}
         self.seq = 0
+        self.package_consumed=set()
 
     # ---------- bookkeeping ----------
     def _next(self, prefix: str) -> str:
@@ -181,7 +210,7 @@ class Run:
         }
 
     def authority(self, rule_id: str) -> dict:
-        if rule_id == "R-LINE-TARIFF":
+        if rule_id in ("R-LINE-TARIFF","R-LINE-PACKAGE"):
             if not self.tariff or not self.tariff.get("agreement_clause"):
                 raise ConfigurationError("tariff has no agreement_clause")
             return {"artifact": f"{self.tariff['tariff_id']}@{self.tariff['tariff_version']}", "doc_id": self.tariff["agreement_doc_id"], "clause": self.tariff["agreement_clause"]}
@@ -391,7 +420,7 @@ class Run:
             if item["type"] not in present:
                 missing.append(item)
         for item in missing:
-            f = self.finding(rid, "DOCUMENT_INCOMPLETE", "MEDIUM", False, f"Required document missing: {item['label']}.", [], route_to="PROCESSOR")
+            f = self.finding(rid, "DOCUMENT_INCOMPLETE", "MEDIUM", item.get("blocking",False), f"Required document missing: {item['label']}.", [], route_to="PROCESSOR",scopes=["ALL_FINANCIAL"] if item.get("blocking") else [])
             self.query(item.get("default_addressee", "HOSPITAL"), f"Please provide: {item['label']}.", [f["finding_id"]], item["type"])
         self.execute(rid, "REVIEW" if missing else "PASSED", {"required": required, "missing": [m["type"] for m in missing]})
 
@@ -516,7 +545,7 @@ class Run:
             return
         hits = []
         for l in sorted(self.lines, key=lambda x: x.line_id):
-            if l.remaining == 0:
+            if l.remaining == 0 or l.line_id in self.package_consumed:
                 continue
             for cap in self.tariff["item_caps"]:
                 if any(k in l.description.lower() for k in cap["match_keys"]):
@@ -559,7 +588,7 @@ class Run:
                          f"Room/ICU days billed ({billed_days}) exceed the stay ({allowed_days} days under the {self.policy['room_rent'].get('room_day_count', 'MIDNIGHTS')} convention). No automatic deduction; reviewer to confirm.",
                          [e for l in room_lines for e in l.evidence], route_to="PROCESSOR")
         for l in room_lines:
-            if l.remaining == 0:
+            if l.remaining == 0 or l.line_id in self.package_consumed:
                 continue
             limit = icu if l.category == "ICU_ROOM" else normal
             allowed = limit * l.quantity
@@ -605,7 +634,7 @@ class Run:
         ratio = eligible / actual  # exact Decimal ratio; applied per line then quantised
         hits = []
         for l in sorted(self.lines, key=lambda x: x.line_id):
-            if l.remaining == 0 or l.category not in cfg["applies_to_categories"] or l.ward_context in cfg["exempt_ward_contexts"]:
+            if l.line_id in self.package_consumed or l.remaining == 0 or l.category not in cfg["applies_to_categories"] or l.ward_context in cfg["exempt_ward_contexts"]:
                 continue
             payable_part = q2(l.remaining * ratio)
             deduction = l.remaining - payable_part
@@ -615,6 +644,53 @@ class Run:
             hits.append(l.line_id)
         self.execute(rid, "APPLIED" if hits else "NOT_APPLICABLE", {"ratio": f"{money(eligible)}/{money(actual)}", "lines": hits})
 
+    def catalogue_review(self):
+        observations=[o for o in self.claim.get('clinical_observations',[]) if not any(e.get('document_id') in self.claim_level.get('identity_mismatched_sources',set()) for e in o['evidence'])]
+        if self.claim['workflow'].startswith('OPD') and not self.policy.get('opd_benefit'):
+            self.finding('R-CLAIM-OPD-BENEFIT','OPD_BENEFIT_UNCONFIGURED','HIGH',True,'OPD benefit is not configured; insurer review required.',[],route_to='PROCESSOR',scopes=['ALL_FINANCIAL'])
+        for exclusion in self.policy.get('exclusions',[]):
+            hits=[o for o in observations if any(k.casefold() in o['text'].casefold() for k in exclusion['keywords_any'])]
+            if hits:
+                self.finding('R-ELIG-EXCLUSION','EXCLUSION_REQUIRES_REVIEW','HIGH',False,
+                    f"Configured exclusion {exclusion['code']} requires insurer/medical review; no automatic denial.",
+                    [e for o in hits for e in o['evidence']],route_to='MEDICAL_OFFICER')
+        if self.policy.get('review_prepost_service_dates') and not {'ALL_FINANCIAL','PRE_POST_WINDOW'} & self.blocked_scopes:
+            if self.claim.get('admission_date') and self.claim.get('discharge_date'):
+                from datetime import timedelta
+                cfg=self.policy['pre_post_hospitalisation'];lo=date.fromisoformat(self.claim['admission_date'])-timedelta(days=cfg['pre_days']);hi=date.fromisoformat(self.claim['discharge_date'])+timedelta(days=cfg['post_days'])
+                for l in self.lines:
+                    if l.service_date and not lo<=date.fromisoformat(l.service_date)<=hi:
+                        f=self.finding('R-ELIG-PREPOST-WINDOW','SERVICE_DATE_OUTSIDE_WINDOW','HIGH',True,'Service date is outside the configured pre/post window; reviewer confirmation required.',l.evidence,route_to='PROCESSOR',scopes=['ALL_FINANCIAL'])
+                        self.query('HOSPITAL','Clarify the service date and relationship to this admission.',[f['finding_id']])
+        if self.policy.get('implant_invoice_required') and any(l.category=='IMPLANTS' for l in self.lines) and not any(d['type']=='IMPLANT_INVOICE' for d in self.claim.get('documents_present',[])):
+            f=self.finding('R-LINE-IMPLANT-INVOICE','IMPLANT_INVOICE_MISSING','HIGH',True,'Implant invoice/sticker evidence is required before financial recommendation.',[e for l in self.lines if l.category=='IMPLANTS' for e in l.evidence],route_to='PROCESSOR',scopes=['ALL_FINANCIAL'])
+            self.query('HOSPITAL','Provide implant invoice and sticker evidence.',[f['finding_id']],'IMPLANT_INVOICE')
+        for norm in self.policy.get('length_of_stay_norms',[]):
+            if norm['procedure_code'] in self.claim.get('procedure_codes',[]) and self.claim.get('admission_date') and self.claim.get('discharge_date'):
+                days=(date.fromisoformat(self.claim['discharge_date'])-date.fromisoformat(self.claim['admission_date'])).days
+                if not norm['min_days']<=days<=norm['max_days']:
+                    self.finding('R-ANOM-LOS-OUTLIER','LOS_REQUIRES_REVIEW','MEDIUM',False,f"Stay of {days} days is outside the customer norm; medical review only.",[e for o in observations for e in o['evidence']],route_to='MEDICAL_OFFICER')
+        for other in self.claim.get('overlapping_claims',[]):
+            self.finding('R-ANOM-DUP-CLAIM','POSSIBLE_DUPLICATE_CLAIM','HIGH',False,'Same member, overlapping dates and similar billed amount: investigate before disposition.',other.get('evidence',[]),route_to='FWA_ANALYST')
+        if self.claim.get('tat_breached'):
+            self.finding('R-TAT-CLOCK','DEADLINE_BREACHED','HIGH',False,'The configured workflow deadline has elapsed; supervisor action required.',[],route_to='SUPERVISOR')
+        if observations:
+            self.execute('R-CLIN-SUMMARY','APPLIED',{'cited_observations':observations,'boundary':'source facts only; no medical verdict'})
+
+    def line_package(self):
+        if not self.tariff or not self.claim.get('hospital_is_network'):return
+        for package in self.tariff.get('packages',[]):
+            if not set(package['procedure_codes']) & set(self.claim.get('procedure_codes',[])):continue
+            components=[l for l in self.lines if l.category in package['inclusions'] and l.line_id not in self.package_consumed]
+            if not components:continue
+            total=sum((l.remaining for l in components),Decimal('0'));excess=max(Decimal('0'),total-D(package['amount']))
+            # Deterministic paise allocation of the exact cap excess; consumed components cannot be capped again.
+            for l in sorted(components,key=lambda x:x.line_id,reverse=True):
+                take=min(l.remaining,excess)
+                if take:self.adjust_line(l,'R-LINE-PACKAGE',take,f"package {package['package_code']} cap {package['amount']}",'PACKAGE_CAP','Component included in the agreed package.',l.evidence)
+                excess-=take;self.package_consumed.add(l.line_id)
+            self.execute('R-LINE-PACKAGE','APPLIED',{'package_code':package['package_code'],'components':sorted(l.line_id for l in components),'cap':package['amount']})
+
     # ---------- claim-level ----------
     def claim_rules(self):
         admissible = q2(sum((l.remaining for l in self.lines), Decimal("0")))
@@ -622,67 +698,74 @@ class Run:
         running = admissible
         member, pol = self.claim["member"], self.claim["policy"]
 
-        rid = "R-CLAIM-SUBLIMIT"
-        applied = []
-        for sl in self.policy["sub_limits"]:
-            if set(sl["procedure_codes"]) & set(self.claim.get("procedure_codes", [])):
-                cap = D(sl["amount"])
-                if running > cap:
-                    self.adjust_claim(rid, running - cap, running, f"{money(running)} - sub-limit {sl['amount']}", "SUBLIMIT_EXCESS", f"{sl['code']} applies.",
-                                      [{"record_type": "CLAIM_RECORD", "record_id": self.claim["claim_id"], "field": "procedure_codes"}])
-                    running = cap
-                    applied.append(sl["code"])
-        self.execute(rid, "APPLIED" if applied else "NOT_APPLICABLE", {"sub_limits": applied})
+        for rid in self.policy["calculation_order"]:
+            if rid == "R-CLAIM-SUBLIMIT":
+                applied = []
+                for sl in self.policy["sub_limits"]:
+                    if set(sl["procedure_codes"]) & set(self.claim.get("procedure_codes", [])):
+                        cap = D(sl["amount"])
+                        if running > cap:
+                            self.adjust_claim(rid, running - cap, running, f"{money(running)} - sub-limit {sl['amount']}", "SUBLIMIT_EXCESS", f"{sl['code']} applies.",
+                                              [{"record_type": "CLAIM_RECORD", "record_id": self.claim["claim_id"], "field": "procedure_codes"}])
+                            running = cap
+                            applied.append(sl["code"])
+                self.execute(rid, "APPLIED" if applied else "NOT_APPLICABLE", {"sub_limits": applied})
 
-        rid = "R-CLAIM-DEDUCTIBLE"
-        ded = D(self.policy["deductible"]["amount"])
-        if ded > 0:
-            take = min(ded, running)
-            self.adjust_claim(rid, take, running, f"min(deductible {money(ded)}, {money(running)})", "DEDUCTIBLE", "Policy deductible.",
-                              [{"record_type": "POLICY_RECORD", "record_id": pol["policy_no"], "field": "deductible"}])
-            running -= take
-            self.execute(rid, "APPLIED", {"deductible": money(ded)})
-        else:
-            self.execute(rid, "NOT_APPLICABLE", {"deductible": "0.00"})
+            elif rid == "R-CLAIM-DEDUCTIBLE":
+                ded = D(self.policy["deductible"]["amount"])
+                if ded > 0:
+                    take = min(ded, running)
+                    self.adjust_claim(rid, take, running, f"min(deductible {money(ded)}, {money(running)})", "DEDUCTIBLE", "Policy deductible.",
+                                      [{"record_type": "POLICY_RECORD", "record_id": pol["policy_no"], "field": "deductible"}])
+                    running -= take
+                    self.execute(rid, "APPLIED", {"deductible": money(ded)})
+                else:
+                    self.execute(rid, "NOT_APPLICABLE", {"deductible": "0.00"})
 
-        rid = "R-CLAIM-COPAY"
-        doa = date.fromisoformat(self.claim["admission_date"])
-        age = age_on(date.fromisoformat(member["dob"]), doa)
-        pct, rule_code = Decimal("0"), None
-        for r in self.policy["co_payment"]["rules"]:
-            if age >= r["condition"]["age_at_admission_gte"]:
-                pct, rule_code = D(r["percent"]), r["rule_code"]
-        if pct > 0:
-            copay = q2(running * pct / 100)
-            self.adjust_claim(rid, copay, running, f"{money(running)} x {pct}%", "CO_PAYMENT", f"{rule_code}: age {age} at admission.",
-                              [{"record_type": "MEMBER_RECORD", "record_id": member["member_id"], "field": "dob"},
-                               {"record_type": "CLAIM_RECORD", "record_id": self.claim["claim_id"], "field": "admission_date"}])
-            running -= copay
-            self.execute(rid, "APPLIED", {"age_at_admission": age, "percent": str(pct), "base": money(running + copay)})
-        else:
-            self.execute(rid, "NOT_APPLICABLE", {"age_at_admission": age})
+            elif rid == "R-CLAIM-COPAY":
+                doa = date.fromisoformat(self.claim["admission_date"])
+                age = age_on(date.fromisoformat(member["dob"]), doa)
+                pct, rule_code = Decimal("0"), None
+                for r in self.policy["co_payment"]["rules"]:
+                    if age >= r["condition"]["age_at_admission_gte"]:
+                        pct, rule_code = D(r["percent"]), r["rule_code"]
+                if pct > 0:
+                    copay = q2(running * pct / 100)
+                    self.adjust_claim(rid, copay, running, f"{money(running)} x {pct}%", "CO_PAYMENT", f"{rule_code}: age {age} at admission.",
+                                      [{"record_type": "MEMBER_RECORD", "record_id": member["member_id"], "field": "dob"},
+                                       {"record_type": "CLAIM_RECORD", "record_id": self.claim["claim_id"], "field": "admission_date"}])
+                    running -= copay
+                    self.execute(rid, "APPLIED", {"age_at_admission": age, "percent": str(pct), "base": money(running + copay)})
+                else:
+                    self.execute(rid, "NOT_APPLICABLE", {"age_at_admission": age})
 
-        rid = "R-CLAIM-SI-CAP"
-        available = D(pol["base_sum_insured"]) + (D(pol.get("cumulative_bonus", "0")) if self.policy["sum_insured"]["cumulative_bonus_counts_toward_available_si"] else 0) - D(pol.get("paid_in_current_year", "0"))
-        available = max(available, Decimal("0"))
-        if running > available:
-            self.adjust_claim(rid, running - available, running, f"{money(running)} - available SI {money(available)}", "SUM_INSURED_EXHAUSTED",
-                              "Amount exceeds available sum insured for the policy year.",
-                              [{"record_type": "SI_LEDGER", "record_id": f"{pol['policy_no']}/{member['member_id']}", "field": "available_at_evaluation"}])
-            running = available
-            self.execute(rid, "APPLIED", {"available_si": money(available)})
-        else:
-            self.execute(rid, "NOT_APPLICABLE", {"available_si": money(available)})
+            elif rid == "R-CLAIM-SI-CAP":
+                available = D(pol["base_sum_insured"]) + (D(pol.get("cumulative_bonus", "0")) if self.policy["sum_insured"]["cumulative_bonus_counts_toward_available_si"] else 0) - D(pol.get("paid_in_current_year", "0"))
+                available = max(available, Decimal("0"))
+                if running > available:
+                    self.adjust_claim(rid, running - available, running, f"{money(running)} - available SI {money(available)}", "SUM_INSURED_EXHAUSTED",
+                                      "Amount exceeds available sum insured for the policy year.",
+                                      [{"record_type": "SI_LEDGER", "record_id": f"{pol['policy_no']}/{member['member_id']}", "field": "available_at_evaluation"}])
+                    running = available
+                    self.execute(rid, "APPLIED", {"available_si": money(available)})
+                else:
+                    self.execute(rid, "NOT_APPLICABLE", {"available_si": money(available)})
 
-        rid = "R-CLAIM-ROUNDING"
-        final = running.quantize(RUPEE, rounding=ROUND_HALF_UP) if self.policy["rounding"]["final_payable"] == "RUPEE_HALF_UP" else q2(running)
-        diff = running - final
-        if diff != 0:
-            self.adjust_claim(rid, diff, running, f"{money(running)} -> {final} ({self.policy['rounding']['final_payable']})", "ROUNDING",
-                              "Final payable rounded per configuration; a negative amount increases the payable.",
-                              [{"record_type": "CONFIG", "record_id": f"{self.policy['config_id']}@{self.policy['config_version']}", "field": "rounding.final_payable"}])
-        self.execute(rid, "APPLIED" if diff != 0 else "NOT_APPLICABLE", {"before": money(running), "after": money(final)})
-        return q2(final)
+            elif rid == "R-CLAIM-ROUNDING":
+                if self.claim['workflow'].startswith('OPD'):
+                    benefit=self.policy['opd_benefit'];cap=min(D(benefit['per_claim_limit']),max(Decimal('0'),D(benefit['annual_limit'])-D(self.claim.get('opd_used','0.00'))))
+                    if running>cap:
+                        self.adjust_claim('R-CLAIM-OPD-BENEFIT',running-cap,running,'OPD benefit remaining/per-claim cap','OPD_BENEFIT_CAP','Configured OPD benefit cap.',[e for l in self.lines for e in l.evidence]);running=cap
+                        self.execute('R-CLAIM-OPD-BENEFIT','APPLIED',{'cap':money(cap)})
+                final = running.quantize(RUPEE, rounding=ROUND_HALF_UP) if self.policy["rounding"]["final_payable"] == "RUPEE_HALF_UP" else q2(running)
+                diff = running - final
+                if diff != 0:
+                    self.adjust_claim(rid, diff, running, f"{money(running)} -> {final} ({self.policy['rounding']['final_payable']})", "ROUNDING",
+                                      "Final payable rounded per configuration; a negative amount increases the payable.",
+                                      [{"record_type": "CONFIG", "record_id": f"{self.policy['config_id']}@{self.policy['config_version']}", "field": "rounding.final_payable"}])
+                self.execute(rid, "APPLIED" if diff != 0 else "NOT_APPLICABLE", {"before": money(running), "after": money(final)})
+                running = q2(final)
+        return q2(running)
 
     # ---------- anomaly ----------
     def anomaly_billno(self):
@@ -700,6 +783,11 @@ class Run:
 
     # ---------- orchestration ----------
     def run(self) -> dict:
+        if self.claim.get("document_reading_blocks"):
+            self.finding("R-GATE-READING", "DOCUMENT_READING_UNCONFIRMED", "HIGH", True,
+                         "Critical document fields require grounded manual confirmation before calculation.",
+                         [], route_to="PROCESSOR", scopes=["ALL_FINANCIAL", "LINE_RULES"])
+            self.execute("R-GATE-READING", "BLOCKED", {"documents": self.claim["document_reading_blocks"]})
         self.gate_identity()
         self.gate_dates()
         self.gate_itemisation()
@@ -707,13 +795,14 @@ class Run:
         self.doc_completeness()
         self.elig_policy_active()
         self.elig_waiting()
+        self.catalogue_review()
         payable = None
         if self._line_rules_allowed():
-            self.line_duplicate()
-            self.line_nonpayable()
-            self.line_tariff()
-            self.line_room_cap()
-            self.line_proportionate()
+            methods={"R-LINE-DUPLICATE":self.line_duplicate,"R-LINE-NONPAYABLE":self.line_nonpayable,
+                     "R-LINE-TARIFF":self.line_tariff,"R-LINE-ROOM-CAP":self.line_room_cap,"R-LINE-PROPORTIONATE":self.line_proportionate}
+            for rid in self.policy['calculation_order']:
+                if rid=='R-LINE-TARIFF':self.line_package()
+                if rid in methods:methods[rid]()
             if not ({"ALL_FINANCIAL", "LINE_RULES", "ROOM_DAYS"} & self.blocked_scopes):
                 payable = self.claim_rules()
             else:
@@ -734,6 +823,7 @@ class Run:
             return "QUERY_AND_REFER_MEDICAL" if open_review else "QUERY"
         if open_review:
             return "REFER_MEDICAL"
+        if any(f["route_to"]=="FWA_ANALYST" and f["severity"] in ("HIGH","CRITICAL") for f in self.findings):return "INVESTIGATE"
         billed = sum((l.billed for l in self.lines), Decimal("0"))
         return "PAY_FULL" if payable is not None and q2(billed) == payable else "PAY_PARTIAL"
 

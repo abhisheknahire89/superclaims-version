@@ -32,7 +32,7 @@ PERMISSIONS: dict[str, set[str]] = {
     "fact.correct": {"PROCESSOR", "MEDICAL_OFFICER", "SUPERVISOR"},
     "line.reclassify": {"PROCESSOR", "MEDICAL_OFFICER", "SUPERVISOR"},
     "adjustment.override": {"PROCESSOR", "MEDICAL_OFFICER", "SUPERVISOR"},
-    "finding.resolve_clinical": {"MEDICAL_OFFICER", "SUPERVISOR"},
+    "finding.resolve_clinical": {"MEDICAL_OFFICER"},
     "finding.resolve": {"PROCESSOR", "MEDICAL_OFFICER", "SUPERVISOR"},
     "finding.dismiss_high_anomaly": {"SUPERVISOR", "FWA_ANALYST"},
     "claim.hold": {"SUPERVISOR", "FWA_ANALYST"},
@@ -113,3 +113,20 @@ def load_principal(conn: Conn, tenant_id: str, user_id: str) -> Principal:
         " AND valid_from <= now() AND (valid_to IS NULL OR valid_to > now())", tenant_id, user_id)
     limits = [r["approval_limit_paise"] for r in rows if r["approval_limit_paise"] is not None]
     return Principal(user_id, tenant_id, {r["role"] for r in rows}, max(limits) if limits else None)
+
+
+def authenticate(ctx, request) -> Principal:
+    """Bearer token -> principal (roles and limits read from the database on every request)."""
+    if ctx.settings.auth_mode == "oidc":
+        from .local_auth import OidcInterface
+        return OidcInterface().authenticate(request)
+    if request.cookies.get("aw_session"):
+        from .local_auth import session_principal
+        return session_principal(ctx,request)
+    if ctx.settings.environment!="test":raise AuthError("local session required")
+    authz = request.headers.get("authorization", "")
+    if not authz.lower().startswith("bearer "):
+        raise AuthError("Bearer token required")
+    user_id, tenant_id = verify_dev_token(ctx.settings.dev_token_secret or "", authz[7:].strip())
+    with ctx.db.tenant_tx(tenant_id) as c:
+        return load_principal(c, tenant_id, user_id)

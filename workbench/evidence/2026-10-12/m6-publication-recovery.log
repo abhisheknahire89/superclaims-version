@@ -1,0 +1,6 @@
+test_interrupted_object_publication_recovers_identical_bytes_only (tests.test_hardening.Hardening.test_interrupted_object_publication_recovers_identical_bytes_only) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.935s
+
+OK

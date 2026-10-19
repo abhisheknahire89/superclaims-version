@@ -1,0 +1,43 @@
+cd .. && PATH="/private/tmp/aw-clean-checkout/workbench/.venv/bin:$PATH" PGBIN=$(workbench/scripts/find_pg.sh) bash verification/build_all.sh
+traces: OK (verification/trace-report.md)
+rendered 5 traces; audit chains self-consistent and time-ordered
+worksheets written; disallowances reconcile
+TC-MAT-01   PASS  Identity conflict blocks all financial computation but eligibility uses identity-matched documents only
+rule tests: OK
+{"result": "PASS", "cases": 3000, "computed": 2715, "blocked": 285, "order_invariance_checked": 3000, "nme_monotonic_checked": 1555}
+contracts: passed=59 failed=0
+mutation tests: 8 caught
+cost tables: OK (verification/cost-tables.md)
+64 evidence rows
+wrote wireframes/claim-workspace.html
+OK — all cross-references resolve
+docs: generated sections re-embedded
+schema applied: 31 tables
+ evaluation_id | billed_total_paise | recommended_payable_paise |   adj   | reconciles | all_have_authority 
+---------------+--------------------+---------------------------+---------+------------+--------------------
+ EVAL-0001-v1  |           10936050 |                  10759100 |  176950 | t          | t
+ EVAL-0002-v1  |           17245575 |                   8500000 | 8745575 | t          | t
+ EVAL-0003-v2  |            8585025 |                   8557000 |   28025 | t          | t
+(3 rows)
+
+NOTICE:  ok (rejected as expected): append-only audit -> table audit_event is append-only
+NOTICE:  ok (rejected as expected): repudiation needs CRC reference -> new row for relation "decision" violates check constraint "decision_check"
+NOTICE:  ok (rejected as expected): repudiation must be communicated by insurer -> new row for relation "decision" violates check constraint "decision_check"
+NOTICE:  ok (rejected as expected): negative non-rounding adjustment -> new row for relation "adjustment" violates check constraint "adjustment_check1"
+NOTICE:  ok (rejected as expected): deduction above base -> new row for relation "adjustment" violates check constraint "adjustment_check2"
+NOTICE:  ok (rejected as expected): adjustment without clause authority -> new row for relation "adjustment" violates check constraint "adjustment_authority_check"
+NOTICE:  ok (rejected as expected): adjustment without evidence -> new row for relation "adjustment" violates check constraint "adjustment_evidence_check"
+NOTICE:  ok (rejected as expected): self-approval of config -> new row for relation "config_artifact" violates check constraint "config_artifact_check1"
+NOTICE:  ok (rejected as expected): blocked evaluation with payable -> new row for relation "evaluation" violates check constraint "evaluation_check1"
+NOTICE:  ok (rejected as expected): clinical finding without uncertainty note -> new row for relation "finding" violates check constraint "finding_check"
+NOTICE:  ok (rejected as expected): self second-approval -> new row for relation "approval_request" violates check constraint "approval_request_check"
+            check             | n 
+------------------------------+---
+ rows visible to other tenant | 0
+(1 row)
+
+           check            | n 
+----------------------------+---
+ rows visible to own tenant | 3
+(1 row)
+

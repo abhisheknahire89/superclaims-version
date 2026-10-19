@@ -50,6 +50,8 @@ def seed(owner: Database, app: Database, tenant: str = TENANT) -> dict:
         for uid, name, roles, limit in USERS:
             c.execute("INSERT INTO app_user (user_id, tenant_id, idp_subject, display_name) VALUES ($1,$2,$3,$4) ON CONFLICT DO NOTHING",
                       uid, tenant, f"dev|{uid}", name)
+            from .local_auth import create_credentials,DEMO_PASSWORD
+            if not c.fetch_one("SELECT 1 FROM local_credential WHERE tenant_id=$1 AND user_id=$2",tenant,uid):create_credentials(c,tenant,uid,DEMO_PASSWORD)
             for r in roles:
                 if not c.fetch_one("SELECT 1 FROM role_assignment WHERE tenant_id=$1 AND user_id=$2 AND role=$3", tenant, uid, r):
                     c.execute("INSERT INTO role_assignment (tenant_id, user_id, role, approval_limit_paise, valid_from) VALUES ($1,$2,$3,$4,'2026-01-01')",
@@ -75,6 +77,8 @@ def seed(owner: Database, app: Database, tenant: str = TENANT) -> dict:
                 c.execute("INSERT INTO si_ledger_entry (tenant_id, policy_no, member_id, policy_year_start, entry_kind, amount_paise)"
                           " VALUES ($1,$2,$3,$4,'OPENING_PAID_EXTERNAL',$5)", tenant, p["policy_no"], m["member_id"],
                           date.fromisoformat(p["period_start"]), to_paise(p["paid_in_current_year"]))
+        from .workflow_demo import seed_members
+        seed_members(c,tenant)
         # prior claim at hospital NN-12 for another member with the same bill number as demo claim 3 (pattern for review)
         c.execute("INSERT INTO member (tenant_id, member_id, full_name, name_normalised, gender, dob) VALUES ($1,'MEM-DEMO-8808','Ravi Kumar','RAVI KUMAR','M','1980-05-05') ON CONFLICT DO NOTHING", tenant)
         c.execute("INSERT INTO policy (tenant_id, policy_no, product_name, period_start, period_end, config_artifact_id, config_version)"

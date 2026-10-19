@@ -1,0 +1,127 @@
+prerequisites: ok
+applied: ['0001_schema.sql', '0002_app_support.sql']
+2026-10-12 21:17:43,261 INFO aw.server demo tenant ready; documents loaded for CLM-DEMO-0001, CLM-DEMO-0002, CLM-DEMO-0003
+INFO:     Started server process [61707]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8080 (Press CTRL+C to quit)
+INFO:     127.0.0.1:60734 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60735 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60734 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60734 - "POST /dev/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60734 - "POST /dev/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60734 - "GET /v1/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60735 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60734 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60734 - "GET /v1/claims/CLM-DEMO-0002 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60735 - "GET /v1/claims/CLM-DEMO-0002/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60734 - "GET /v1/claims/CLM-DEMO-0002/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60738 - "GET /v1/claims/CLM-DEMO-0002/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60739 - "GET /v1/claims/CLM-DEMO-0002/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60740 - "GET /v1/claims/CLM-DEMO-0002/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60740 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130cc5f7775fb9b0f34a2ef6b7c93/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60740 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130cc5f7775fb9b0f34a2ef6b7c93/pages/2/image?t=TENANT-DEMO&exp=1791820428&sig=DIkhpn8KlhBHkCwEerXtTZF8rNzTP7rSpUtytjdPLcw HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60740 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130cc5f7775fb9b0f34a2ef6b7c93/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60740 - "POST /v1/claims/CLM-DEMO-0002/decisions HTTP/1.1" 409 Conflict
+INFO:     127.0.0.1:60778 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60778 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60779 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60779 - "POST /dev/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60779 - "POST /dev/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60779 - "GET /v1/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60778 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60779 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60778 - "GET /v1/claims/CLM-DEMO-0001 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60779 - "GET /v1/claims/CLM-DEMO-0001/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60781 - "GET /v1/claims/CLM-DEMO-0001/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60778 - "GET /v1/claims/CLM-DEMO-0001/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60780 - "GET /v1/claims/CLM-DEMO-0001/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60782 - "GET /v1/claims/CLM-DEMO-0001/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60791 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60791 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60792 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60791 - "POST /dev/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60791 - "POST /dev/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60791 - "GET /v1/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60792 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60792 - "GET /v1/claims/CLM-DEMO-0001 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60791 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60793 - "GET /v1/claims/CLM-DEMO-0001/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60792 - "GET /v1/claims/CLM-DEMO-0001/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60791 - "GET /v1/claims/CLM-DEMO-0001/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60794 - "GET /v1/claims/CLM-DEMO-0001/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60795 - "GET /v1/claims/CLM-DEMO-0001/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60796 - "GET /v1/claims/CLM-DEMO-0001/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60796 - "GET /v1/claims/CLM-DEMO-0001/documents/DOC-01a130cc5daa7f288469d08b8247e653/pages/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60796 - "GET /v1/claims/CLM-DEMO-0001/documents/DOC-01a130cc5daa7f288469d08b8247e653/pages/1/words?t=TENANT-DEMO&exp=1791820506&sig=ApUiflGQJVjk5vOLPnAmbEsV-7ah9xbU4n_IrD7jZLM HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60795 - "GET /v1/claims/CLM-DEMO-0001/documents/DOC-01a130cc5daa7f288469d08b8247e653/pages/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60795 - "GET /v1/claims/CLM-DEMO-0001/documents/DOC-01a130cc5daa7f288469d08b8247e653/pages/1/words?t=TENANT-DEMO&exp=1791820506&sig=ApUiflGQJVjk5vOLPnAmbEsV-7ah9xbU4n_IrD7jZLM HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60795 - "POST /v1/claims/CLM-DEMO-0001/documents/DOC-01a130cc5daa7f288469d08b8247e653/reading-confirmations HTTP/1.1" 201 Created
+INFO:     127.0.0.1:60795 - "GET /v1/claims/CLM-DEMO-0001 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60791 - "GET /v1/claims/CLM-DEMO-0001/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60795 - "GET /v1/claims/CLM-DEMO-0001/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60792 - "GET /v1/claims/CLM-DEMO-0001/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60794 - "GET /v1/claims/CLM-DEMO-0001/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60793 - "GET /v1/claims/CLM-DEMO-0001/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60798 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60798 - "GET /static/app.css HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60799 - "GET /static/app.js HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60798 - "POST /dev/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60798 - "POST /dev/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60798 - "GET /v1/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60799 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60798 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60798 - "GET /v1/claims/CLM-DEMO-0002 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60799 - "GET /v1/claims/CLM-DEMO-0002/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60798 - "GET /v1/claims/CLM-DEMO-0002/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60801 - "GET /v1/claims/CLM-DEMO-0002/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60800 - "GET /v1/claims/CLM-DEMO-0002/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "GET /v1/claims/CLM-DEMO-0002/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130cc5f7775fb9b0f34a2ef6b7c93/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130cc5f7775fb9b0f34a2ef6b7c93/pages/2/image?t=TENANT-DEMO&exp=1791820519&sig=UvwPAz_28xeZNRAs1QYiXGw_Y63PCVlMoHb2EsBAI1g HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130cc5f7775fb9b0f34a2ef6b7c93/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "POST /v1/claims/CLM-DEMO-0002/decisions HTTP/1.1" 409 Conflict
+INFO:     127.0.0.1:60802 - "POST /v1/claims/CLM-DEMO-0002/approval-requests HTTP/1.1" 201 Created
+INFO:     127.0.0.1:60802 - "GET /v1/claims/CLM-DEMO-0002 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60800 - "GET /v1/claims/CLM-DEMO-0002/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60801 - "GET /v1/claims/CLM-DEMO-0002/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60799 - "GET /v1/claims/CLM-DEMO-0002/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60798 - "GET /v1/claims/CLM-DEMO-0002/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "GET /v1/claims/CLM-DEMO-0002/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130cc5f7775fb9b0f34a2ef6b7c93/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "POST /dev/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "POST /dev/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "GET /v1/me HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60798 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "GET /v1/claims HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "GET /v1/claims/CLM-DEMO-0002 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60799 - "GET /v1/claims/CLM-DEMO-0002/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60798 - "GET /v1/claims/CLM-DEMO-0002/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "GET /v1/claims/CLM-DEMO-0002/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60800 - "GET /v1/claims/CLM-DEMO-0002/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60801 - "GET /v1/claims/CLM-DEMO-0002/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60801 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130cc5f7775fb9b0f34a2ef6b7c93/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60801 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130cc5f7775fb9b0f34a2ef6b7c93/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60801 - "POST /v1/approval-requests/APR-01a130cec4697be1a1167002b2c6f049%3Aapprove HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60801 - "GET /v1/claims/CLM-DEMO-0002 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60800 - "GET /v1/claims/CLM-DEMO-0002/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60798 - "GET /v1/claims/CLM-DEMO-0002/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "GET /v1/claims/CLM-DEMO-0002/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60801 - "GET /v1/claims/CLM-DEMO-0002/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60799 - "GET /v1/claims/CLM-DEMO-0002/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60799 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130cc5f7775fb9b0f34a2ef6b7c93/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60801 - "GET /v1/claims/CLM-DEMO-0002/documents/DOC-01a130cc5f7775fb9b0f34a2ef6b7c93/pages/2 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60799 - "GET /v1/claims/CLM-DEMO-0002/audit-events HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60799 - "GET /v1/claims/CLM-DEMO-0003 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60802 - "GET /v1/claims/CLM-DEMO-0003/bill-lines HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60801 - "GET /v1/claims/CLM-DEMO-0003/documents HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60798 - "GET /v1/claims/CLM-DEMO-0003/findings HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60800 - "GET /v1/claims/CLM-DEMO-0003/facts HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60799 - "GET /v1/claims/CLM-DEMO-0003/evaluations/current HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60799 - "GET /v1/claims/CLM-DEMO-0003/documents/DOC-01a130cc60a2789584c6ff05e61779c6/pages/1 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60799 - "GET /v1/claims/CLM-DEMO-0003/documents/DOC-01a130cc60a2789584c6ff05e61779c6/pages/1/image?t=TENANT-DEMO&exp=1791820520&sig=-h7ncxFkd3P5bWN-UrfgBKcJE51VCFIXoHn7HDi-tT0 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60799 - "GET /v1/claims/CLM-DEMO-0003/documents/DOC-01a130cc60a2789584c6ff05e61779c6/pages/1 HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [61707]

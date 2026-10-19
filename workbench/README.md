@@ -1,125 +1,117 @@
-# Adjudication Workbench — Phase 1 build
+# Adjudication Workbench — local synthetic product
 
-This is the first build of the product specified in this pack. It is a claims-review service and reviewer UI for Indian health-insurance reimbursement claims. **Synthetic data only. Every decision is made by a person.** The software never repudiates, and it never decides on its own.
-
-It runs the G1 slice end to end (`../11-build-backlog.md` §1):
-
-1. **PDF upload.** Documents go to a write-once store and are rendered as page images.
-2. **Extraction.** Each document is classified and its fields and bill lines are extracted. Every value is validated against `../schemas/extraction-output.schema.json` and must be grounded in a quote found on the page. Embedded instructions are detected and ignored.
-3. **Fact resolution.** Values from different documents are resolved. Conflicts block the rules until a person resolves them.
-4. **Rule engine** (`aw-engine-1.0.0`, ported from `../verification/engine.py`). The engine uses the effective-dated configs in `../config/`.
-5. **Evaluation.** Each evaluation is persisted with evidence-linked deductions and findings. It goes STALE when the evidence changes.
-6. **Reviewer actions.** Reviewers can correct, resolve, reclassify, override (with a fingerprint guard), escalate, hold, and draft and approve queries.
-7. **Decisions.** Decisions respect approval limits and the second-approval rule from the workflow config. The SI ledger prevents double-spend. Repudiation goes only through the insurer's CRC path.
-8. **Outputs.** A settlement worksheet (JSON and PDF), a hash-chained audit trail and an export record.
-9. **API.** The HTTP API from `../api/openapi.yaml` validates requests against it. It uses idempotency keys, ETag/If-Match and RFC 9457 errors.
-10. **Reviewer UI.** A work queue and a three-pane claim workspace.
-
-What differs from the pack's architecture, and why, is recorded in `docs/ADR-12-phase-1-build-substitutions.md`. The status of each backlog item is mapped in `docs/traceability.md`.
+AW reads documents locally, recommends evidence-linked adjustments and lets a person record the disposition. It covers IPD reimbursement, provisional cashless preauthorization/enhancement, cashless discharge and OPD reimbursement. Only synthetic data is supported by this delivery. No hosted model/OCR, paid application service or external delivery is enabled.
 
 ## Run it
 
-You need:
-
-- Python 3.11 or later (tested on 3.13);
-- PostgreSQL 16 server binaries (`initdb`, `pg_ctl`, `psql`) on `PATH`, or set `PGBIN`;
-- the packages in `pyproject.toml`.
-
-The repository layout matters. This folder must sit inside the research pack, because the code reads `../schemas`, `../config`, `../api` and `../fixtures`.
+Keep `workbench/` inside this repository: its parent provides the normative API, schemas, configs and fixtures. Prerequisites: Python3.11+ (tested3.13.15), PostgreSQL16 server binaries, Tesseract5, and Chromium for browser verification. On the tested Mac, PostgreSQL16 is under `/opt/homebrew/opt/postgresql@16/bin`; the scripts detect it. Existing Homebrew prerequisites can be installed by the user with `brew install postgresql@16 tesseract` if absent.
 
 ```bash
-cd workbench
-python3 -m pip install -e .            # or install the pinned dependencies listed in pyproject.toml
-make test                              # 27 tests; starts a throwaway PostgreSQL cluster in /tmp for the run
-make serve                             # local cluster in .devdb/, demo claims loaded, http://127.0.0.1:8080/
+cd /Users/abhishekpravinnahire/Desktop/SUperclaims/workbench
+make setup
+make check
+make serve
 ```
 
-`make serve` starts a PostgreSQL cluster in `.devdb/` on port 55440, applies the migrations and creates two roles:
+`make setup` creates `.venv` and installs pinned Python dependencies; it needs a package source or populated pip cache. `make serve` creates private ignored `.env` secrets, starts a loopback PostgreSQL16 cluster, applies migrations0001–0006, seeds six undecided synthetic claims and starts FastAPI, the worker and maintenance scheduler at [localhost8080](http://127.0.0.1:8080/). `/healthz` is liveness; `/readyz` checks DB/storage/worker configuration. Ctrl-C stops the application; `make db-stop` stops its DB. Keep `.env` and `.devdb.env` private; never print or commit them.
 
-- `aw_app`, which the API uses;
-- `aw_worker`, which the job worker uses.
+All TENANT-DEMO seed accounts use **Synthetic-demo-2026!**, a public password for synthetic development accounts only. User IDs: PROC-07 (processor,₹150000 limit), PROC-11 (processor,₹100000), SUP-02 (supervisor,₹500000), MO-01 (medical officer,₹100000), FWA-01, AUD-01, CFG-01 (configuration author), ADM-01 (tenant administrator/second publisher), RO-01 (masked read-only). Login accepts tenant/user/password; local sessions are HttpOnly, CSRF-protected, revocable and expire after8hours. OIDC is an unconfigured future interface. Production mode does not expose demo login buttons; this synthetic seed is not a production identity deployment.
 
-Neither role can bypass row-level security. It then seeds the synthetic tenant `TENANT-DEMO` and uploads synthetic PDFs for the three demo claims. Finally it serves the API, the UI and one background worker.
+For an isolated fresh demo, leaving existing state intact:
 
-To sign in, open the page and pick a synthetic user:
+```bash
+make serve AW_DEV_DIR=/tmp/aw-fresh-demo AW_DEV_PORT=55470 AW_OBJECT_STORE_DIR=/tmp/aw-fresh-demo/objects
+```
 
-- `PROC-11`, a processor with a ₹1,00,000 limit;
-- `SUP-02`, a supervisor;
-- `MO-01`, a medical officer.
+Use a new directory/unused port each time a **fresh** seed is needed. Seed startup does not erase prior decisions. The default DB is `.devdb`/55440 and default objects `.objects`; `PORT` controls the HTTP port. Do not run `serve`, `db`, `demo` or `backup` commands concurrently: they share `.devdb.env`. Browser flows below require HTTP8080.
 
-Development sign-in exists only when `AW_ENV` is `dev` or `test`. Roles and limits always come from the database, never from the token.
+## Verify
 
-Other commands:
+```bash
+make test-all
+make pack-check
+make demo AW_DEV_DIR=/tmp/aw-trace-demo AW_DEV_PORT=55471 AW_OBJECT_STORE_DIR=/tmp/aw-trace-demo/objects
+```
 
-| Command | What it does |
-|---|---|
-| `make demo` | Runs the three demo claims through the whole pipeline without the UI and compares each evaluation with the pack's trace fixtures. Exits non-zero on any difference |
-| `make ui-smoke` | Browser walk-through against a running, freshly seeded `make serve`. Needs `pip install -e ".[ui-test]"` and a Playwright Chromium |
-| `make db` / `make db-stop` | Start or stop the local cluster. `source .devdb.env` gives you `AW_OWNER_DSN`, `AW_DATABASE_URL` and `AW_WORKER_DSN` |
-| `make clean` | Stop the cluster and remove `.devdb/`, `.objects/` and caches |
+The full suite currently contains71 tests on **each** psycopg and pgwire, with required DB tests (no silent skips). The pack also runs rule traces,3000 property cases, schema checks, mutation tests and negative DB/RLS checks. Five exact traces must remain:109360.50→107591.00;172455.75→85000.00;L14override admissible102385.75/payable85000.00;3a no payable/QUERY_AND_REFER_MEDICAL;3b85570.00/REFER_MEDICAL. `demo` records human fixture actions through the services, not automatic decisions.
 
-### What a reviewer can do in the UI
+Install the browser once if missing (a development dependency, not an application service):
 
-- **Work queue** (S-01). Claims are sorted by settlement due time. Each row shows the recommendation, the proposed payable and the number of blocking findings. Patient names are masked.
-- **Claim workspace** (S-02 to S-05). It has three panes:
-  - **Left:** documents with their status, an upload form (supersede a document) and the resolved facts. A conflicting fact can be resolved by choosing the value the evidence supports.
-  - **Centre:**
-    - bill lines with deductions grouped by rule, plus the claim ladder;
-    - findings (blocking, medical officer, pattern-for-review) with their actions;
-    - drafted queries, which a person approves before they are released;
-    - the decision panel, with approval limits and a request for second approval;
-    - the audit trail, with chain verification.
-  - **Right:** the evidence viewer. It shows the source page with the cited text highlighted, plus the rule, formula, clause authority and override form for a deduction.
-- **Keyboard:** `J`/`K` move between rows, `E` opens evidence, `G` then `D` opens the decision panel, `N` opens the next claim and `?` shows help.
+```bash
+.venv/bin/python -m playwright install chromium
+```
 
-## Layout
+Start a fresh `make serve` in one terminal, then in another:
 
-| Path | Contents |
-|---|---|
-| `migrations/0001_schema.sql` | The pack's `db/schema.sql`, byte-identical (a test checks this) |
-| `migrations/0002_app_support.sql` | Application columns, job-queue policy for the worker role, least-privilege grants |
-| `src/aw/db/` | Database facade (psycopg if installed, otherwise the stdlib wire client `pgwire.py`), tenant transactions, migration runner |
-| `src/aw/ingest.py`, `storage.py`, `extraction/` | Upload, quarantine, deduplication, page rendering, classification, extraction providers, grounding, normalisation |
-| `src/aw/facts.py`, `matching.py` | Fact resolution, conflicts, bill-line categorisation, name matching |
-| `src/aw/engine/` | Rule engine |
-| `src/aw/evaluations.py` | Engine input, evaluations, findings, STALE/SUPERSEDED, diffs |
-| `src/aw/review.py`, `queries.py`, `decisions.py`, `exports.py` | Reviewer actions, queries, decisions and approvals, worksheets and export |
-| `src/aw/configs.py` | Configuration artifacts: drafts, four-eyes publish, effective dating |
-| `src/aw/audit.py`, `jobs.py`, `auth.py` | Hash-chained audit, job queue (`SKIP LOCKED`), principals and permissions |
-| `src/aw/api/` | HTTP API and the OpenAPI contract layer |
-| `src/aw/web/` | Reviewer UI (no build step, no third-party code) |
-| `src/aw/seed.py`, `synthetic.py`, `demo.py`, `server.py` | Synthetic tenant, synthetic PDFs, end-to-end demo, development server |
-| `tests/` | Engine equivalence, foundation, API and workflow tests; browser smoke test |
-| `docs/` | ADR-12 and backlog traceability |
-| `Dockerfile`, `docker-compose.yml`, `../.github/workflows/workbench-ci.yml` | Container and CI definitions. **Written but not yet run** |
+```bash
+make e2e
+```
 
-## Configuration
+This sequentially measures evidence-highlight timing and submits an override; runs queue/second approval/audit smoke; manual source-grounded and explicit human-transcription entry; assignment/filter/KPI/queryPDF/reply/admin screens; all four human-decision workflows and linked enhancement registration; and config draft/validation/replay/four-eyes publication with password confirmation. It mutates the demo. Screenshots are in `e2e-shots/` and `evidence/2026-10-12/`; timing samples are in `reviewer-ui-benchmark.json`. Run against a new seed each time. `make ui-smoke` runs only the original smoke subset.
 
-All configuration comes from environment variables (`src/aw/settings.py`).
+## Backup and restore
 
-| Variable | Meaning |
-|---|---|
-| `AW_DATABASE_URL` | Application role DSN (required) |
-| `AW_WORKER_DSN` | Worker role DSN (required for the in-process worker) |
-| `AW_OWNER_DSN` | Owner DSN, used only for migrations and `--seed-demo` |
-| `AW_ENV` | `dev`, `test` or `prod`. `prod` refuses development tokens |
-| `AW_DEV_TOKEN_SECRET` | HMAC secret for development tokens. A fixed development default is used in `dev` and `test` |
-| `AW_OBJECT_STORE_DIR` | Directory for the local write-once store (default `.objects/`) |
-| `AW_EXTRACTION_PROVIDER` | `heuristic` (default), `fixture` (with `AW_FIXTURE_DIR`) or `bedrock` (stub, never executed) |
-| `AW_PACK_DIR` | Research pack root (default: the parent of this folder) |
+Stop the writing app first for a consistent local drill; the DB remains running. Use the SAME DB/object settings as its startup:
 
-## Limits — read before relying on anything here
+```bash
+make backup AW_DEV_DIR=/tmp/aw-fresh-demo AW_DEV_PORT=55470 AW_OBJECT_STORE_DIR=/tmp/aw-fresh-demo/objects
+make restore BACKUP=.backups/<reported-backup-id>
+```
 
-- **Synthetic only.** The heuristic extractor reads the text layer of the synthetic PDFs that `synthetic.py` generates. It has not been tried on a real hospital document. Scanned pages fail with `NO_TEXT_LAYER_OCR_NOT_CONFIGURED`, because there is no OCR yet (BL-07, BL-08).
-- **Illustrative configuration.** The policy, tariff, NME list and classifier map are illustrative. None is a real product wording.
-- **Unexecuted adapters.** The psycopg driver path, the Bedrock provider, the S3 Object Lock store and OIDC sign-in are written but have never run. The same is true of the CI workflow, the Dockerfile and the compose file.
-- **Placeholder text.** The grievance block in the worksheet is placeholder text until counsel provides the wording (E-REG-04). Query letters have no template or export yet.
-- **Not built yet:**
-  - TMS adapter;
-  - TAT alerts;
-  - config replay;
-  - anchoring of audit chain heads;
-  - clinical summary;
-  - load testing;
-  - accessibility audit.
-- **Development server only.** `python -m aw.server` runs the API and one worker in a single process and binds to loopback. It is not a production deployment.
+The backup is a PostgreSQL custom dump plus immutable objects and a hash manifest. Restore verifies the exact file set and hashes, refuses symlinks/existing targets, creates a NEW `aw_restore_*` database/object directory, then verifies all original hashes against the DB, referenced pages/local exports, audit chains and anchors. It never replaces a running DB. A failed post-restore validation leaves the newly named target for diagnosis; do not treat it as verified. Restored object directories default inside the source backup; use a separate object destination through `python -m aw.backup restore ... --objects ...` if retaining a pristine reusable backup. The stopped-writer drill was actually run; no online atomic-snapshot guarantee is claimed.
+
+Actual final drill: eight claims,32documents,five human decisions,eight verified chains,109referenced object reads; restricted restored-app login/read200 and other-tenant0visible claims. See `evidence/2026-10-12/m6-{backup,restore,restored-app}.log`.
+
+## Review and configure
+
+The queue masks names and sorts deadlines. Filter by status/workflow/assignment/deadline/reference; supervisors assign active reviewers. The workspace shows source pages with quote/bbox highlights, bill deductions and policy/tariff authority, manual corrections with preserved provenance, findings, queries, human decision/second approval/insurer CRC path, audit and local exports. Keyboard: J/K rows, E evidence, G then D decision, N next claim, ? help; forms have accessible labels. Native/scanned PDF,PNG/JPG,multiple uploads and bounded ZIP are supported; OCR uses local Tesseract, deskew/denoise and generic rules. Visual transcription explicitly records the reviewer and immutable image hash; it never pretends to be machine extraction.
+
+Configuration supports local version/draft/validate/diff/replay/publish for policies, tariffs/packages,NME,checklists,workflow ordering/limits and classifier maps. CSV/XLSX imports patch local configuration only and reject formulas. Publication needs a distinct administrator and password confirmation. Retroactive updates explicitly queue eligible open claims; decisions remain human. Operations shows actual queue/decision/job/query/correction/override counts. Tenant administration manages local users/roles/limits/activation/password resets, preserves role history and revokes sessions; last-supervisor/self-lockout protections apply.
+
+## Limits and status
+
+See [DELIVERY.md](DELIVERY.md) for the three-state feature matrix,10-minute demo, measured accuracy and customer materials. Extraction performance is inadequate for unattended hospital-document reading: original blind held-back results were poor. Revised-layout regression results are labelled revealed and are not presented as blind accuracy. Material identity/date/amount conflicts and untrusted/low-confidence evidence abstain; targeted product probes verify refusal of blocked approvals. No accuracy on handwriting or real claims is claimed.
+
+Local immutable files/checksum sidecars and append-only audit anchors resist application mutation; a host administrator controlling DB and disk can replace both. They are not an external trusted anchor or compliance WORM guarantee. Security findings and actual remediation checks are in `evidence/2026-10-12/final-independent-review.md` and ADR13–19. Original migrations0001/0002 remain unchanged; new schema is numbered0003–0006.
+
+Docker definitions and CI are **not run here**: Docker daemon unavailable, no remote CI triggered. To enable a future Docker run, open Docker Desktop and wait until its engine is running. `make docker-up` is supplied but unverified; do not infer native-test results prove containers. Existing bulk-import/TMS receiver routes are inherited; no new integration,webhook/API key,TMS adapter,cloud storage,hosted AI or external query delivery was built. A shared-platform security guard now blocks unauthorized withdrawal through the inherited receiver; its handler/schema are unchanged (ADR19). React migration, production IdP,real customer rulebooks and independent external security/compliance acceptance are outside this local delivery.
+
+## Insurance Policy Intelligence (local, shadow only)
+
+`http://127.0.0.1:8080/#/policy` provides source-page review, explicit interpretation,
+ordered validation/review and separate-user approval/publication. Use CFG-01 and ADM-01
+in TENANT-DEMO with the synthetic demo password. Published policy-intelligence records
+are shadow mappings and never update the demonstration's runtime rules.
+
+From the repository root, using the existing local environment:
+
+```sh
+PYTHONPATH=workbench/src workbench/.venv/bin/python -m aw.policy_intelligence.acquisition --root workbench/.policy-research import /absolute/path/corrected-manifest.csv
+PYTHONPATH=workbench/src workbench/.venv/bin/python -m aw.policy_intelligence.acquisition --root workbench/.policy-research report
+PYTHONPATH=workbench/src workbench/.venv/bin/python -m aw.policy_intelligence.acquisition --root workbench/.policy-research download 'IMPORT_SHA:LINE'
+PYTHONPATH=workbench/src workbench/.venv/bin/python -m aw.policy_intelligence.extraction --root workbench/.policy-research 'IMPORT_SHA:LINE'
+PYTHONPATH=workbench/src workbench/.venv/bin/python -m aw.policy_intelligence.illustrative --root workbench/.policy-illustrative
+```
+
+Manifest columns: insurer_name, product_name, uin, url; optional revision,
+wording_effective_from/wording_effective_to, referrer_url and verification_status.
+Research labels and supplied dates remain untrusted. Exact UIN reuse across conflicting
+names, malformed rows, placeholders and nonofficial/webpage URLs are quarantined.
+The downloader respects robots, refuses redirects/protection bypass, retains old bytes,
+uses strong-ETag resume, and records actual hashes/pages/UINs. CLI extraction produces
+nonexecutable UNINTERPRETED proposals only; application extraction requires separate
+human source approval. Originals and transport journals are in ignored isolated roots.
+Back these roots up separately from operational object storage.
+
+The delivered preview translates only unconditional copay/per-claim deductible into the
+existing deterministic engine. Unknown coverage, tariff, effective dates, options or
+unsupported conditions/dependencies block effects. Complete illustrative bundles are
+interface simulations; customer/insurer evidence verification is not connected and
+`definitive_payable` is always null. See [POLICY_INTELLIGENCE_DELIVERY.md](POLICY_INTELLIGENCE_DELIVERY.md)
+for executed proof, source coverage, limits and the demonstration script.
+
+Product history and quarantine controls are on the same review screen. Rename/withdrawal
+evidence needs exact source pages, independently checked titles and distinct approval.
+The optional downloader `--quarantine-evidence` flag permits only name-reuse conflicts,
+keeps them quarantined and never approves sources. Review decisions stay tenant-scoped
+in PostgreSQL; malformed identity/URL conflicts require a corrected manifest.

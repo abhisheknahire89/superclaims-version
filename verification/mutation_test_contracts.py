@@ -12,7 +12,11 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def run_with(mutate, expect_substring):
     tmp = Path(tempfile.mkdtemp())
-    shutil.copytree(ROOT, tmp / "p", ignore=shutil.ignore_patterns("raw", "wireframes", "*.png", "*.jpg"))
+    # Copy only normative validator inputs, never live databases, sockets or secrets.
+    pack = tmp / "p"
+    pack.mkdir()
+    for directory in ("schemas", "config", "fixtures", "api", "db", "verification"):
+        shutil.copytree(ROOT / directory, pack / directory)
     mutate(tmp / "p")
     r = subprocess.run([sys.executable, str(tmp / "p/verification/validate_contracts.py")], capture_output=True, text=True)
     shutil.rmtree(tmp)

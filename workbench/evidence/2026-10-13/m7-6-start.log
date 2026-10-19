@@ -1,0 +1,11 @@
+prerequisites: ok
+applied: ['0001_schema.sql', '0002_app_support.sql', '0003_human_transcription.sql', '0004_workflow_links.sql', '0005_local_platform.sql', '0006_operations.sql', '0007_policy_intelligence.sql', '0008_policy_candidate_entry.sql']
+{"time": "2026-10-12T22:42:32.382957+00:00", "level": "INFO", "component": "aw.server", "event": "demo tenant ready; documents loaded for CLM-DEMO-0001, CLM-DEMO-0002, CLM-DEMO-0003"}
+INFO:     Started server process [16757]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8080 (Press CTRL+C to quit)
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [16757]

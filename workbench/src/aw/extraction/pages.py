@@ -1,9 +1,4 @@
-"""Page splitting, text-layer detection and page rendering for PDFs and images.
-
-Native text (and word/line boxes) come from pdfplumber. Pages with no usable text layer are marked NONE and
-need OCR (an OCR provider is configured per ADR-05 after the bake-off; none runs in the Phase 1 environment).
-Page images for the evidence viewer are rendered with pypdfium2 at 110 dpi.
-"""
+"""Native PDF reading with local Tesseract fallback and immutable page rendering."""
 from __future__ import annotations
 
 import io
@@ -40,14 +35,24 @@ def read_pdf(data: bytes) -> list[PageText]:
 
     out: list[PageText] = []
     with pdfplumber.open(io.BytesIO(data)) as pdf:
+        if len(pdf.pages) > 100:
+            raise ValueError("PDF_PAGE_LIMIT")
+        if sum(page.width*page.height*(220/72)**2 for page in pdf.pages)>200_000_000:
+            raise ValueError("PDF_TOTAL_RASTER_LIMIT")
         for i, page in enumerate(pdf.pages, start=1):
+            if page.width * page.height * (220/72)**2 > 40_000_000:
+                raise ValueError("PDF_RASTER_LIMIT")
             words = [{"text": w["text"], "x0": _r(w["x0"]), "top": _r(w["top"]), "x1": _r(w["x1"]), "bottom": _r(w["bottom"])}
                      for w in page.extract_words(keep_blank_chars=False, use_text_flow=False)]
             lines = [{"text": ln["text"], "x0": _r(ln["x0"]), "top": _r(ln["top"]), "x1": _r(ln["x1"]), "bottom": _r(ln["bottom"])}
                      for ln in page.extract_text_lines(return_chars=False)]
             text = "\n".join(ln["text"] for ln in lines)
             layer = "NATIVE" if len(text.replace(" ", "")) >= MIN_NATIVE_CHARS else "NONE"
-            out.append(PageText(i, _r(page.width), _r(page.height), text, lines, words, layer))
+            if layer == "NONE":
+                from .ocr import read_image
+                out.append(read_image(render_png(data, i, dpi=220), i, _r(page.width), _r(page.height)))
+            else:
+                out.append(PageText(i, _r(page.width), _r(page.height), text, lines, words, layer))
     return out
 
 
@@ -57,6 +62,9 @@ def render_png(data: bytes, page_no: int, dpi: int = 110) -> bytes:
     pdf = pdfium.PdfDocument(data)
     try:
         page = pdf[page_no - 1]
+        width,height = page.get_size()
+        if width*height*(dpi/72)**2 > 40_000_000:
+            raise ValueError("PDF_RASTER_LIMIT")
         image = page.render(scale=dpi / 72).to_pil()
         buf = io.BytesIO()
         image.save(buf, format="PNG", optimize=True)

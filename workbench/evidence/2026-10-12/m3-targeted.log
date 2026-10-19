@@ -1,0 +1,8 @@
+test_opd_benefit_cap (tests.test_workflows.FourWorkflows.test_opd_benefit_cap) ... ok
+test_preauth_enhancement_discharge_reservation_carry_forward (tests.test_workflows.FourWorkflows.test_preauth_enhancement_discharge_reservation_carry_forward) ... ok
+test_workflow_clock_and_invalid_parent_guards (tests.test_workflows.FourWorkflows.test_workflow_clock_and_invalid_parent_guards) ... ok
+
+----------------------------------------------------------------------
+Ran 3 tests in 1.132s
+
+OK

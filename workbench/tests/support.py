@@ -26,8 +26,12 @@ from aw.db.migrate import migrate  # noqa: E402
 def _pgbin() -> Path:
     if os.environ.get("PGBIN"):
         return Path(os.environ["PGBIN"])
-    found = shutil.which("initdb")
-    return Path(found).parent if found else Path("/usr/lib/postgresql/16/bin")
+    try:  # same detection as the dev scripts: prefers PostgreSQL 16 over whatever initdb is first on PATH
+        out = subprocess.run([str(ROOT / "scripts" / "find_pg.sh")], capture_output=True, text=True, check=True).stdout.strip()
+        return Path(out)
+    except (subprocess.CalledProcessError, OSError):
+        found = shutil.which("initdb")
+        return Path(found).parent if found else Path("/usr/lib/postgresql/16/bin")
 
 
 PGBIN = _pgbin()

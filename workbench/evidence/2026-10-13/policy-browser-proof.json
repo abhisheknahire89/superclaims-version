@@ -1,0 +1,663 @@
+{
+  "scope": "ILLUSTRATIVE review simulation; no automatic approval of public rules",
+  "actions": [
+    {
+      "button": "Intake candidate",
+      "status": 200,
+      "result": {
+        "source_id": "DOCV-d1f8f7403a9b45aa9fafcd34196bf43a",
+        "state": "CONTENT_VERIFIED"
+      }
+    },
+    {
+      "button": "Extract draft candidates",
+      "status": 422,
+      "result": {
+        "type": "https://aw.example.invalid/problems/policy-intelligence-invalid",
+        "title": "policy intelligence invalid",
+        "status": 422,
+        "detail": "source identity has not been approved by a human",
+        "instance": "/v1/policy-intelligence/actions"
+      }
+    },
+    {
+      "button": "Intake candidate",
+      "status": 200,
+      "result": {
+        "source_id": "DOCV-2f7576117ce547c4a4788577afac23ec",
+        "state": "CONTENT_VERIFIED"
+      }
+    },
+    {
+      "button": "Approve source as second reviewer",
+      "status": 200,
+      "result": {
+        "insurer": "STAR",
+        "uin": "SYNHLIP26001V012026",
+        "identity_quote": "SYNHLIP26001V012026",
+        "product_title_quote": "Star Health Illustrative Demo",
+        "legal_name_quote": "Star Health and Allied Insurance Company Limited",
+        "revision_label": "ILLUSTRATIVE synthetic v1",
+        "wording_effective_from": "2026-01-01",
+        "wording_effective_to": null,
+        "effective_date_quote": "Wording effective from 2026-01-01.",
+        "identity_match_verified": true,
+        "source_id": "DOCV-2f7576117ce547c4a4788577afac23ec",
+        "sha256": "ce8c338fa7d113a2ec878caf07562fa3475fedb3aa957a785bb7534bf7d505ce",
+        "state": "APPROVED_SOURCE",
+        "identity_conflict_pending": false,
+        "review_required": false
+      }
+    },
+    {
+      "button": "Extract draft candidates",
+      "status": 200,
+      "result": {
+        "rule_ids": [
+          "RULE-5b68ec8d43334a7f9d5064743108ac01"
+        ],
+        "count": 1
+      }
+    },
+    {
+      "button": "Save interpretation",
+      "status": 200,
+      "result": {
+        "rule_id": "RULE-5b68ec8d43334a7f9d5064743108ac01",
+        "state": "DRAFT",
+        "mode": "SHADOW_ONLY"
+      }
+    },
+    {
+      "button": "validate rule",
+      "status": 200,
+      "result": {
+        "rule_id": "RULE-5b68ec8d43334a7f9d5064743108ac01",
+        "state": "VALIDATED",
+        "mode": "SHADOW_ONLY"
+      }
+    },
+    {
+      "button": "review rule",
+      "status": 200,
+      "result": {
+        "rule_id": "RULE-5b68ec8d43334a7f9d5064743108ac01",
+        "state": "HUMAN_REVIEWED",
+        "mode": "SHADOW_ONLY"
+      }
+    },
+    {
+      "button": "approve rule",
+      "status": 422,
+      "result": {
+        "type": "https://aw.example.invalid/problems/policy-intelligence-invalid",
+        "title": "policy intelligence invalid",
+        "status": 422,
+        "detail": "author and approver/publisher must differ",
+        "instance": "/v1/policy-intelligence/actions"
+      }
+    },
+    {
+      "button": "approve rule",
+      "status": 200,
+      "result": {
+        "rule_id": "RULE-5b68ec8d43334a7f9d5064743108ac01",
+        "state": "APPROVED",
+        "mode": "SHADOW_ONLY"
+      }
+    },
+    {
+      "button": "publish rule",
+      "status": 200,
+      "result": {
+        "rule_id": "RULE-5b68ec8d43334a7f9d5064743108ac01",
+        "state": "PUBLISHED",
+        "mode": "SHADOW_ONLY"
+      }
+    },
+    {
+      "button": "Preview without changing runtime",
+      "status": 200,
+      "result": {
+        "states": [
+          "POLICY_UNVERIFIED",
+          "CONTRACT_INCOMPLETE",
+          "BENEFITS_UNVERIFIED",
+          "TARIFF_UNVERIFIED",
+          "FINANCIAL_REVIEW_REQUIRED"
+        ],
+        "verification_tasks": [
+          {
+            "layer": "member",
+            "field": "issued_policy_evidence",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "member",
+            "field": "insurer_id",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "member",
+            "field": "uin",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "member",
+            "field": "revision_hash",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "member",
+            "field": "policy_period_start",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "member",
+            "field": "policy_period_end",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "member",
+            "field": "wording_effective_date",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "member",
+            "field": "selected_options",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "member",
+            "field": "group_variations",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "member",
+            "field": "endorsement_evidence",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "coverage",
+            "field": "status",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "coverage",
+            "field": "base_sum_insured",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "coverage",
+            "field": "remaining_sum_insured",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "coverage",
+            "field": "authoritative_evidence",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "coverage",
+            "field": "as_of",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "coverage",
+            "field": "reservations",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "coverage",
+            "field": "restoration_usage",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "coverage",
+            "field": "previous_claims",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "coverage",
+            "field": "benefit_utilisation",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "tariff",
+            "field": "hospital_id",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "tariff",
+            "field": "agreement_id",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "tariff",
+            "field": "insurer_or_tpa",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "tariff",
+            "field": "effective_from",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "tariff",
+            "field": "effective_to",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "tariff",
+            "field": "authoritative_evidence",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "tariff",
+            "field": "rates",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "tariff",
+            "field": "packages",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "tariff",
+            "field": "room_limits",
+            "reason": "authoritative customer/insurer information required; public wording cannot supply this"
+          },
+          {
+            "layer": "member",
+            "field": "product_revision",
+            "reason": "issued contract must bind exact insurer/UIN/revision, not newest wording"
+          },
+          {
+            "layer": "applicability",
+            "field": "distinct_dates",
+            "reason": "issued period/wording/treatment/tariff dates missing or conflicting"
+          },
+          {
+            "layer": "coverage",
+            "field": "status",
+            "reason": "active policy status not verified"
+          },
+          {
+            "layer": "coverage",
+            "field": "as_of",
+            "reason": "current local-date authoritative coverage snapshot required"
+          },
+          {
+            "layer": "coverage",
+            "field": "balance_reconciliation",
+            "reason": "exact nonnegative paise amounts and remaining cover net of reservations required; restoration translation unsupported"
+          },
+          {
+            "layer": "member",
+            "field": "options_and_variations",
+            "reason": "explicit structured selections and group variations required"
+          },
+          {
+            "layer": "coverage",
+            "field": "claim_utilisation",
+            "reason": "explicit claim history and benefit utilisation required"
+          },
+          {
+            "layer": "tariff",
+            "field": "structured_rates",
+            "reason": "explicit contracted rates/packages/room limits required; no public price substitutions"
+          }
+        ],
+        "unknown_values_preserved": true,
+        "mode": "SHADOW_ONLY",
+        "persisted": false,
+        "verification_scope": "ILLUSTRATIVE_INTERFACE_INPUTS_ONLY; private evidence not independently connected",
+        "definitive_payable": null,
+        "applicable_policy_version": {
+          "insurer": "STAR",
+          "uin": "SYNHLIP26001V012026",
+          "revision_hash": "ce8c338fa7d113a2ec878caf07562fa3475fedb3aa957a785bb7534bf7d505ce",
+          "source_id": "DOCV-2f7576117ce547c4a4788577afac23ec"
+        },
+        "matched_clauses": [
+          {
+            "page": 1,
+            "quote": "1. Co-payment is 10% of admissible claim amount.",
+            "clause": "p1:line5",
+            "sha256": "ce8c338fa7d113a2ec878caf07562fa3475fedb3aa957a785bb7534bf7d505ce"
+          }
+        ],
+        "draft_deduction_effects": null,
+        "baseline_difference": null
+      }
+    },
+    {
+      "button": "Preview without changing runtime",
+      "status": 200,
+      "result": {
+        "states": [
+          "POLICY_MATCHED",
+          "FINANCIAL_INPUTS_VERIFIED"
+        ],
+        "verification_tasks": [],
+        "unknown_values_preserved": true,
+        "mode": "SHADOW_ONLY",
+        "persisted": false,
+        "verification_scope": "ILLUSTRATIVE_INTERFACE_INPUTS_ONLY; private evidence not independently connected",
+        "definitive_payable": null,
+        "applicable_policy_version": {
+          "insurer": "STAR",
+          "uin": "SYNHLIP26001V012026",
+          "revision_hash": "ce8c338fa7d113a2ec878caf07562fa3475fedb3aa957a785bb7534bf7d505ce",
+          "source_id": "DOCV-2f7576117ce547c4a4788577afac23ec"
+        },
+        "matched_clauses": [
+          {
+            "page": 1,
+            "quote": "1. Co-payment is 10% of admissible claim amount.",
+            "clause": "p1:line5",
+            "sha256": "ce8c338fa7d113a2ec878caf07562fa3475fedb3aa957a785bb7534bf7d505ce"
+          }
+        ],
+        "draft_deduction_effects": [
+          {
+            "adjustment_id": "ADJ-0010",
+            "level": "LINE",
+            "line_id": "L10",
+            "rule_id": "R-LINE-NONPAYABLE",
+            "rule_version": "1.0.0",
+            "reason_code": "NME_SUBSUMED_TREATMENT",
+            "amount": "1000.00",
+            "engine_amount": "1000.00",
+            "origin": "ENGINE",
+            "override_ref": null,
+            "base_before": "1000.00",
+            "remaining_after": "0.00",
+            "formula": "remaining (full)",
+            "explanation": "'Admission / registration charges' matched NME-301 (Admission / registration charges); treatment DISALLOW_FULL_IF_BILLED_SEPARATELY under list NMELIST-ILL-A v2026.1.0.",
+            "authority": {
+              "artifact": "SHADOW:RULE-5b68ec8d43334a7f9d5064743108ac01@ce8c338fa7d113a2ec878caf07562fa3475fedb3aa957a785bb7534bf7d505ce",
+              "doc_id": "ILL-WORDING-A-2026",
+              "clause": "4.1 Non-payable items"
+            },
+            "evidence_refs": [
+              {
+                "bbox": [
+                  40.0,
+                  213.9,
+                  575.0,
+                  222.9
+                ],
+                "page": 2,
+                "quote": "L10 Admission / registration charges - WARD 1 1,000.00",
+                "document_id": "DOC-01a13251e51875288f13da45ed85c8d1",
+                "transcription_ids": []
+              }
+            ]
+          },
+          {
+            "adjustment_id": "ADJ-0011",
+            "level": "LINE",
+            "line_id": "L11",
+            "rule_id": "R-LINE-NONPAYABLE",
+            "rule_version": "1.0.0",
+            "reason_code": "NME_SUBSUMED_ROOM",
+            "amount": "180.00",
+            "engine_amount": "180.00",
+            "origin": "ENGINE",
+            "override_ref": null,
+            "base_before": "180.00",
+            "remaining_after": "0.00",
+            "formula": "remaining (full)",
+            "explanation": "'Toothpaste and toothbrush' matched NME-101 (Tooth paste / tooth brush); treatment DISALLOW_FULL_IF_BILLED_SEPARATELY under list NMELIST-ILL-A v2026.1.0.",
+            "authority": {
+              "artifact": "SHADOW:RULE-5b68ec8d43334a7f9d5064743108ac01@ce8c338fa7d113a2ec878caf07562fa3475fedb3aa957a785bb7534bf7d505ce",
+              "doc_id": "ILL-WORDING-A-2026",
+              "clause": "4.1 Non-payable items"
+            },
+            "evidence_refs": [
+              {
+                "bbox": [
+                  40.0,
+                  227.9,
+                  575.0,
+                  236.9
+                ],
+                "page": 2,
+                "quote": "L11 Toothpaste and toothbrush - WARD 1 180.00",
+                "document_id": "DOC-01a13251e51875288f13da45ed85c8d1",
+                "transcription_ids": []
+              }
+            ]
+          },
+          {
+            "adjustment_id": "ADJ-0012",
+            "level": "LINE",
+            "line_id": "L12",
+            "rule_id": "R-LINE-NONPAYABLE",
+            "rule_version": "1.0.0",
+            "reason_code": "NME_NON_PAYABLE",
+            "amount": "240.00",
+            "engine_amount": "240.00",
+            "origin": "ENGINE",
+            "override_ref": null,
+            "base_before": "240.00",
+            "remaining_after": "0.00",
+            "formula": "remaining (full)",
+            "explanation": "'Mineral water' matched NME-001 (Mineral water); treatment DISALLOW_FULL under list NMELIST-ILL-A v2026.1.0.",
+            "authority": {
+              "artifact": "SHADOW:RULE-5b68ec8d43334a7f9d5064743108ac01@ce8c338fa7d113a2ec878caf07562fa3475fedb3aa957a785bb7534bf7d505ce",
+              "doc_id": "ILL-WORDING-A-2026",
+              "clause": "4.1 Non-payable items"
+            },
+            "evidence_refs": [
+              {
+                "bbox": [
+                  40.0,
+                  241.9,
+                  575.0,
+                  250.9
+                ],
+                "page": 2,
+                "quote": "L12 Mineral water - WARD 1 240.00",
+                "document_id": "DOC-01a13251e51875288f13da45ed85c8d1",
+                "transcription_ids": []
+              }
+            ]
+          },
+          {
+            "adjustment_id": "ADJ-0013",
+            "level": "LINE",
+            "line_id": "L13",
+            "rule_id": "R-LINE-NONPAYABLE",
+            "rule_version": "1.0.0",
+            "reason_code": "NME_SUBSUMED_ROOM",
+            "amount": "350.00",
+            "engine_amount": "350.00",
+            "origin": "ENGINE",
+            "override_ref": null,
+            "base_before": "350.00",
+            "remaining_after": "0.00",
+            "formula": "remaining (full)",
+            "explanation": "'Patient gown' matched NME-102 (Gown); treatment DISALLOW_FULL_IF_BILLED_SEPARATELY under list NMELIST-ILL-A v2026.1.0.",
+            "authority": {
+              "artifact": "SHADOW:RULE-5b68ec8d43334a7f9d5064743108ac01@ce8c338fa7d113a2ec878caf07562fa3475fedb3aa957a785bb7534bf7d505ce",
+              "doc_id": "ILL-WORDING-A-2026",
+              "clause": "4.1 Non-payable items"
+            },
+            "evidence_refs": [
+              {
+                "bbox": [
+                  40.0,
+                  87.9,
+                  575.0,
+                  96.9
+                ],
+                "page": 3,
+                "quote": "L13 Patient gown - WARD 1 350.00",
+                "document_id": "DOC-01a13251e51875288f13da45ed85c8d1",
+                "transcription_ids": []
+              }
+            ]
+          },
+          {
+            "adjustment_id": "ADJ-0020",
+            "level": "CLAIM",
+            "line_id": null,
+            "rule_id": "R-CLAIM-COPAY",
+            "rule_version": "1.0.0",
+            "reason_code": "CO_PAYMENT",
+            "amount": "10759.05",
+            "engine_amount": "10759.05",
+            "origin": "ENGINE",
+            "override_ref": null,
+            "base_before": "107590.50",
+            "remaining_after": "96831.45",
+            "formula": "107590.50 x 10.00%",
+            "explanation": "SHADOW-COPAY: age 34 at admission.",
+            "authority": {
+              "artifact": "SHADOW:RULE-5b68ec8d43334a7f9d5064743108ac01@ce8c338fa7d113a2ec878caf07562fa3475fedb3aa957a785bb7534bf7d505ce",
+              "doc_id": "DOCV-2f7576117ce547c4a4788577afac23ec#sha256:ce8c338fa7d113a2ec878caf07562fa3475fedb3aa957a785bb7534bf7d505ce",
+              "clause": "p1:line5"
+            },
+            "evidence_refs": [
+              {
+                "record_type": "MEMBER_RECORD",
+                "record_id": "MEM-DEMO-1001",
+                "field": "dob"
+              },
+              {
+                "record_type": "CLAIM_RECORD",
+                "record_id": "CLM-DEMO-0001",
+                "field": "admission_date"
+              }
+            ]
+          },
+          {
+            "adjustment_id": "ADJ-0023",
+            "level": "CLAIM",
+            "line_id": null,
+            "rule_id": "R-CLAIM-ROUNDING",
+            "rule_version": "1.0.0",
+            "reason_code": "ROUNDING",
+            "amount": "0.45",
+            "engine_amount": "0.45",
+            "origin": "ENGINE",
+            "override_ref": null,
+            "base_before": "96831.45",
+            "remaining_after": "96831.00",
+            "formula": "96831.45 -> 96831 (RUPEE_HALF_UP)",
+            "explanation": "Final payable rounded per configuration; a negative amount increases the payable.",
+            "authority": {
+              "artifact": "SHADOW:RULE-5b68ec8d43334a7f9d5064743108ac01@ce8c338fa7d113a2ec878caf07562fa3475fedb3aa957a785bb7534bf7d505ce",
+              "doc_id": "ILL-CLAIMS-MANUAL-A-2026",
+              "clause": "2.4 Rounding of settlement amounts"
+            },
+            "evidence_refs": [
+              {
+                "record_type": "CONFIG",
+                "record_id": "SHADOW:RULE-5b68ec8d43334a7f9d5064743108ac01@ce8c338fa7d113a2ec878caf07562fa3475fedb3aa957a785bb7534bf7d505ce",
+                "field": "rounding.final_payable"
+              }
+            ]
+          }
+        ],
+        "baseline_difference": {
+          "before": "107591.00",
+          "after": "96831.00",
+          "note": "synthetic baseline plus one translated clause; not a complete contract calculation"
+        },
+        "illustrative_shadow_recommendation": {
+          "type": "PAY_PARTIAL",
+          "computed": true,
+          "recommended_payable": "96831.00",
+          "billed_total": "109360.50",
+          "bill_stated_total": "109360.50",
+          "itemised_lines_available": true,
+          "line_level_deductions": "1770.00",
+          "claim_level_deductions": "10759.50",
+          "admissible_after_line_rules": "107590.50",
+          "blocked_scopes": [],
+          "human_decision_required": true
+        },
+        "translation": {
+          "engine_rule": "R-CLAIM-COPAY",
+          "authority": {
+            "doc_id": "DOCV-2f7576117ce547c4a4788577afac23ec#sha256:ce8c338fa7d113a2ec878caf07562fa3475fedb3aa957a785bb7534bf7d505ce",
+            "clause": "p1:line5"
+          },
+          "source_quote": "1. Co-payment is 10% of admissible claim amount.",
+          "ledger_mutated": false
+        }
+      }
+    },
+    {
+      "button": "Propose product history",
+      "status": 200,
+      "result": {
+        "proposal_id": "ProductHistory-2ba73385199c4820a1df05c36841000b",
+        "state": "DRAFT"
+      }
+    },
+    {
+      "button": "Approve product history as second reviewer",
+      "status": 422,
+      "result": {
+        "type": "https://aw.example.invalid/problems/policy-intelligence-invalid",
+        "title": "policy intelligence invalid",
+        "status": 422,
+        "detail": "product author and approver must differ",
+        "instance": "/v1/policy-intelligence/actions"
+      }
+    },
+    {
+      "button": "Approve product history as second reviewer",
+      "status": 200,
+      "result": {
+        "history_id": "ProductHistory-9a73637b447247bbbaf32b35de37edd7",
+        "names": [
+          "Illustrative Demo",
+          "Star Health Illustrative Demo"
+        ],
+        "state": "APPROVED",
+        "author": "CFG-01",
+        "change": "RENAME",
+        "evidence": [
+          {
+            "page": 1,
+            "quote": "Star Health Illustrative Demo",
+            "sha256": "ce8c338fa7d113a2ec878caf07562fa3475fedb3aa957a785bb7534bf7d505ce",
+            "source_id": "DOCV-2f7576117ce547c4a4788577afac23ec"
+          }
+        ],
+        "product_id": "STAR:SYNHLIP26001V012026",
+        "effective_from": null,
+        "interpretation": "ILLUSTRATIVE title alias only; no changed benefit or guessed effective date.",
+        "review_required": true,
+        "context_reviewed": true,
+        "proposal_id": "ProductHistory-2ba73385199c4820a1df05c36841000b",
+        "approver": "ADM-01"
+      }
+    },
+    {
+      "button": "Resolve against approved source",
+      "status": 200,
+      "result": {
+        "research_id": "illustrative-conflict",
+        "state": "CONTENT_VERIFIED"
+      }
+    },
+    {
+      "button": "Reject research entry",
+      "status": 200,
+      "result": {
+        "research_id": "b87738b70facb2f9220b9abcf1888e14053b6502df94d74404114b5cdf1ab8de:10",
+        "state": "REJECTED"
+      }
+    }
+  ],
+  "public_source": "DOCV-d1f8f7403a9b45aa9fafcd34196bf43a",
+  "illustrative_source": "DOCV-2f7576117ce547c4a4788577afac23ec",
+  "rule_id": "RULE-5b68ec8d43334a7f9d5064743108ac01",
+  "source_sha256": "ce8c338fa7d113a2ec878caf07562fa3475fedb3aa957a785bb7534bf7d505ce"
+}

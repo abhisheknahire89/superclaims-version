@@ -36,7 +36,9 @@ def main(base: str, out: Path) -> int:
         page.goto(base + "/#/login")
         page.get_by_role("button", name="PROC-11").click()
         expect(page.get_by_role("heading", name="Work queue")).to_be_visible()
-        expect(page.locator("tr.qrow")).to_have_count(3)
+        expect(page.locator("tr.qrow")).to_have_count(6)
+        for cid in ['CLM-DEMO-0001','CLM-DEMO-0002','CLM-DEMO-0003','CLM-DEMO-PREAUTH','CLM-DEMO-DISCHARGE','CLM-DEMO-OPD']:
+            expect(page.get_by_role('link',name=cid,exact=True)).to_be_visible()
         shot("01-queue")
 
         # claim 2: bill and deductions, evidence for a deduction, findings, decision needs a second approver
@@ -53,7 +55,7 @@ def main(base: str, out: Path) -> int:
         page.locator("#evidence").screenshot(path=str(out / "04-evidence-zoom.png"))
         page.get_by_role("tab", name="Decision").click()
         page.get_by_role("button", name="Record decision").click()
-        expect(page.locator(".err[role=alert]")).to_contain_text("deductions above share of billed")
+        expect(page.locator("[role=tabpanel] .err[role=alert]")).to_contain_text("deductions above share of billed")
         page.get_by_role("button", name="Send for approval").click()
         expect(page.locator("h3", has_text="Awaiting second approval")).to_be_visible()
         shot("05-sent-for-approval")

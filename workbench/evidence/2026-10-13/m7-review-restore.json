@@ -1,0 +1,46 @@
+{
+  "database": "aw_restore_policy_drill",
+  "object_dir": "/private/tmp/aw-m7-review-restored-objects",
+  "claims": 7,
+  "documents": 34,
+  "decisions": 2,
+  "audit_chains": [
+    {
+      "claim_id": "CLM-DEMO-0001",
+      "events": 49,
+      "verified": true
+    },
+    {
+      "claim_id": "CLM-DEMO-0002",
+      "events": 57,
+      "verified": true
+    },
+    {
+      "claim_id": "CLM-DEMO-0003",
+      "events": 100,
+      "verified": true
+    },
+    {
+      "claim_id": "CLM-DEMO-0088",
+      "events": 0,
+      "verified": true
+    },
+    {
+      "claim_id": "CLM-DEMO-DISCHARGE",
+      "events": 28,
+      "verified": true
+    },
+    {
+      "claim_id": "CLM-DEMO-OPD",
+      "events": 31,
+      "verified": true
+    },
+    {
+      "claim_id": "CLM-DEMO-PREAUTH",
+      "events": 28,
+      "verified": true
+    }
+  ],
+  "manifest_verified": true,
+  "verified_referenced_objects": 114
+}

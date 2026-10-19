@@ -29,13 +29,15 @@ class EvaluationError(Exception):
 
 def _ev(f: dict) -> dict:
     e = f["evidence"]
-    return {"document_id": e["document_id"], "page": e["page"], "bbox": e.get("bbox") or [0, 0, 0, 0], "quote": e["quote"]}
+    return {**e, "document_id": e["document_id"], "page": e["page"], "bbox": e.get("bbox") or [0, 0, 0, 0], "quote": e["quote"]}
 
 
 def available_si_inputs(conn: Conn, tenant_id: str, claim: dict, pm: dict, policy_row: dict) -> Decimal:
+    from .workflows import group_claims
+    group=group_claims(conn,tenant_id,claim)
     rows = conn.fetch_all("SELECT entry_kind, sum(amount_paise) AS s FROM si_ledger_entry WHERE tenant_id=$1 AND policy_no=$2 AND member_id=$3"
-                          " AND policy_year_start=$4 AND (claim_id IS NULL OR claim_id <> $5) GROUP BY entry_kind",
-                          tenant_id, claim["policy_no"], claim["member_id"], policy_row["period_start"], claim["claim_id"])
+                          " AND policy_year_start=$4 AND (claim_id IS NULL OR NOT (claim_id = ANY($5::text[]))) GROUP BY entry_kind",
+                          tenant_id, claim["policy_no"], claim["member_id"], policy_row["period_start"], group)
     s = {r["entry_kind"]: int(r["s"]) for r in rows}
     used = s.get("OPENING_PAID_EXTERNAL", 0) + s.get("PAID", 0) + s.get("RESERVED", 0) - s.get("RELEASED", 0)
     return from_paise(max(used, 0))
@@ -79,9 +81,9 @@ def build_engine_input(conn: Conn, tenant_id: str, claim_id: str, evaluation_id:
     bill_lines = conn.fetch_all("SELECT * FROM bill_line WHERE tenant_id=$1 AND claim_id=$2 AND is_active ORDER BY line_no", tenant_id, claim_id)
     docs = conn.fetch_all("SELECT document_id, classified_type, status FROM document WHERE tenant_id=$1 AND claim_id=$2 AND status <> 'QUARANTINED'"
                           " ORDER BY received_at", tenant_id, claim_id)
-    itemised = any(d["classified_type"] == "FINAL_BILL_ITEMISED" and d["status"] != "SUPERSEDED" for d in docs)
-    bill_total_facts = [f for f in facts if f["field_path"] == "bill.total" and f["classified_type"] in ("FINAL_BILL_ITEMISED", "FINAL_BILL_SUMMARY")]
-    bill_no_facts = [f for f in facts if f["field_path"] == "bill.number" and f["classified_type"] in ("FINAL_BILL_ITEMISED", "FINAL_BILL_SUMMARY")]
+    itemised = any(d["classified_type"] in ("FINAL_BILL_ITEMISED","ESTIMATE_BILL") and d["status"] != "SUPERSEDED" for d in docs)
+    bill_total_facts = [f for f in facts if f["field_path"] == "bill.total" and f["classified_type"] in ("FINAL_BILL_ITEMISED", "FINAL_BILL_SUMMARY", "ESTIMATE_BILL")]
+    bill_no_facts = [f for f in facts if f["field_path"] == "bill.number" and f["classified_type"] in ("FINAL_BILL_ITEMISED", "FINAL_BILL_SUMMARY", "ESTIMATE_BILL")]
     summary_docs = [f for f in facts if f["classified_type"] == "FINAL_BILL_SUMMARY" and f["field_path"] == "bill.is_itemised"]
 
     eff_date = date.fromisoformat(rv("admission.date")) if rv("admission.date") else (
@@ -114,10 +116,33 @@ def build_engine_input(conn: Conn, tenant_id: str, claim_id: str, evaluation_id:
         " FROM adjustment_override o JOIN reviewer_action a ON a.tenant_id=o.tenant_id AND a.reviewer_action_id=o.reviewer_action_id"
         " WHERE o.tenant_id=$1 AND o.claim_id=$2 AND o.is_active", tenant_id, claim_id)
 
+    required_paths = {"ESTIMATE_BILL":{"patient.name","bill.total","bill.line_item"},"FINAL_BILL_ITEMISED": {"patient.name", "bill.total", "bill.line_item"},
+                      "PREAUTH_REQUEST":{"patient.name","admission.date","diagnosis.primary_text"},
+                      "FINAL_BILL_SUMMARY": {"patient.name", "bill.total"},
+                      "DISCHARGE_SUMMARY": {"patient.name", "admission.date", "diagnosis.primary_text"}}
+    missing_critical = {d["document_id"] for d in docs if d["status"] != "SUPERSEDED"
+                        and not required_paths.get(d["classified_type"], set()) <=
+                        {f["field_path"] for f in facts if f["document_id"] == d["document_id"]}}
+    unreadable_pages = {r["document_id"] for r in conn.fetch_all("SELECT p.document_id FROM document_page p JOIN document d ON d.tenant_id=p.tenant_id AND d.document_id=p.document_id WHERE p.tenant_id=$1 AND d.claim_id=$2 AND p.text_layer='NONE' AND NOT EXISTS (SELECT 1 FROM human_page_transcription ht WHERE ht.tenant_id=p.tenant_id AND ht.document_id=p.document_id AND ht.page_no=p.page_no AND ht.reviewed_complete) AND d.status NOT IN ('SUPERSEDED','QUARANTINED')",tenant_id,claim_id)}
+    opd_rows=conn.fetch_all("SELECT l.entry_kind,sum(l.amount_paise) AS amount FROM si_ledger_entry l JOIN claim c ON c.tenant_id=l.tenant_id AND c.claim_id=l.claim_id WHERE l.tenant_id=$1 AND l.policy_no=$2 AND l.member_id=$3 AND l.policy_year_start=$4 AND c.workflow IN ('OPD_REIMBURSEMENT','OPD_CASHLESS') AND c.claim_id<>$5 GROUP BY l.entry_kind",tenant_id,claim['policy_no'],claim['member_id'],policy_row['period_start'],claim_id)
+    opd_amounts={r['entry_kind']:int(r['amount']) for r in opd_rows}
+    encounter_date=rv("admission.date") or (rv("bill.date") if claim["workflow"].startswith("OPD") else None)
+    if claim["workflow"].startswith("OPD") and not adm_obs:
+        adm_obs=[{"source":f["document_id"],"value":f["normalised_value"],"evidence":_ev(f)} for f in facts if f["field_path"]=="bill.date"]
     engine_input = {
         "claim_id": claim_id,
+        "prior_decision_count":conn.fetch_val("SELECT count(*) FROM decision WHERE tenant_id=$1 AND claim_id=$2",tenant_id,claim_id),
+        "tat_breached": __import__('aw.tat',fromlist=['breached']).breached(claim,configs.effective(conn,tenant_id,'WORKFLOW_CONFIG',date.today()) or {}),
+        "document_reading_blocks": sorted({f["document_id"] for f in facts
+            if float(f["confidence"]) < 0.95 and f["field_path"] in
+            ("patient.name", "patient.gender", "admission.date", "discharge.date", "bill.total", "bill.line_item")
+            and not (resolved.get(f["field_path"], {}).get("basis") in ("REVIEWER_SELECTED", "REVIEWER_ENTERED")
+                     and resolved[f["field_path"]]["value"] == f["normalised_value"])} |
+            {d["document_id"] for d in docs if d["status"] in ("FAILED_TECHNICAL", "FAILED_UNREADABLE")} |
+            {path for path in ("bill.total", "discharge.date") if resolved.get(path, {}).get("basis") == "UNRESOLVED"} | missing_critical | unreadable_pages | ({"ENCOUNTER_DATE_MISSING"} if not encounter_date and not adm_obs else set())),
         "evaluation_id": evaluation_id,
         "workflow": claim["workflow"],
+        "opd_used":f"{from_paise(max(0,opd_amounts.get('RESERVED',0)+opd_amounts.get('PAID',0)-opd_amounts.get('RELEASED',0))):.2f}",
         "member": {"member_id": member["member_id"], "name_normalised": member["name_normalised"], "gender": member["gender"],
                    "dob": member["dob"].isoformat()},
         "policy": {"policy_no": policy_row["policy_no"], "config_ref": f"{policy_row['config_artifact_id']}@{policy_row['config_version']}",
@@ -131,8 +156,8 @@ def build_engine_input(conn: Conn, tenant_id: str, claim_id: str, evaluation_id:
         "bill_no": bill_no,
         "bill_no_evidence": _ev(bill_no_facts[-1]) if bill_no_facts else None,
         "bill_stated_total": rv("bill.total"),
-        "admission_date": rv("admission.date"),
-        "discharge_date": rv("discharge.date"),
+        "admission_date": encounter_date,
+        "discharge_date": rv("discharge.date") or (encounter_date if claim["workflow"].startswith("OPD") else None),
         "procedure_codes": procedure_codes,
         "identity_observations": identity_obs,
         "admission_date_observations": adm_obs,
@@ -146,6 +171,8 @@ def build_engine_input(conn: Conn, tenant_id: str, claim_id: str, evaluation_id:
             "billed": f"{from_paise(l['billed_paise']):.2f}",
             "invoice_no": l["invoice_no"], "service_date": l["service_date"].isoformat() if l["service_date"] else None,
             "evidence": l["evidence"]} for l in bill_lines] if itemised else [],
+        "clinical_observations": [{"text":str(f['normalised_value']),"evidence":[_ev(f)]} for f in facts if f['field_path'] in ('diagnosis.primary_text','procedure.text','history.past_illness_text') and f['grounding_check']=='VERIFIED'],
+        "overlapping_claims": [],
         "ped_signals": ped_signals,
         "portfolio_bill_number_index": [{"claim_id": p["claim_id"], "bill_no": p["bill_no"], "hospital_id": p["hospital_id"], "member_id": p["member_id"]} for p in portfolio],
         "documents_present": [{"document_id": d["document_id"], "type": d["classified_type"]} for d in docs if d["classified_type"]],
@@ -158,6 +185,13 @@ def build_engine_input(conn: Conn, tenant_id: str, claim_id: str, evaluation_id:
     if engine_input["bill_stated_total"] is None:
         engine_input.pop("bill_stated_total")
     cfgs = {"policy": policy_cfg, "nme": nme, "tariff": tariff, "checklist": checklist}
+    if engine_input['admission_date'] and engine_input['discharge_date']:
+        for other in conn.fetch_all("SELECT c.claim_id,e.result FROM claim c JOIN evaluation e ON e.tenant_id=c.tenant_id AND e.evaluation_id=c.current_evaluation_id WHERE c.tenant_id=$1 AND c.member_id=$2 AND c.claim_id<>$3 AND c.status NOT IN ('WITHDRAWN')",tenant_id,claim['member_id'],claim_id):
+            before=conn.fetch_all("SELECT field_path,value FROM resolved_fact WHERE tenant_id=$1 AND claim_id=$2 AND is_active AND field_path IN ('admission.date','discharge.date')",tenant_id,other['claim_id'])
+            dates={r['field_path']:r['value'] for r in before}
+            total=other['result']['recommendation']['billed_total'];current_total=sum(Decimal(l['billed']) for l in engine_input['bill_lines'])
+            if dates.get('admission.date') and dates.get('discharge.date') and dates['admission.date']<=engine_input['discharge_date'] and dates['discharge.date']>=engine_input['admission_date'] and abs(Decimal(total)-current_total)<=max(Decimal('1'),current_total*Decimal('.05')):
+                engine_input['overlapping_claims'].append({'claim_id':other['claim_id'],'evidence':[]})
     return engine_input, cfgs
 
 
@@ -173,6 +207,10 @@ def evaluate_claim(conn: Conn, tenant_id: str, claim_id: str, trigger: str = "MA
     claim = conn.fetch_one("SELECT * FROM claim WHERE tenant_id=$1 AND claim_id=$2 FOR UPDATE", tenant_id, claim_id)
     if claim is None:
         raise EvaluationError("claim not found")
+    if claim['status'] in ('FINALISED','EXPORTED','WITHDRAWN'):return {'skipped':True,'reason':'CLOSED_CLAIM'}
+    if claim['status']=='REOPENED':
+        conn.execute("UPDATE claim SET status='PROCESSING' WHERE tenant_id=$1 AND claim_id=$2",tenant_id,claim_id)
+        claim['status']='PROCESSING'
     evaluation_id = new_id("EVL")
     engine_input, cfgs = build_engine_input(conn, tenant_id, claim_id, evaluation_id)
     input_hash = _stable_input_hash(engine_input, cfgs)
@@ -302,6 +340,9 @@ def _set_current(conn: Conn, tenant_id: str, claim: dict, evaluation_id: str):
     status = claim["status"]
     if status in ("INTAKE", "DOCS_INCOMPLETE", "PROCESSING", "REOPENED", "AWAITING_RESPONSE"):
         status = "READY_FOR_REVIEW"
+    if status!=claim["status"]:
+        from .workflows import assert_transition
+        assert_transition(claim["workflow"],claim["status"],status)
     conn.execute("UPDATE claim SET current_evaluation_id=$3, status=$4::claim_status, updated_at=now(), row_version=row_version+1"
                  " WHERE tenant_id=$1 AND claim_id=$2", tenant_id, claim["claim_id"], evaluation_id, status)
     claim["current_evaluation_id"] = evaluation_id

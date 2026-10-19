@@ -1,0 +1,5 @@
+insurer_name,product_name,uin,url,verification_status,referrer_url
+Niva Bupa,ReAssure,NBHHLIP26050V042526,https://transactions.nivabupa.com/pages/doc/policy_wording/ReAssure-Policy-Wording.pdf?v=1.2,DISCOVERED,
+Niva Bupa,Health Companion,NBHHLIP26051V092526,https://transactions.nivabupa.com/pages/doc/policy_wording/Health-Companion_Variant-1-2-3-EFF_Policy-Wording.pdf?v=1.1,DISCOVERED,
+Care Health,Care Classic,CHIHLIP22071V012122,https://cms.careinsurance.com/cms/public/uploads/download_center/care-classic---%28health-insurance-product%29-policy-terms-%26-conditions.pdf?rv=0.06437300+1717690836,DISCOVERED,
+Star Health,Super Star,SHAHLIP27049V022627,https://d28c6jni2fmamz.cloudfront.net/Policy_Super_Star_V_3_80e5dd8988.pdf,DISCOVERED,https://www.starhealth.in/downloads/

@@ -479,3 +479,411 @@ Throughout: no real data until BL-01 (DPA plus legal basis) is done. Keep every 
 - unittest collects module-level aliases of TestCase classes twice. Use base classes, not `_cls = Foo`.
 - Browser 4xx responses also log "Failed to load resource" console errors. ui_smoke.py ignores those and judges by HTTP status; the expected 409 on the second-approval path is allowed.
 - verification/check_refs.py fails the build if any doc cites an ID (ADJ-…, EVAL-…, etc.) that no fixture contains.
+
+
+13. CURRENT MAC RUN — MILESTONE 0 (12 October 2026)
+---------------------------------------------------
+Starting commit: 6bba0ddf48be5b2b738bcec6ca54252f7da39525. Preserved pre-existing
+modified/untracked implementation files; no commit/push. Darwin arm64, venv Python
+3.13.15, FastAPI 0.143.0, psycopg 3.3.6, native PostgreSQL 16.15 at
+/opt/homebrew/opt/postgresql@16/bin; default PATH PG15 is not used. Tesseract 5.5.3.
+Docker executable present, daemon unavailable: Docker NOT RUN (open Docker Desktop).
+make test initially failed discovery (tests lacked __init__.py); restored marker.
+ACTUALLY RUN: make test 27 passed, 0 failed/skipped; make test-pgwire 27 passed,
+0 failed/skipped; make demo (isolated /tmp/aw-m0-demo port 55441) all 5 traces and
+audit checks passed; make ui-smoke on seeded native server: 0 problems, 9 screenshots.
+Full verification/build_all.sh: 10 rules, 3000 properties (2715 computed/285 blocked),
+53 contracts, 8 mutations, 31-table DB, 11 negative constraints, RLS and refs passed.
+Evidence: workbench/evidence/2026-10-12/baseline-*.log, workbench/ui-shots/.
+Generated ignored .env without printing values. Existing FastAPI/psycopg migration
+executed successfully. ADR-13 records resolution of older stack spec.
+Startup tested: cd workbench && make serve (http://127.0.0.1:8080). Development
+synthetic user selection PROC-11, SUP-02, MO-01. UI smoke changes claim 2; next
+restart uses a fresh isolated cluster. Demo/db start were accidentally launched
+concurrently once, producing database creation race; sequential isolated demo passed.
+Milestones 1–6 remain incomplete; historical handover proof is not current proof.
+
+
+14. CURRENT MAC RUN — MILESTONE 1 (12 October 2026)
+---------------------------------------------------
+Implemented native/scanned PDF, JPG/PNG local Tesseract OCR, image deskew/denoise,
+original-coordinate boxes, bounded safe ZIP and multiple uploads. Shared grounding
+checks quotes, actual values and source geometry. Critical low confidence, missing
+bill identity/total/lines, conflicts and unreadable continuation pages block money.
+Manual versioned readings preserve evidence; visual transcription explicitly records
+immutable image hash, reviewer, region and human provenance in append-only/RLS0003.
+Repeated human readings retain provenance. Full-page attestation is separately required
+to unblock an unreadable page. ADR14 records conflicts and human-reading boundaries.
+ACTUALLY RUN:42 tests passed/0failed/0skipped on each psycopg and pgwire;
+make demo five exact traces/audits; full pack passed (same counts as M0);
+fresh native startup /tmp/aw-m1-completed port55446; UI smoke0problems/9screenshots;
+manual UI201 for source-grounded reading and human full-page attestation.
+Independent review found7 initial issues plus repeat-provenance/request-mutation and
+staging poisoning; fixed and reviewer reran15 tests plus independent probes successfully.
+Evidence:workbench/evidence/2026-10-12/m1-*.log, manual-reading.png,
+document-review[-followup].md and benchmark JSON files.
+Synthetic corpus:38 distinct claims across9 layouts (20/5 training,10/2 first reserved,
+8/2 fresh challenge), including native/scans/skew/noise/stamps/multipage/instructions.
+Training120documents:396/400 fields,43/60 lines,15/40 artifact reconciliation;
+45/60 required-abstention scorer cases. These are extraction scorer results, not an
+end-to-end decision-safety rate. PNG page fragments cannot always reconcile a whole bill.
+Original blind first:100/1132 fields,0/400 lines; fresh blind challenge157/876,0/256.
+After generic fixes, revealed first610/1132 fields,379/400 lines,30/44 bills;
+revealed challenge175/876 fields,65/256 lines,8/36 bills. Original blind hashes retained.
+Accuracy is inadequate for unattended reading; manual review remains required. Totals
+alone do not prove correct descriptions/quantities. No arbitrary-layout/handwriting accuracy
+claim. Outstanding product gap: challenge parsing and abstention benchmark coverage.
+M2–M6 not yet completed; Docker still NOT RUN. No paid/hosted app calls or push.
+
+
+15. CURRENT MAC RUN — MILESTONE 2 (12 October2026)
+---------------------------------------------------
+Implemented config admin UI: stored body, version/draft, validate, prior-version diff,
+read-only saved-claim replay, second-administrator publish, optional open-claim re-eval.
+Six kinds supported; workflow/classifier replay previews settings/classification/field
+counts, not a fictitious payable delta. Local bounded CSV/XLSX JSON-pointer patches
+preview/validate only; formulas rejected. Existing external import/integration endpoints
+unchanged and not newly built. Policy body/version effective dates must agree.
+Engine follows safe configured line/claim ordering, enforcing co-pay before SI cap,
+duplicate/NME before tariff/packages, room-cap before proportionate and rounding last.
+Catalogue rules implemented: exclusion/LOS/duplicate-overlap review cues; prepost and
+implant missing evidence abstention; authority-cited package caps consume components;
+cited clinical observations in rule details; deadline breach cues/clock calculation.
+These are synthetic customer rules, never automatic denial. No clinical validation claim.
+ADR15 describes resolutions/replay limits. Config publication serializes; explicit
+retroactive re-evaluation fixed a discovered reconcile-idempotency reuse bug by queueing
+config-version-specific evaluations. Workflow published limits update role assignments.
+ACTUALLY RUN:49tests/0fail/0skip on psycopg and pgwire; five exact demo traces/audits;
+full pack passed; clean native restart /tmp/aw-m2-clean port55448. UI smoke0problems;
+headless config flow draft, validate, replay, author-publish422, second admin-publish200
+passed with config-replay.png/config-published.png. Also fixed late queue response
+clobbering a newer navigation. Evidence:m2-*.log and config screenshots.
+Remaining:M3–M6, heldout extraction accuracy limitation from M1; Docker NOT RUN.
+
+
+16. CURRENT MAC RUN — MILESTONE 3 (12October2026)
+---------------------------------------------------
+Added local PREAUTH/ENHANCEMENT estimate reading, blocking workflow checklists,
+CASHLESS_DISCHARGE final-bill/discharge checks, OPD prescription/bill/receipt plus
+exact configured annual/per-claim benefit caps. New config files/versions preserve
+original immutable config contents.0004 adds tenant-scoped cashless parent/root refs
+and unique successors. Enhancement requires a human-approved matching parent and
+cumulative authorisation; one stage continues into next. Decisions release prior group
+net reservations and reserve new amount under the policy-member lock;3500 final after
+3000 preauth/4000enhancement leaves3500 outstanding. OPD balance rechecked under lock.
+UI registers claims and continues authorised cashless cases. Source quotes, human
+final decisions, TPA insurer-outcome-only and staleness guards retained. Transition
+checks added. Fixed historical reopen release double-credit and new-evaluation revision;
+late background evaluations skip closed claims. ADR16 records local workflow scope.
+ACTUALLY RUN:52tests/0failed/0skipped on each driver; full pack/five demo traces pass;
+fresh database+object store /tmp/aw-m3-complete port55453 starts all6 seeded claims.
+Headless four workflows each reviewed/human-decided; linked enhancement registration201,
+9screenshots in evidence/2026-10-12/workflows. Old smoke initially failed its3-claim
+expectation; updated to assert6 named seeded claims, then sequential fresh-seed smoke
+and four-workflow browser runs passed. m3-*.log evidence.
+Preauth recommendations are provisional authorisations; no clinical criteria validation,
+external insurer exchange/TMS integration or automatic decision. OPD_CASHLESS outside
+requested four-flow scope and not claimed complete. M4–M6 remain; Docker NOT RUN.
+
+17. CURRENT MAC RUN — MILESTONE 4 (12 October2026)
+---------------------------------------------------
+Local scrypt passwords, opaque hashed/revocable eight-hour sessions, CSRF, five-attempt
+lockouts, immediate role reload and password confirmation for config publication.
+Public Synthetic-demo-2026! is ONLY the synthetic seed password; generated .env secrets
+protect services and are never printed. OIDC is an unconfigured future interface.
+0005 adds tenant-RLS sessions/credentials, append-only anchors/deadline alerts.
+Workers now fence lease owner/attempt, hold job lock through atomic handler commit,
+recover expired leases and exhaust attempts visibly. Local WORM uses exclusive hard
+links plus fsync/checksums; races cannot overwrite bytes. JSON logs carry error codes,
+not source data/tracebacks; access logging disabled. /readyz checks DB/storage/worker.
+Maintenance records deadline alerts and anchors audit heads in immutable local files.
+Host administrators controlling both DB and storage can defeat local tamper evidence.
+ACTUALLY RUN:57 tests/0fail/0skip on each driver before final readiness/OIDC guard;
+closure full tests rerun in m4-closure-tests.log. Full pack and five exact demo traces
+pass. Fresh startup /tmp/aw-m4-closure PG55459/isolated objects: readyz200;
+sequential smoke0problems, manual source+human attestation201, all4 workflow human
+reviews/decisions+linked enhancement201, config4eyes+password-confirm publication.
+ACTUAL DRILL: stopped source app, backup .backups/1791823712 (dump SHA verified,
+242 files); restored NEW aw_restore_1791823770 on isolated PG55456. Eight claims,
+32 docs,five human decisions,eight verified audit chains; restored app login/read200,
+68 original/page object checksum reads and other-tenant0claims. Logs:m4-backup,
+m4-restore,m4-restore-app. Consistent drill used stopped writer; no online atomic
+snapshot claim. ADR17 documents limits. Docker NOT RUN (daemon unavailable);
+OIDC provider not built/configured; no new integration or paid/hosted application calls.
+M5/M6 outstanding; extraction accuracy limitations from section14 remain.
+
+18. CURRENT MAC RUN — MILESTONE 5 (13 October2026)
+---------------------------------------------------
+Reviewer queue adds workflow/assignment/deadline/reference filters, assignee, pagination;
+supervisors assign active same-tenant reviewers with ETag. Workspace exposes safe worker
+status and masked claim JSON/CSV plus permissioned audit export. Query composer creates
+approved downloadable local PDF/JSON letters, tracks same-claim evidence replies and
+reprocesses; overdue local reminders leave claims open. No external message is sent.
+Operations dashboard shows status/decision agreement/pending approval/overdue query/
+job failure/correction/override counts and freshness. Tenant admin user/role/limit/
+activation/password-reset UI uses password confirmation, serialised changes, immediate
+session revocation, last-supervisor/self-lockout guards and append-only RLS0006 history.
+Closed/stale reviewer writes fail; clinical findings require a medical officer.
+ACTUALLY RUN:69tests/0fail/0skip each driver (includes initial hardening cases); full
+pack and five exact demo traces passed; fresh native PG55462/objects /tmp/aw-m5-closure.
+Sequential headless smoke0problems, manual201, operations assignment/filters/KPIs/
+approvedPDFdownload/evidenceReply/userCreation0pageErrors, four workflow human
+reviews/decisions+enhancement201, config4eyes/password-confirm pass.
+Evidence:m5-closure-*.log, queue-filters.png,operations.png,query-reply.png,users.png,
+workflows/ screenshots. Browser failure disclosed/fixed: late claim refresh replaced
+queue after navigation; atomic load/navigation guard added. Engine FINAL_BILL_CORRECTED
+request is mapped to existing FINAL_BILL_ITEMISED upload type without changing wording.
+ADR18/19 record boundaries and independent authorization repairs underway for M6.
+M6 remains: final review remediation, clean checkout/README, timing/override browser,
+final DR/full verification/report. Independent inventory found training layouts are
+minor variants and corpus lacked deliberate missing/duplicate bundles; expanding it
+independently rather than claiming those cases were represented. Extraction limitation
+from section14 remains. Docker daemon still unavailable; no paid/external app calls.
+
+19. CURRENT MAC RUN — MILESTONE 6 (13 October 2026)
+---------------------------------------------------
+Executed final hardening, independent security review/remediation, reserved corpus,
+browser proof, stopped-writer backup/restore, README-based clean checkout and fresh
+delivered app. Implementation milestones0–6 have been executed; generic extraction
+accuracy targets/customer production acceptance have NOT been achieved.
+Final full suite:71passed/0failed/0skipped EACH psycopg and pgwire, logged in
+workbench/evidence/2026-10-12/m6-verified-tests.log. Clean checkout psycopg71passed
+(clean-tests-psycopg-final.log); pgwire71passed (clean-tests.log). Initial70-test
+snapshots predated the final storage-recovery test and are not final suite proof.
+TC-REV-01 actual submitted override/blank-comment/stale checks; TC-QRY-01 operations
+query tests; TC-REL-04 actual subprocess SIGKILL after evaluation writes before
+commit, rollback/reclaim/exactly-one recovery; TC-SEC-02 eight-role permissions and
+HTTP endpoints; TC-UX-02 ten actual warm loaded-page highlight clicks, mean17.07ms/
+max18.8ms, override201/audit, zero page errors. No cold-network timing claim.
+All six sequential headless browser flows passed in clean checkout: timing/override,
+smoke/second approval/audit, manual provenance, operations/queryPDF/reply/admin,
+four claim workflows/enhancement, configuration4eyes/password. Screenshots and
+downloaded letter retained in clean-browser-artifacts/, clean-e2e-shots/.
+Full pack FINAL:59contracts/0fail,8mutations caught,3000property cases(2715computed/
+285blocked), all exact traces/rules/references, normative31tables,11invalid writes
+rejected and RLSother0/own3. Logs m6-pack-verified.log/clean-pack-verified.log.
+CORRECTION to earlier full-pack summaries: final log audit found mutation runner
+copytree failed on a live PG socket, hidden by shell && despite set-e. Earlier exit0
+does NOT prove that gate passed. Fixed runner copies only validator inputs and gate
+now fails pack on error; both final packs exited0 with all8caught. No bypass.
+Clean demo reproduced all5historical traces with exact paise and audit chains.
+Independent review found/fixed: null approval-limit second approver, closed query
+changes, cross-actor cached idempotency, restore manifest/object omissions/corruption,
+inherited RO receiver withdrawal. Shared platform permission guard only, unchanged
+inherited route/handler/schema; no new integration. Also fixed checksum publication
+crash recovery and restore owner-connection cleanup; independent recheck recorded.
+ADR19 and final-independent-review.md describe evidence and host-admin limitations.
+Actual final stopped-writer backup244files including checksum sidecars, id1791840203;
+restore aw_restore_1791840246:8claims/32docs/5human decisions/eight verified audit
+chains/109referenced object reads. Restricted aw_app login/read200; other tenant0.
+Manifest tamper/omissions/unlisted/symlinks refused; newly failed target retained for
+diagnosis. No online atomic-backup guarantee. Logs m6-backup/restore/restored-app.
+Corpus:44distinct synthetic claims,414artifacts;11layout IDs but SEVEN structural
+templates (five training IDs are minor variants). Six independently generated reserved
+structural layouts including final2unseen until blind scoring; missing2summary bundles,
+2duplicate SHA groups, skew/noise/stamp/multipage/conflicting/injected documents.
+Recorded blind fields:original100/1132(8.83%),challenge157/876(17.92%),final158/610
+(25.90%); all three0exact lines and0bill reconciliations; finalclassification0/70.
+Finaldocument-only abstention10/12 is not claim-level sensitivity. Revealed scores
+labelled separately. Per-type/quality denominators/hashes in extraction-benchmark-
+summary.md. Actual bounded product probes9/9blocked/null,9/9approvalrefused,
+0decisions,59successful jobs,2/2duplicates deduped; not proof of full corpus conflict
+recognition, because unknown reading/classification also blocks these documents.
+Clean local Git snapshot from pending source, excluding secrets/runtime/evidence;
+/tmp/aw-clean-checkout final snapshot7a777f8, originalHEAD6bba0dd unchanged.
+7a777f8 is the verified implementation/pack snapshot; final delivery documents and
+trailing-whitespace-only cleanup were fast-forwarded as f0510fd afterward. Source
+fingerprints agree; git diff --check passes. No behavioral change after verification.
+Freshvenv from53cached local wheel archives with PIP_NO_INDEX=1; no copied .env.
+Initial interrupted setup/tests and earlier socket-copy failure retained, not passing
+proof. Selected source hashes equal; no push/remote CI/public deployment.
+Native environment macOSarm64/Python3.13.15/PostgreSQL16/Tesseract5/Chromium.
+FINAL fresh app LEFT RUNNING:HTTP127.0.0.1:8080,PG55465,/tmp/aw-delivered/objects.
+Actual restart/readiness/login/6undecidedclaimqueue/trace1payable107591.00/zero browser
+errors recorded delivered-start.log/delivered-proof.json/queue+workspace screenshots.
+Startup:cd /Users/abhishekpravinnahire/Desktop/SUperclaims/workbench
+make serve AW_DEV_DIR=/tmp/aw-delivered AW_DEV_PORT=55465 AW_OBJECT_STORE_DIR=/tmp/aw-delivered/objects
+All synthetic TENANT-DEMO accounts password Synthetic-demo-2026!; PROC-07/11,
+SUP-02,MO-01,FWA-01,AUD-01,CFG-01,ADM-01,RO-01. README/DELIVERY contain roles,
+startup/backup commands,10-minute demo,three-state matrix,benchmarks,proof links and
+customer pilot materials. Traceability updated; older table explicitly historical.
+NOT RUN:Docker (open Docker Desktop and wait for engine),remote CI(no authorization),
+full WCAG/external penetration/compliance audit,real-data/handwriting and full-corpus
+claim-level identity/date-conflict or quantity/rate accuracy. NOT BUILT:new integration/
+APIkeys/webhooks/TMSadapter/cloudstore/hostedAI/OCR/OIDCprovider/customer rulebooks/
+production deployment. Only synthetic local data; no paid/hosted application calls.
+
+20. MILESTONE 7.0 — NEW POLICY INTELLIGENCE BASELINE (13 October 2026)
+--------------------------------------------------------------------
+Read existing context/delivery/architecture/data/rules/config code and migration history.
+ACTUALLY RUN make test-all:71 passed,0fail/skip EACH psycopg/pgwire; pack59contracts,
+8mutations,3000properties plus original DB/RLS passed. Logs m7-baseline-tests/pack.
+Before edits:source backup /tmp/aw-m7-baseline-backup/source.tar.gz,213files,
+SHA2562a4a0953a2af02df0bfa368861ac886422fdbcf647b919b3f2fb7c9e6dc4d787;
+manifest records originalHEAD6bba0dd unchanged. Prior delivered app still running.
+Independent research audit located CSVs/reports in Downloads;102product rows,
+2malformed,45XXX/26MULTIPLE and reused concrete UIN conflicts; no originalPDFs/logs.
+Named quality-audit XLSX/correctedmanifest NOT FOUND; inspection NOT RUN pending path.
+No discovered source approved. ADR20 authorizes only user-requested public research
+network retrieval, separates four data layers and shadow rule lifecycle; no demo config
+publication or patient information. 7.1–7.7 implementation remains underway.
+
+21. MILESTONE 7.1 — RESEARCH QUARANTINE (13 October 2026)
+-------------------------------------------------------
+Built isolated aw.policy_intelligence.acquisition import journal and CLI. OriginalCSV
+bytes copied/hash-addressed; original row cells/line/research labels retained. Exact
+UIN/columns/product/canonical insurer/directHTTPS/domain checks and reused-UIN conflict
+checks across imports quarantine bad rows; no researchVERIFIED promotion.
+ACTUALLY RUN old102rowcatalogue:101METADATA_CONFLICT,1DISCOVERED,0approved.
+make test-all74tests/driver0fail/skip; restart isolated appHTTP8081PG55480 readyz200,
+existingHTTP8080delivery untouched. Relevant3validation tests pass. Transport tests
+added next: initial missingfitz dependency repaired by reusing installed pdfplumber/
+reportlab rather than adding a new package; targeted9tests pass, belongs7.2.
+Evidence m7-1-tests/start.log,m7-research-import.json; ADR20. Workbook/correctedexports
+still unavailable,NOTRUN; no publicPDF or source identity approved yet.
+
+22. MILESTONE 7.2 — LOCAL ACQUISITION (13 October 2026)
+-----------------------------------------------------
+Built sequential boundedHTTPS downloader, official-host allowlist/explicit StarCDN
+referrer-chain checks, robots restrictions/no redirects or protection bypass, byte/page
+limits, strongETag+Range safe resume (otherwise restart), SHA256 original storage,
+append-only retrieval/verification journal, duplicate/changedURL retention, actual PDF
+metadata/title/pages/UIN and failure reports. No approved financial source inferred.
+ACTUALLY RUN targeted9transport/validation tests; full80tests/driver0fail/skip.
+Duplicate/changed-content oldbytes retained and interrupted128byte resume proven with
+controlled synthetic HTTP responses, HTML refused. Full public-site coverage is still
+pending; failures will be retained rather than treated as verified. ADR20.
+
+23. MILESTONE 7.3 — PRODUCT/REVISION REGISTRY (13 October 2026)
+------------------------------------------------------------
+New0007 migration (historical files untouched) adds tenant-RLS public knowledge,
+rule candidates and append-only review events. Twelve requested typed models plus
+separate dynamic coverage/member/tariff interfaces. Immutable source/product revisions
+include insurer+exactUIN+SHA256; UNKNOWN dates/status retained. Human source identity
+verification checks original hash/UIN/title/legal-name quotes and distinct importer/
+verifier. Insurer alias/regulatory claims in research are not adopted automatically.
+ACTUALLY RUN83tests/driver0fail/skip including conflict,quote,unknown dates,RLS and
+append-only registry tests. FreshHTTP8081PG55481 applies0007 and readyz200.
+HDFC/Niva public acquisition attempts currently blocked by robots permission unavailable
+(HTTP403); no restrictions bypassed, no original publicPDF stored/approved yet. The
+namedworkbook/correctedmanifest remainNOTRUN. Further candidate hosts will be tested.
+
+24. MILESTONE 7.4 — GROUNDED RULE CANDIDATES (13 October 2026)
+------------------------------------------------------------
+Local keyword/context extraction covers room/ICU/proportionate/copay/deductible/
+sub-limit/waiting/exclusion/prepost/daycare/restoration/NME/package/network candidates.
+Each retains insurer/UIN/revisionSHA/page/quote/actualbbox/context, structured
+UNINTERPRETED representation, dependencies,confidence explicitly keyword-only and
+DRAFT state. OriginalPDF hash and exact page quote/bbox checked; source approval
+required before extraction. No extracted rule executes or publishes automatically.
+ACTUALLY RUN full84tests/driver0fail/skip in m7-4-tests-retry.log; grounded candidate
+and unsupportedquote/source approval tests pass. Earlier attempt failed due Mac shared
+memory exhaustion and copied helper super() misuse; both repaired, failures retained.
+Stopped26own olddevelopment PG clusters (data preserved, delivered8080 untouched),
+restartHTTP8081PG55540 readyz200. No clinical extraction accuracy claim.
+
+25. MILESTONE 7.5 — HUMAN REVIEW AND SHADOW PUBLICATION (13 October 2026)
+------------------------------------------------------------------------
+Built source-page review UI, exact interpretation/context review, ordered lifecycle,
+reauthenticated role-authorised approval/publication with distinct author/approver,
+immutable approved bodies and shadow-only mappings; no runtime configuration writes.
+ACTUALLY RUN 87 tests per driver, zero failures/skips (m7-5-tests-retry.log).
+Initial failures (OpenAPI path placed under webhooks; absent baseline tariff in test)
+were repaired without weakening validation. Target lifecycle 3 tests pass. Fresh
+HTTP8081/PG55542 ready. Browser demonstration is pending 7.7.
+Independent review found coverage-proof/freshness/reservations/dependency blockers and
+unquoted effective-end dates; hardening repairs and independent retest underway for
+7.6. Real downloads: two Niva unique UIN matches, Care contains two UINs and is
+METADATA_CONFLICT. No public source/rule automatically approved. HDFC/Star attempts
+blocked by robots. Correction: prior environment notes describe earlier app instances;
+original HTTP8080 is no longer running and will be restarted with final implementation.
+
+26. MILESTONE 7.6 — CONTROLLED ENGINE SHADOW PREVIEW (13 October 2026)
+--------------------------------------------------------------------
+COPAY and per-claim DEDUCTIBLE translation reuse the existing exact Decimal engine.
+No second calculator, ledger/evaluation write, synthetic published-rule change, or
+final payable. Complete illustrative interface inputs give baseline107591.00 versus
+shadow96831.00 for ten-percent copay; every new deduction carries clause/SHA authority.
+Missing/blank proofs, stale snapshot, inconsistent reservations, unknown dependencies,
+options, tariff or applicability block effects. Actual private verification interfaces
+are not connected; complete-shaped inputs are only an illustrative interface simulation.
+0008 requires every new candidate to enter DRAFT and link a DocumentVersion.
+ACTUALLY RUN93tests/driver0fail/skip (m7-6-tests-final.log), all five existing traces and
+full pack verified. Independent3adversarial DBtests+changedURL retest pass after repairs.
+FreshHTTP8080PG55550 ready; demo exact traces run. Long policy PDFs read native text
+without charging native pages against OCR raster budget; actual public2PDF scan yields
+201+143 grounded UNINTERPRETED proposals, confidenceUNMEASURED. Care2UIN conflict
+quarantined. Actual browser first attempt failed due exact user-button label, repaired
+selector; complete demonstration pending7.7. Public and illustrative originals stored
+in separate fixed roots; real sources remain unapproved. Legitimate rename resolution
+and interactive quarantine remediation are not built; conflicting names fail closed.
+
+27. MILESTONE 7.7 — REGRESSION / BROWSER / INTEGRITY / INDEPENDENT REVIEW
+------------------------------------------------------------------------
+Completed executed validation13October2026. Final89tests per driver0failure/skip both
+working repository(m7-7-final-tests.log) and clean local snapshot checkout(m7-clean-tests).
+Count reduced from94 by removing exact inherited duplicates, then adding archive drill;
+all unique validations retained. Fullpack59contracts/8mutation catches/3000properties
+and negative DB/RLS pass here and clean checkout. Samefiveexacttraces reproduced there.
+Local snapshot commit a0d595320257732e2fdbba7e1e0b3649844a751a; clean Git source,
+existing installed venv reused (no network install), fresh startupHTTP8082PG55593.
+OriginalrepositoryHEAD6bba0ddf unchanged; pending work preserved in source backup.
+
+Actual policy browser passed: originalpublicNiva page/hash viewed, unapproved source
+extraction refused; clearlyILLUSTRATIVE source independently verified; exactclause
+interpreted/validated/reviewed; CFGself-approval422; ADMapproval/publication200; unknown
+privateinputs block; explicit illustrative preview107591.00→96831.00, definitivepayable
+null. Screenshots +policy-browser-proof.json. Improved concise preview summary and
+source/rule selection synchronization. Public sources/rules NOT automatically approved.
+Existing6browserflows including4workflows+9workflow screenshots passed against separate
+fresh regression DB; its test config publication did not touch deliveredreviewDB.
+
+Independent review found coverage-proof/date-end/changedURL defects; repaired and
+3adversarial DBtests +correctedimport retest pass. Published bodies immutable, tenant
+access negative, runtime configs unchanged. See policy-independent-review.md (targeted,
+not exhaustive). NativePDF scan201+143 proposals in7.044s/4.285s; accuracyUNMEASURED.
+Publicresearch backup/restore actually executed:3original hashes,108researchrecords.
+Stopped-writer reviewDB backup246objects, restore7claims/34docs/2decisions,3rules(2shadow
+published),8sources/27reviewevents; original hashes checked and OTHER-TENANT0candidates.
+Backup/restore limitations: incomplete downloads restart; operational and researchroots
+must both be backed up. Historic migrations0001–0006 unchanged frombaselinebackup.
+
+Finalfresh deliveredapp: HTTP8080 PG55592, /tmp/aw-m7-delivered, originalsyntheticconfigs
+and claimqueue. Policybrowserrun onthisfreshDB creates1publishedILLUSTRATIVE shadowrule;
+before/after confighashes,evaluationcount,SIledgercount,decisioncount identical (proof
+policy-runtime-integrity.json). Ready200. Startup first attempt PG55555 conflicted with
+pack verification port; retried55592 successfully. Finalserverleft running.
+
+NOTRUN: namedinsurance_research_quality_audit_2026-10-13.xlsx/correctedexports absent;
+realpolicy reviewer approval, measured rule/scan accuracy, actualcustomer/privateproof
+verification. Coveragebelow20target:2NivauniqueUINmatches(pendinghumanapproval),1CarePDF
+quarantined2UINconflict; HDFC/Starrobotsblocked. Do not label2PDFs approvedsources.
+NOTBUILT: reviewedrenaming/withdrawaladmin,interactivequarantine remediation,conditional/
+group/restoration/roomtranslation, liveinsurer/TPA connections. Member/coverage/tariff
+interfaces requirecustomerdata. Unsupportedfinancialdecisionsrefused. Scope/status,
+startup/demo/customer-readiness checklist inPOLICY_INTELLIGENCE_DELIVERY.md. No real
+patientdata, paid/hostedservices, publicdeployment, push or Superclaims contact.
+
+28. PRODUCT HISTORY COMPLETION AND USER-AUTHORISED GIT HANDOVER (19 October 2026)
+-------------------------------------------------------------------------------
+Follow-up code closes earlier rename/withdrawal/quarantine UI gaps: new0009/0010 add
+append-only ProductHistory and tenant-scoped ResearchRemediation. Canonical SHA/page
+evidence, existing marketing identity/verified titles and distinct approval required.
+Name-conflict evidence downloads remain quarantined until alias/source review. Shared
+SQLite is not mutated by tenant review; overlays and audit roll back atomically and
+resolution binds current hash. Public sources/rules remain unapproved. Independent
+5-adversarial-test retest passed; policy browser exercised history self-approval block,
+second-user approval, resolution and rejection. Full95tests/driver passed in
+m7-final-95-tests.log. Earlier89-test clean checkout predates this history extension;
+updated clean-checkout run NOT RUN. These are recorded prior execution results, not
+fresh test execution on19October. Runtime availability has not been rechecked today.
+
+Current explicit user request authorises committing and pushing everything appropriate
+to https://github.com/abhisheknahire89/superclaims-version.git. Remote was empty on
+inspection. HandoffZIP contains3files identical to existingAGENTS/START_HERE/preflight;
+no archive instructions were promoted into new user commands. Preserve original Git
+history and commit implementation, synthetic fixtures and evidence. Exclude secrets,
+venv/databases/object stores/backups and isolated downloaded policy originals using
+.gitignore. Current versionable-file scan found no actual local secrets/APIkeys/JWTs.
+No application deployment or paid service use is requested. Tests are not rerun for
+this Git-only handover; source and historical execution evidence are being preserved.

@@ -20,10 +20,10 @@ from .ids import new_id
 from .money import to_paise
 
 ACTIVE_DOC = "d.status NOT IN ('SUPERSEDED','QUARANTINED')"
-CLAIM_FIELDS = ["admission.date", "discharge.date", "bill.number", "bill.total", "bill.is_itemised",
+CLAIM_FIELDS = ["admission.date", "discharge.date", "bill.number", "bill.total", "bill.is_itemised", "bill.date",
                 "diagnosis.primary_text", "procedure.text", "history.past_illness_text"]
 BILL_FIELDS = {"bill.number", "bill.total", "bill.is_itemised"}
-BILL_TYPES = ("FINAL_BILL_ITEMISED", "FINAL_BILL_SUMMARY")
+BILL_TYPES = ("FINAL_BILL_ITEMISED", "FINAL_BILL_SUMMARY", "ESTIMATE_BILL")
 
 
 def latest_facts(conn: Conn, tenant_id: str, claim_id: str, field_path: str | None = None, include_inactive: bool = False) -> list[dict]:
@@ -119,7 +119,7 @@ def room_category(description: str, category: str, cmap: dict) -> str | None:
 
 
 def sync_bill_lines(conn: Conn, tenant_id: str, claim_id: str) -> dict:
-    bill = conn.fetch_one(f"SELECT d.document_id FROM document d WHERE d.tenant_id=$1 AND d.claim_id=$2 AND d.classified_type='FINAL_BILL_ITEMISED'"
+    bill = conn.fetch_one(f"SELECT d.document_id FROM document d WHERE d.tenant_id=$1 AND d.claim_id=$2 AND d.classified_type IN ('FINAL_BILL_ITEMISED','ESTIMATE_BILL')"
                           f" AND {ACTIVE_DOC} ORDER BY d.received_at DESC LIMIT 1", tenant_id, claim_id)
     active = conn.fetch_all("SELECT * FROM bill_line WHERE tenant_id=$1 AND claim_id=$2 AND is_active ORDER BY line_no", tenant_id, claim_id)
     if not bill:

@@ -1,0 +1,109 @@
+applied: ['0001_schema.sql', '0002_app_support.sql', '0003_human_transcription.sql']
+{
+ "claims": {
+  "CLM-DEMO-0001": {
+   "compare": {
+    "trace": "trace-1-straightforward",
+    "recommendation_matches": true,
+    "adjustments_match": true,
+    "finding_kinds_match": true,
+    "payable": "107591.00",
+    "pack_payable": "107591.00",
+    "differences": []
+   },
+   "decision": {
+    "decision_id": "DEC-01a130e34ff7721ba706e3073e97e6a6",
+    "disposition": "APPROVED_PARTIAL",
+    "approved_payable": "107591.00",
+    "second_approver": null,
+    "worksheet_id": "WS-DEC-01a130e34ff7721ba706e3073e97e6a6",
+    "claim_status": "FINALISED"
+   }
+  },
+  "CLM-DEMO-0002": {
+   "compare": {
+    "trace": "trace-2-interacting-adjustments",
+    "recommendation_matches": true,
+    "adjustments_match": true,
+    "finding_kinds_match": true,
+    "payable": "85000.00",
+    "pack_payable": "85000.00",
+    "differences": []
+   },
+   "second_approval": {
+    "code": "second-approval-required",
+    "triggers": [
+     "TOTAL_DEDUCTIONS_ABOVE_SHARE_OF_BILLED"
+    ]
+   },
+   "decision": {
+    "decision_id": "DEC-01a130e34fff7327b6884161a8e6af93",
+    "disposition": "APPROVED_PARTIAL",
+    "approved_payable": "85000.00",
+    "second_approver": "SUP-02",
+    "worksheet_id": "WS-DEC-01a130e34fff7327b6884161a8e6af93",
+    "claim_status": "FINALISED"
+   }
+  },
+  "CLM-DEMO-0003": {
+   "first_run": {
+    "trace": "trace-3a-insufficient-conflicting",
+    "recommendation_matches": true,
+    "adjustments_match": true,
+    "finding_kinds_match": true,
+    "payable": null,
+    "pack_payable": null,
+    "differences": []
+   },
+   "queries_sent": [
+    {
+     "addressed_to": "HOSPITAL",
+     "items": 4
+    },
+    {
+     "addressed_to": "INSURER",
+     "items": 1
+    }
+   ],
+   "after_new_documents": {
+    "recommendation": "QUERY_AND_REFER_MEDICAL",
+    "blocked_scopes": [
+     "PRE_POST_WINDOW",
+     "ROOM_DAYS",
+     "WAITING_PERIOD"
+    ]
+   },
+   "after_conflict_resolution": {
+    "trace": "trace-3b-after-new-evidence",
+    "recommendation_matches": true,
+    "adjustments_match": true,
+    "finding_kinds_match": true,
+    "payable": "85570.00",
+    "pack_payable": "85570.00",
+    "differences": []
+   }
+  }
+ },
+ "audit_chains": {
+  "CLM-DEMO-0001": {
+   "verified": true,
+   "events": 48,
+   "head": "sha256:f2dbc8415ee82cf30c4d979a4e3c4c02f8333320e41d9d8e135dfd34a9d79381"
+  },
+  "CLM-DEMO-0002": {
+   "verified": true,
+   "events": 56,
+   "head": "sha256:64baa4c2b4c410abf75dbe89a4d7c7b785895d1b1899154a74515b62ebfc63f9"
+  },
+  "CLM-DEMO-0003": {
+   "verified": true,
+   "events": 97,
+   "head": "sha256:1fc703a4c95e600fe2a9feabe4ea35319d98ef15ae21d92b6418c944df250e3f"
+  }
+ },
+ "claim_status": {
+  "CLM-DEMO-0001": "EXPORTED",
+  "CLM-DEMO-0002": "EXPORTED",
+  "CLM-DEMO-0003": "READY_FOR_REVIEW"
+ }
+}
